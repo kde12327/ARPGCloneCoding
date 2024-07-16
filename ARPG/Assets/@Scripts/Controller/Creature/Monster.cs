@@ -38,12 +38,18 @@ public class Monster : Creature
             return false;
 
         CreatureType = ECreatureType.Monster;
-        CreatureState = ECreatureState.Idle;
-        Speed = 3.0f;
 
         StartCoroutine(CoUpdateAI());
 
         return true;
+    }
+
+    public override void SetInfo(int templateID)
+    {
+        base.SetInfo(templateID);
+
+        // State
+        CreatureState = ECreatureState.Idle;
     }
 
     private void Start()
@@ -107,7 +113,8 @@ public class Monster : Creature
         {
             // Patrol or Return
             Vector3 dir = (_destPos - transform.position);
-            float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * Speed);
+            float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
+            //SetRigidBodyVelocity(dir.normalized * MoveSpeed);
             transform.TranslateEx(dir.normalized * moveDist);
 
             if (dir.sqrMagnitude <= 0.01f)
@@ -133,7 +140,7 @@ public class Monster : Creature
             {
                 // Chase
                 Debug.Log("Chase");
-                float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * Speed);
+                float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
                 transform.TranslateEx(dir.normalized * moveDist);
 
                 // Give up

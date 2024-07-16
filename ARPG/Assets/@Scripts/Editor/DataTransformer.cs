@@ -20,6 +20,7 @@ public class DataTransformer : EditorWindow
 		//LEGACY_ParseTestData("Test");
 
 		ParseExcelDataToJson<CreatureDataLoader, CreatureData>("Creature");
+		ParseExcelDataToJson<EnvDataLoader, EnvData>("Env");
 
 		Debug.Log("DataTransformer Completed");
 	}

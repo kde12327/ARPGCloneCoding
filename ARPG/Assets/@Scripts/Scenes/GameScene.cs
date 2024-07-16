@@ -17,15 +17,19 @@ public class GameScene : BaseScene
 		map.transform.position = Vector3.zero;
 		map.name = "@BaseMap";
 
-		Player player = Managers.Object.Spawn<Player>(new Vector3Int(-10, -5, 0));
+		Player player = Managers.Object.Spawn<Player>(new Vector3Int(-10, -5, 0), HERO_KNIGHT_ID);
 
 		CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
 		camera.Target = player;
 
         {
-			Monster monster = Managers.Object.Spawn<Monster>(new Vector3Int(0, 1, 0));
-			monster.CreatureState = ECreatureState.Idle;
+			Managers.Object.Spawn<Monster>(new Vector3Int(0, 1, 0), MONSTER_BEAR_ID);
+			//Managers.Object.Spawn<Monster>(new Vector3Int(1, 1, 0), MONSTER_SLIME_ID);
         }
+
+		{
+			Env env = Managers.Object.Spawn<Env>(new Vector3Int(0, 2, 0), ENV_TREE1_ID);
+		}
 
 		// TODO
 
