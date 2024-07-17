@@ -7,9 +7,18 @@ public static class Define
 
     public enum EMouseState
     {
+        None,
         MouseDown,
         MouseUp,
         MouseHolding,
+    }
+    public enum EKeyState
+    {
+        None,
+        Skill01,
+        Skill02,
+        Skill03,
+        Skill04,
     }
 
     public enum EScene

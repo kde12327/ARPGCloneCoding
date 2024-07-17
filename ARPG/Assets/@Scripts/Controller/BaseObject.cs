@@ -1,3 +1,4 @@
+using Spine;
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,8 +13,8 @@ public class BaseObject : InitBase
     public SkeletonAnimation SkeletonAnim { get; private set; }
     public Rigidbody2D RigidBody { get; private set; }
 
-	//public float ColliderRadius { get { return Collider != null ? Collider.radius : 0.0f; } }
-	public float ColliderRadius { get { return Collider?.radius ?? 0.0f; } }
+	public float ColliderRadius { get { return Collider != null ? Collider.radius : 0.0f; } }
+	//public float ColliderRadius { get { return Collider?.radius ?? 0.0f; } }
 	public Vector3 CenterPosition { get { return transform.position + Vector3.up * ColliderRadius; } }
 
 	public int DataTemplateID { get; set; }
@@ -42,23 +43,21 @@ public class BaseObject : InitBase
         return true;
     }
 
-	public void TranslateEx(Vector3 pos)
+	#region Battle
+	public virtual void OnDamaged(BaseObject attacker)
     {
-		transform.Translate(pos);
 
-		if (pos.x < 0)
-		{
-			LookLeft = true;
-		}
-		else if (pos.x > 0)
-		{
-			LookLeft = false;
-		}
-	}
+    }
 
-	#region Spine
+	public virtual void OnDead(BaseObject attacker)
+    {
 
-	protected virtual void SetSpineAnimation(string dataLabel, int sortingOrder)
+    }
+    #endregion
+
+    #region Spine
+
+    protected virtual void SetSpineAnimation(string dataLabel, int sortingOrder)
 	{
 		if (SkeletonAnim == null)
 			return;
@@ -110,6 +109,29 @@ public class BaseObject : InitBase
 			return;
 
 		SkeletonAnim.Skeleton.ScaleX = flag ? -1 : 1;
+	}
+
+	public virtual void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
+    {
+		Debug.Log("OnAnimEventHandler");
+    }
+	#endregion
+
+	#region Debug
+	protected void DrawDebugBox(Vector2 point, Vector2 size)
+	{
+		float dx = size.x / 2;
+		float dy = size.y / 2;
+
+		Vector2 leftTop = new Vector2(point.x - dx, point.y + dy);
+		Vector2 leftBottom = new Vector2(point.x - dx, point.y - dy);
+		Vector2 rightTop = new Vector2(point.x + dx, point.y + dy);
+		Vector2 rightBottom = new Vector2(point.x + dx, point.y - dy);
+
+		Debug.DrawLine(leftTop, leftBottom, Color.red, 1000);
+		Debug.DrawLine(leftTop, rightTop, Color.red, 1000);
+		Debug.DrawLine(rightBottom, leftBottom, Color.red, 1000);
+		Debug.DrawLine(rightTop, rightBottom, Color.red, 1000);
 	}
 	#endregion
 }

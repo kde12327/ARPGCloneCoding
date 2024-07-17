@@ -16,12 +16,14 @@ public class Monster : Creature
                 switch (value)
                 {
                     case ECreatureState.Idle:
+                        SetRigidBodyVelocity(Vector3.zero);
                         UpdateAITick = 0.5f;
                         break;
                     case ECreatureState.Move:
                         UpdateAITick = 0.0f;
                         break;
                     case ECreatureState.Skill:
+                        SetRigidBodyVelocity(Vector3.zero);
                         UpdateAITick = 0.0f;
                         break;
                     case ECreatureState.Dead:
@@ -69,6 +71,7 @@ public class Monster : Creature
     {
         //Debug.Log("Idle");
 
+
         // Patrol
         {
             Debug.Log("Patrol");
@@ -94,7 +97,6 @@ public class Monster : Creature
                 Vector3 dir = player.transform.position - transform.position;
                 float distToTargetSqr = dir.sqrMagnitude;
 
-                Debug.Log(distToTargetSqr);
 
                 if (distToTargetSqr < searchDistanceSqr)
                 {
@@ -113,14 +115,14 @@ public class Monster : Creature
         {
             // Patrol or Return
             Vector3 dir = (_destPos - transform.position);
-            float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
-            //SetRigidBodyVelocity(dir.normalized * MoveSpeed);
-            transform.TranslateEx(dir.normalized * moveDist);
 
-            if (dir.sqrMagnitude <= 0.01f)
+            if (dir.sqrMagnitude <= StopTheshold)
             {
                 CreatureState = ECreatureState.Idle;
+                return;
             }
+
+            SetRigidBodyVelocity(dir.normalized * MoveSpeed);
         }
         else
         {
@@ -133,15 +135,16 @@ public class Monster : Creature
             {
                 // Attack
                 Debug.Log("Attack");
+
                 CreatureState = ECreatureState.Skill;
-                StartWait(2.0f);
+                LookLeft = dir.x < 0; 
+                StartWait(1.0f);
             }
             else
             {
                 // Chase
                 Debug.Log("Chase");
-                float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
-                transform.TranslateEx(dir.normalized * moveDist);
+                SetRigidBodyVelocity(dir.normalized * MoveSpeed);
 
                 // Give up
                 float searchDistanceSqr = SearchDistance * SearchDistance;
@@ -175,5 +178,20 @@ public class Monster : Creature
 
     #endregion
 
-    
+    #region Battle
+    public override void OnDamaged(BaseObject attacker)
+    {
+        base.OnDamaged(attacker);
+    }
+
+    public override void OnDead(BaseObject attacker)
+    {
+        base.OnDead(attacker);
+
+        // TODO : Drop Item
+
+        Managers.Object.Despawn(this);
+    }
+    #endregion
+
 }

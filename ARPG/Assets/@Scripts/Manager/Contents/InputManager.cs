@@ -26,5 +26,10 @@ public class InputManager
         {
             Managers.Game.MouseState = Define.EMouseState.MouseUp;
         }
+
+        if(Input.GetKey(KeyCode.Q))
+        {
+            Managers.Game.KeyState = Define.EKeyState.Skill01;
+        }
     }
 }

@@ -29,11 +29,23 @@ public class GameManager
             OnMouseStateChanged?.Invoke(value);
         }
     }
+
+    private EKeyState _keyState;
+    public EKeyState KeyState
+    {
+        get { return _keyState; }
+        set
+        {
+            _keyState = value;
+            OnKeyStateChanged?.Invoke(value);
+        }
+    }
     #endregion
 
     #region Action
     public event Action<Vector3> OnMovePosChanged;
     public event Action<EMouseState> OnMouseStateChanged;
+    public event Action<EKeyState> OnKeyStateChanged;
 
     #endregion
 }
