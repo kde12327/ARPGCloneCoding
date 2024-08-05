@@ -1,0 +1,28 @@
+{
+  "portals": [
+    {
+      "MapName": "ACT01_01_Map",
+      "DestPortalId": 310201,
+      "DataId": 310101,
+      "DescriptionTextID": "포탈0101",
+      "PrefabLabel": "Interactable",
+      "MaxHp": 0.0,
+      "IsInteractable": 1,
+      "SkeletonDataIDs": [
+        "0"
+      ]
+    },
+    {
+      "MapName": "ACT01_02_Map",
+      "DestPortalId": 310101,
+      "DataId": 310201,
+      "DescriptionTextID": "포탈0201",
+      "PrefabLabel": "Interactable",
+      "MaxHp": 0.0,
+      "IsInteractable": 1,
+      "SkeletonDataIDs": [
+        "0"
+      ]
+    }
+  ]
+}

@@ -19,6 +19,17 @@ public class GameManager
         }
     }
 
+    private Vector3 _targetPos;
+    public Vector3 TargetPos
+    {
+        get { return _targetPos; }
+        set
+        {
+            _targetPos = value;
+            OnTargetPosChanged?.Invoke(value);
+        }
+    }
+
     private EMouseState _mouseState;
     public EMouseState MouseState
     {
@@ -46,6 +57,7 @@ public class GameManager
     public event Action<Vector3> OnMovePosChanged;
     public event Action<EMouseState> OnMouseStateChanged;
     public event Action<EKeyState> OnKeyStateChanged;
+    public event Action<Vector3> OnTargetPosChanged;
 
     #endregion
 }

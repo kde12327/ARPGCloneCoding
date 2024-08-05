@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,14 +17,12 @@ public class Monster : Creature
                 switch (value)
                 {
                     case ECreatureState.Idle:
-                        SetRigidBodyVelocity(Vector3.zero);
                         UpdateAITick = 0.5f;
                         break;
                     case ECreatureState.Move:
                         UpdateAITick = 0.0f;
                         break;
                     case ECreatureState.Skill:
-                        SetRigidBodyVelocity(Vector3.zero);
                         UpdateAITick = 0.0f;
                         break;
                     case ECreatureState.Dead:
@@ -39,9 +38,9 @@ public class Monster : Creature
         if (base.Init() == false)
             return false;
 
-        CreatureType = ECreatureType.Monster;
+        ObjectType = EObjectType.Monster;
 
-        StartCoroutine(CoUpdateAI());
+        StartCoroutine(CoUpdateState());
 
         return true;
     }
@@ -52,6 +51,10 @@ public class Monster : Creature
 
         // State
         CreatureState = ECreatureState.Idle;
+
+        // Skill
+        Skills = gameObject.GetOrAddComponent<SkillComponent>();
+        Skills.SetInfo(this, CreatureData.SkillIdList);
     }
 
     private void Start()
@@ -63,24 +66,25 @@ public class Monster : Creature
 
     public float SearchDistance { get; private set; } = 8.0f;
     public float AttackDistance { get; private set; } = 4.0f;
-    Creature _target;
+    public BaseObject Target { get; protected set; }
     Vector3 _destPos;
     Vector3 _initPos;
 
     protected override void UpdateIdle()
     {
-        //Debug.Log("Idle");
+        /*if(Hp != MaxHp.Value)
+        Debug.Log("Idle");*/
 
 
         // Patrol
         {
-            Debug.Log("Patrol");
+            //Debug.Log("Patrol");
 
             int patrolPercent = 10;
-            int rand = Random.Range(0, 100);
+            int rand = UnityEngine.Random.Range(0, 100);
             if (rand <= patrolPercent)
             {
-                _destPos = _initPos + new Vector3(Random.Range(-2, 2), Random.Range(-2, 2));
+                _destPos = _initPos + new Vector3(UnityEngine.Random.Range(-2, 2), UnityEngine.Random.Range(-2, 2));
                 CreatureState = ECreatureState.Move;
                 return;
             }
@@ -88,86 +92,79 @@ public class Monster : Creature
 
         // Search Player
         {
-            Debug.Log("Search");
-            float searchDistanceSqr = SearchDistance * SearchDistance;
-
-            Player player = Managers.Object.player;
-            if(player != null)
+            //Debug.Log("Search");
+            Creature creature = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Player, func: IsValid) as Creature;
+            if (creature != null)
             {
-                Vector3 dir = player.transform.position - transform.position;
-                float distToTargetSqr = dir.sqrMagnitude;
-
-
-                if (distToTargetSqr < searchDistanceSqr)
-                {
-                    _target = player;
-                    CreatureState = ECreatureState.Move;
-                }
-
+                Target = creature;
+                CreatureState = ECreatureState.Move;
+                return;
             }
+
         }
     }
     protected override void UpdateMove()
     {
-        //Debug.Log("Move");
+        /*if(Hp != MaxHp.Value)
+            Debug.Log("Move");*/
 
-        if(_target == null)
+        if(Target.IsValid() == false)
         {
-            // Patrol or Return
-            Vector3 dir = (_destPos - transform.position);
+            Creature creature = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Player, func: IsValid) as Creature;
+            if (creature != null)
+            {
+                Target = creature;
+                CreatureState = ECreatureState.Move;
+                return;
+            }
 
-            if (dir.sqrMagnitude <= StopTheshold)
+            FindPathAndMoveToCellPos(_destPos, MONSTER_DEFAULT_MOVE_DEPTH);
+
+            if (LerpCellPosCompleted)
             {
                 CreatureState = ECreatureState.Idle;
                 return;
             }
-
-            SetRigidBodyVelocity(dir.normalized * MoveSpeed);
         }
         else
         {
+
             // Chase
-            Vector3 dir = (_target.transform.position - transform.position);
-            float distToTargetSqr = dir.sqrMagnitude;
-            float attackDistanceSqr = AttackDistance * AttackDistance;
+            SkillBase skill = Skills.CurrentSkill;
+            ChaseOrAttackTarget(MONSTER_SEARCH_DISTANCE, skill);
 
-            if(distToTargetSqr < attackDistanceSqr)
+            // 너무 멀어지면 포기.
+            if (Target.IsValid() == false)
             {
-                // Attack
-                Debug.Log("Attack");
-
-                CreatureState = ECreatureState.Skill;
-                LookLeft = dir.x < 0; 
-                StartWait(1.0f);
-            }
-            else
-            {
-                // Chase
-                Debug.Log("Chase");
-                SetRigidBodyVelocity(dir.normalized * MoveSpeed);
-
-                // Give up
-                float searchDistanceSqr = SearchDistance * SearchDistance;
-                if(distToTargetSqr > searchDistanceSqr)
-                {
-                    _destPos = _initPos;
-                    _target = null;
-                    CreatureState = ECreatureState.Move;
-                }
-
+                Target = null;
+                _destPos = _initPos;
+                return;
             }
         }
     }
     protected override void UpdateSkill()
     {
-        //Debug.Log("Skill");
+        /*if (Hp != MaxHp.Value)
+            Debug.Log("Skill");*/
 
-        if (_coWait != null)
+        if (Target.IsValid() == false)
+        {
+            Target = null;
+            _destPos = _initPos;
+            CreatureState = ECreatureState.Move;
             return;
-
-        CreatureState = ECreatureState.Move;
+        }
 
     }
+
+    protected override void UpdateOnDamaged()
+    {
+        /*if (Hp != MaxHp.Value)
+            Debug.Log("UpdateOnDamaged");*/
+
+
+    }
+
     protected override void UpdateDead()
     {
         //Debug.Log("Dead");
@@ -179,18 +176,84 @@ public class Monster : Creature
     #endregion
 
     #region Battle
-    public override void OnDamaged(BaseObject attacker)
+    public override void OnDamaged(BaseObject attacker, SkillBase skill)
     {
-        base.OnDamaged(attacker);
+        base.OnDamaged(attacker, skill);
     }
 
-    public override void OnDead(BaseObject attacker)
+    public override void OnDead(BaseObject attacker, SkillBase skill)
     {
-        base.OnDead(attacker);
+        base.OnDead(attacker, skill);
 
         // TODO : Drop Item
+        if(attacker.ObjectType == EObjectType.Player)
+        {
+            Player player = attacker as Player;
+            player.Exp++;
+        }
+
 
         Managers.Object.Despawn(this);
+    }
+
+    protected BaseObject FindClosestInRange(float range, BaseObject obj, Func<BaseObject, bool> func = null)
+    {
+        if (obj == null) return null;
+
+        BaseObject target = null;
+        float searchDistanceSqr = range * range;
+
+        Vector3 dir = obj.transform.position - transform.position;
+        float distToTargetSqr = dir.sqrMagnitude;
+
+        // 서치 범위보다 멀리 있으면 스킵.
+        if (distToTargetSqr > searchDistanceSqr)
+            return null;
+
+        // 추가 조건
+        if (func != null && func.Invoke(obj) == false)
+            return null;
+
+        target = obj;
+
+
+        return target;
+    }
+
+    protected void ChaseOrAttackTarget(float chaseRange, SkillBase skill)
+    {
+        Vector3 dir = (Target.transform.position - transform.position);
+        float distToTargetSqr = dir.sqrMagnitude;
+
+        // TEMP
+        float attackRange = MONSTER_DEFAULT_MELEE_ATTACK_RANGE;
+        if (skill.SkillData.ProjectileId != 0)
+            attackRange = MONSTER_DEFAULT_RANGED_ATTACK_RANGE;
+
+        float finalAttackRange = attackRange + Target.ColliderRadius + ColliderRadius;
+        float attackDistanceSqr = finalAttackRange * finalAttackRange;
+
+        if (distToTargetSqr <= attackDistanceSqr)
+        {
+            // 공격 범위 이내로 들어왔다면 공격.
+            CreatureState = ECreatureState.Skill;
+            skill.DoSkill(Target.transform.position);
+            return;
+        }
+        else
+        {
+            // 공격 범위 밖이라면 추적.
+            FindPathAndMoveToCellPos(Target.transform.position, MONSTER_DEFAULT_MOVE_DEPTH);
+
+            // 너무 멀어지면 포기.
+            float searchDistanceSqr = chaseRange * chaseRange;
+            if (distToTargetSqr > searchDistanceSqr)
+            {
+                Target = null;
+                CreatureState = ECreatureState.Move;
+            }
+            return;
+        }
     }
     #endregion
 

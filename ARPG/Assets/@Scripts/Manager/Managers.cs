@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
+    private static bool Initialized { get; set; } = false;
+
     private static Managers s_instance;
     private static Managers Instance { get { Init(); return s_instance; } }
 
@@ -11,10 +13,12 @@ public class Managers : MonoBehaviour
     private GameManager _game = new GameManager();
     private ObjectManager _object = new ObjectManager();
     private InputManager _input = new InputManager();
+    private MapManager _map = new MapManager();
 
     public static GameManager Game { get { return Instance?._game; } }
     public static ObjectManager Object { get { return Instance?._object; } }
     public static InputManager Input { get { return Instance?._input; } }
+    public static MapManager Map { get { return Instance?._map; } }
 
     #endregion
 
@@ -37,8 +41,10 @@ public class Managers : MonoBehaviour
 
     public static void Init()
     {
-        if (s_instance == null)
+        if (s_instance == null && Initialized == false)
         {
+            Initialized = true;
+
             GameObject go = GameObject.Find("@Managers");
             if (go == null)
             {

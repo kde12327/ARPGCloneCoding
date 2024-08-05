@@ -16,64 +16,17 @@ public class DataTransformer : EditorWindow
 	[MenuItem("Tools/ParseExcel %#K")]
 	public static void ParseExcelDataToJson()
 	{
-		//ParseExcelDataToJson<TestDataLoader, TestData>("Test");
-		//LEGACY_ParseTestData("Test");
-
-		ParseExcelDataToJson<CreatureDataLoader, CreatureData>("Creature");
+		ParseExcelDataToJson<MonsterDataLoader, MonsterData>("Monster");
+		ParseExcelDataToJson<PlayerDataLoader, PlayerData>("Player");
+		ParseExcelDataToJson<SkillDataLoader, SkillData>("Skill");
+		ParseExcelDataToJson<SupportDataLoader, SupportData>("Support");
+		ParseExcelDataToJson<ProjectileDataLoader, ProjectileData>("Projectile");
+		ParseExcelDataToJson<EffectDataLoader, EffectData>("Effect");
 		ParseExcelDataToJson<EnvDataLoader, EnvData>("Env");
+		ParseExcelDataToJson<PortalDataLoader, PortalData>("Portal");
 
 		Debug.Log("DataTransformer Completed");
 	}
-
-	#region LEGACY
-	// LEGACY !
-	/*public static T ConvertValue<T>(string value)
-	{
-		if (string.IsNullOrEmpty(value))
-			return default(T);
-
-		TypeConverter converter = TypeDescriptor.GetConverter(typeof(T));
-		return (T)converter.ConvertFromString(value);
-	}
-
-	public static List<T> ConvertList<T>(string value)
-	{
-		if (string.IsNullOrEmpty(value))
-			return new List<T>();
-
-		return value.Split('&').Select(x => ConvertValue<T>(x)).ToList();
-	}
-
-	static void LEGACY_ParseTestData(string filename)
-	{
-		TestDataLoader loader = new TestDataLoader();
-
-		string[] lines = File.ReadAllText($"{Application.dataPath}/@Resources/Data/ExcelData/{filename}Data.csv").Split("\n");
-
-		for (int y = 1; y < lines.Length; y++)
-		{
-			string[] row = lines[y].Replace("\r", "").Split(',');
-			if (row.Length == 0)
-				continue;
-			if (string.IsNullOrEmpty(row[0]))
-				continue;
-
-			int i = 0;
-			TestData testData = new TestData();
-			testData.Level = ConvertValue<int>(row[i++]);
-			testData.Exp = ConvertValue<int>(row[i++]);
-			testData.Skills = ConvertList<int>(row[i++]);
-			testData.Speed = ConvertValue<float>(row[i++]);
-			testData.Name = ConvertValue<string>(row[i++]);
-
-			loader.tests.Add(testData);
-		}
-
-		string jsonStr = JsonConvert.SerializeObject(loader, Formatting.Indented);
-		File.WriteAllText($"{Application.dataPath}/@Resources/Data/JsonData/{filename}Data.json", jsonStr);
-		AssetDatabase.Refresh();
-	}*/
-	#endregion
 
 	#region Helpers
 	private static void ParseExcelDataToJson<Loader, LoaderData>(string filename) where Loader : new() where LoaderData : new()
@@ -102,9 +55,9 @@ public class DataTransformer : EditorWindow
 				continue;
 
 			LoaderData loaderData = new LoaderData();
+			var fields = GetFieldsInBase(typeof(LoaderData));
 
-			System.Reflection.FieldInfo[] fields = typeof(LoaderData).GetFields();
-			for (int f = 0; f < fields.Length; f++)
+			for (int f = 0; f < fields.Count; f++)
 			{
 				FieldInfo field = loaderData.GetType().GetField(fields[f].Name);
 				Type type = field.FieldType;
@@ -116,7 +69,7 @@ public class DataTransformer : EditorWindow
 				}
 				else
 				{
-					object value = ConvertValue(row[f], type);
+					object value = ConvertValue(row[f], field.FieldType);
 					field.SetValue(loaderData, value);
 				}
 			}
@@ -153,6 +106,35 @@ public class DataTransformer : EditorWindow
 			genericList.Add(item);
 
 		return genericList;
+	}
+
+
+	public static List<FieldInfo> GetFieldsInBase(Type type, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+	{
+		List<FieldInfo> fields = new List<FieldInfo>();
+		HashSet<string> fieldNames = new HashSet<string>(); // 중복방지
+		Stack<Type> stack = new Stack<Type>();
+
+		while (type != typeof(object))
+		{
+			stack.Push(type);
+			type = type.BaseType;
+		}
+
+		while (stack.Count > 0)
+		{
+			Type currentType = stack.Pop();
+
+			foreach (var field in currentType.GetFields(bindingFlags))
+			{
+				if (fieldNames.Add(field.Name))
+				{
+					fields.Add(field);
+				}
+			}
+		}
+
+		return fields;
 	}
 	#endregion
 

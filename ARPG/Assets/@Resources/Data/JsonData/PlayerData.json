@@ -1,0 +1,133 @@
+{
+  "players": [
+    {
+      "DataId": 201000,
+      "DescriptionTextID": "위자드",
+      "PrefabLabel": "HeroPrefab",
+      "ColliderOffsetX": 0.0,
+      "ColliderOffsetY": 0.5,
+      "ColliderRadius": 0.6,
+      "MaxHp": 1000.0,
+      "UpMaxHpBonus": 2.0,
+      "Atk": 25.0,
+      "AtkRange": 4.0,
+      "AtkBonus": 2.0,
+      "MoveSpeed": 5.0,
+      "CriRate": 0.15,
+      "CriDamage": 1.5,
+      "IconImage": "002.sprite",
+      "SkeletonDataID": "002_SkeletonData",
+      "SkillIdList": [
+        10002
+      ]
+    },
+    {
+      "DataId": 201001,
+      "DescriptionTextID": "주인공",
+      "PrefabLabel": "HeroPrefab",
+      "ColliderOffsetX": 0.0,
+      "ColliderOffsetY": 0.5,
+      "ColliderRadius": 0.6,
+      "MaxHp": 1000.0,
+      "UpMaxHpBonus": 2.0,
+      "Atk": 25.0,
+      "AtkRange": 1.8,
+      "AtkBonus": 2.0,
+      "MoveSpeed": 5.0,
+      "CriRate": 0.15,
+      "CriDamage": 1.5,
+      "IconImage": "001.sprite",
+      "SkeletonDataID": "001_SkeletonData",
+      "SkillIdList": [
+        10001
+      ]
+    },
+    {
+      "DataId": 201002,
+      "DescriptionTextID": "연금술사",
+      "PrefabLabel": "HeroPrefab",
+      "ColliderOffsetX": 0.0,
+      "ColliderOffsetY": 0.5,
+      "ColliderRadius": 0.6,
+      "MaxHp": 1000.0,
+      "UpMaxHpBonus": 2.0,
+      "Atk": 25.0,
+      "AtkRange": 4.0,
+      "AtkBonus": 2.0,
+      "MoveSpeed": 5.0,
+      "CriRate": 0.15,
+      "CriDamage": 1.5,
+      "IconImage": "003.sprite",
+      "SkeletonDataID": "003_SkeletonData",
+      "SkillIdList": [
+        10002
+      ]
+    },
+    {
+      "DataId": 201003,
+      "DescriptionTextID": "사자",
+      "PrefabLabel": "HeroPrefab",
+      "ColliderOffsetX": 0.0,
+      "ColliderOffsetY": 0.5,
+      "ColliderRadius": 0.6,
+      "MaxHp": 1000.0,
+      "UpMaxHpBonus": 2.0,
+      "Atk": 25.0,
+      "AtkRange": 1.8,
+      "AtkBonus": 2.0,
+      "MoveSpeed": 5.0,
+      "CriRate": 0.15,
+      "CriDamage": 1.5,
+      "IconImage": "004.sprite",
+      "SkeletonDataID": "004_SkeletonData",
+      "SkillIdList": [
+        10001,
+        10018,
+        10019
+      ]
+    },
+    {
+      "DataId": 201004,
+      "DescriptionTextID": "뱀파",
+      "PrefabLabel": "HeroPrefab",
+      "ColliderOffsetX": 0.0,
+      "ColliderOffsetY": 0.5,
+      "ColliderRadius": 0.6,
+      "MaxHp": 1000.0,
+      "UpMaxHpBonus": 2.0,
+      "Atk": 25.0,
+      "AtkRange": 1.8,
+      "AtkBonus": 2.0,
+      "MoveSpeed": 5.0,
+      "CriRate": 0.15,
+      "CriDamage": 1.5,
+      "IconImage": "005.sprite",
+      "SkeletonDataID": "005_SkeletonData",
+      "SkillIdList": [
+        10001
+      ]
+    },
+    {
+      "DataId": 201020,
+      "DescriptionTextID": "오웬",
+      "PrefabLabel": "HeroPrefab",
+      "ColliderOffsetX": 0.0,
+      "ColliderOffsetY": 0.5,
+      "ColliderRadius": 0.6,
+      "MaxHp": 1000.0,
+      "UpMaxHpBonus": 2.0,
+      "Atk": 25.0,
+      "AtkRange": 1.8,
+      "AtkBonus": 2.0,
+      "MoveSpeed": 5.0,
+      "CriRate": 0.15,
+      "CriDamage": 1.5,
+      "IconImage": "020.sprite",
+      "SkeletonDataID": "020_SkeletonData",
+      "SkillIdList": [
+        10001,
+        10020
+      ]
+    }
+  ]
+}

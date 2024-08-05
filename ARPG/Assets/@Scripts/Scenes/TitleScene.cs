@@ -17,19 +17,6 @@ public class TitleScene : BaseScene
 		return true;
 	}
 
-	void StartLoadAssets()
-	{
-		Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
-		{
-			Debug.Log($"{key} {count}/{totalCount}");
-
-			if (count == totalCount)
-			{
-				//Managers.Data.Init();
-			}
-		});
-	}
-
 	public override void Clear()
 	{
 

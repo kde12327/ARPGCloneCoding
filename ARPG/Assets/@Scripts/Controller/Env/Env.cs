@@ -5,7 +5,7 @@ using static Define;
 
 public class Env : BaseObject
 {
-    private Data.EnvData _data;
+    public Data.EnvData EnvData { get; protected set; }
 
     private Define.EEnvState _envState = Define.EEnvState.Idle;
 	public Define.EEnvState EnvState
@@ -33,18 +33,19 @@ public class Env : BaseObject
 		return true;
 	}
 
-	public void SetInfo(int templateID)
+	public virtual void SetInfo(int templateID)
 	{
 		DataTemplateID = templateID;
-		_data = Managers.Data.EnvDic[templateID];
+		EnvData = Managers.Data.EnvDic[templateID];
 
 		// Stat
-		Hp = _data.MaxHp;
-		MaxHp = _data.MaxHp;
+		Hp = EnvData.MaxHp;
+		MaxHp = EnvData.MaxHp;
 
 		// Spine
-		string ranSpine = _data.SkeletonDataIDs[Random.Range(0, _data.SkeletonDataIDs.Count)];
+		/*string ranSpine = _data.SkeletonDataIDs[Random.Range(0, _data.SkeletonDataIDs.Count)];
 		SetSpineAnimation(ranSpine, SortingLayers.ENV);
+		*/
 
 		EnvState = Define.EEnvState.Idle;
 
@@ -69,12 +70,14 @@ public class Env : BaseObject
 	}
 
 	#region Battle
-	public override void OnDamaged(BaseObject attacker)
+	public override void OnDamaged(BaseObject attacker, SkillBase skill)
 	{
 		if (EnvState == EEnvState.Dead)
 			return;
 
-		base.OnDamaged(attacker);
+		if (EnvData.MaxHp == 0) return;
+
+		base.OnDamaged(attacker, skill);
 
 		float finalDamage = 1;
 		EnvState = EEnvState.OnDamaged;
@@ -84,12 +87,12 @@ public class Env : BaseObject
 		//Debug.Log(Hp + "/" + MaxHp);
 
 		if (Hp <= 0)
-			OnDead(attacker);
+			OnDead(attacker, skill);
 	}
 
-	public override void OnDead(BaseObject attacker)
+	public override void OnDead(BaseObject attacker, SkillBase skill)
 	{
-		base.OnDead(attacker);
+		base.OnDead(attacker, skill);
 
 		EnvState = EEnvState.Dead;
 

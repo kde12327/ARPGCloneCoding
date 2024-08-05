@@ -1,4 +1,5 @@
 using Spine.Unity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,27 +8,36 @@ using static Define;
 
 public class Creature : BaseObject
 {
+    public SkillComponent Skills { get; protected set; }
+
     public Data.CreatureData CreatureData { get; protected set; }
-    public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
+    public EffectComponent Effects { get; set; }
 
     protected float StopTheshold = 0.02f;
 
 
     #region Stats
-    public float Hp { get; set; }
-    public float MaxHp { get; set; }
-    public float MaxHpBonusRate { get; set; }
-    public float HealBonusRate { get; set; }
-    public float HpRegen { get; set; }
-    public float Atk { get; set; }
-    public float AttackRate { get; set; }
-    public float Def { get; set; }
-    public float DefRate { get; set; }
-    public float CriRate { get; set; }
-    public float CriDamage { get; set; }
-    public float DamageReduction { get; set; }
-    public float MoveSpeedRate { get; set; }
-    public float MoveSpeed { get; set; }
+    public float _hp;
+    public float Hp 
+    {
+        get { return _hp; } 
+        set
+        {
+            _hp = value;
+            OnHpChanged?.Invoke(_hp / MaxHp.Value);
+        } 
+    }
+    public event Action<float> OnHpChanged;
+
+    public CreatureStat MaxHp;
+    public CreatureStat Atk;
+    public CreatureStat CriRate;
+    public CreatureStat CriDamage;
+    public CreatureStat ReduceDamageRate;
+    public CreatureStat LifeStealRate;
+    public CreatureStat ThornsDamageRate; // 쏜즈
+    public CreatureStat MoveSpeed;
+    public CreatureStat AttackSpeedRate;
     #endregion
 
 
@@ -52,7 +62,6 @@ public class Creature : BaseObject
         if (base.Init() == false)
             return false;
 
-        ObjectType = EObjectType.Creature;
         return true;
     }
 
@@ -60,7 +69,15 @@ public class Creature : BaseObject
     {
         DataTemplateID = templateID;
 
-        CreatureData = Managers.Data.CreatureDic[templateID];
+        if(ObjectType == EObjectType.Monster)
+        {
+            CreatureData = Managers.Data.MonsterDic[templateID];
+        }
+        else if(ObjectType == EObjectType.Player)
+        {
+            CreatureData = Managers.Data.PlayerDic[templateID];
+        }
+
         gameObject.name = $"{CreatureData.DataId}_{CreatureData.DescriptionTextID}";
 
         // Collider
@@ -69,36 +86,41 @@ public class Creature : BaseObject
 
 
         // RigidBody
-        RigidBody.mass = CreatureData.Mass;
+        //RigidBody.mass = CreatureData.Mass;
+        RigidBody.mass = 0;
 
         // Spine
-        SkeletonAnim.skeletonDataAsset = Managers.Resource.Load<SkeletonDataAsset>(CreatureData.SkeletonDataID);
-        SkeletonAnim.Initialize(true);
-
-        // Register AnimEvent
-        if (SkeletonAnim.AnimationState != null)
-        {
-            SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
-            SkeletonAnim.AnimationState.Event += OnAnimEventHandler;
-        }
-
-        // Spine SkeletonAnimation은 SpriteRender를 사용하지 않고 MeshRenderer을 사용함.
-        // 2D Sort Axis가 적용이 되지 않는데, SortingGroup을 SpriteRenderer, MeshRenderer을 같이 계산함.
-        SortingGroup sg = Util.GetOrAddComponent<SortingGroup>(gameObject);
-        sg.sortingOrder = SortingLayers.CREATURE;
+        SetSpineAnimation(CreatureData.SkeletonDataID, SortingLayers.CREATURE);
 
         // Skills
         // CreatureData.SkillIdList;
 
         // Stat
-        MaxHp = CreatureData.MaxHp;
         Hp = CreatureData.MaxHp;
-        Atk = CreatureData.Atk;
-        MaxHp = CreatureData.MaxHp;
-        MoveSpeed = CreatureData.MoveSpeed;
+        MaxHp = new CreatureStat(CreatureData.MaxHp);
+        Atk = new CreatureStat(CreatureData.Atk);
+        CriRate = new CreatureStat(CreatureData.CriRate);
+        CriDamage = new CreatureStat(CreatureData.CriDamage);
+        ReduceDamageRate = new CreatureStat(0);
+        LifeStealRate = new CreatureStat(0);
+        ThornsDamageRate = new CreatureStat(0);
+        MoveSpeed = new CreatureStat(CreatureData.MoveSpeed);
+        AttackSpeedRate = new CreatureStat(1);
 
         // State
         CreatureState = ECreatureState.Idle;
+
+        //Effect
+        Effects = gameObject.AddComponent<EffectComponent>();
+        Effects.SetInfo(this);
+
+        // Map
+        StartCoroutine(CoLerpToCellPos());
+
+        // HPBar
+        GameObject go = Managers.Resource.Instantiate("HPBar");
+        HPBar hp = go.GetComponent<HPBar>();
+        hp.SetInfo(this);
     }
 
     protected override void UpdateAnimation()
@@ -109,10 +131,14 @@ public class Creature : BaseObject
                 PlayAnimation(0, AnimName.IDLE, true);
                 break;
             case ECreatureState.Skill:
-                PlayAnimation(0, AnimName.ATTACK_A, true);
+                //PlayAnimation(0, AnimName.ATTACK_A, true);
                 break;
             case ECreatureState.Move:
                 PlayAnimation(0, AnimName.MOVE, true);
+                break;
+            case ECreatureState.OnDamaged:
+                PlayAnimation(0, AnimName.IDLE, true);
+                Skills.CurrentSkill.CancelSkill();
                 break;
             case ECreatureState.Dead:
                 PlayAnimation(0, AnimName.DEAD, true);
@@ -123,27 +149,11 @@ public class Creature : BaseObject
         }
     }
 
-    public void ChangeColliderSize(EColliderSize size = EColliderSize.Normal)
-    {
-        switch (size)
-        {
-            case EColliderSize.Small:
-                Collider.radius = CreatureData.ColliderRadius * 0.8f;
-                break;
-            case EColliderSize.Normal:
-                Collider.radius = CreatureData.ColliderRadius;
-                break;
-            case EColliderSize.Big:
-                Collider.radius = CreatureData.ColliderRadius * 1.2f;
-                break;
-        }
-    }
-
     #region AI
 
     public float UpdateAITick { get; protected set; } = 0.0f;
 
-    protected IEnumerator CoUpdateAI()
+    protected IEnumerator CoUpdateState()
     {
         while (true)
         {
@@ -157,6 +167,9 @@ public class Creature : BaseObject
                     break;
                 case ECreatureState.Skill:
                     UpdateSkill();
+                    break;
+                case ECreatureState.OnDamaged:
+                    UpdateOnDamaged();
                     break;
                 case ECreatureState.Dead:
                     UpdateDead();
@@ -174,14 +187,15 @@ public class Creature : BaseObject
     protected virtual void UpdateIdle() { }
     protected virtual void UpdateMove() { }
     protected virtual void UpdateSkill() { }
+    protected virtual void UpdateOnDamaged() { }
     protected virtual void UpdateDead() { }
 
     #endregion
 
     #region Battle
-    public override void OnDamaged(BaseObject attacker)
+    public override void OnDamaged(BaseObject attacker, SkillBase skill)
     {
-        base.OnDamaged(attacker);
+        base.OnDamaged(attacker, skill);
 
         if (attacker.IsValid() == false)
             return;
@@ -190,23 +204,26 @@ public class Creature : BaseObject
         if (creature == null)
             return;
 
-        float finalDamage = creature.Atk; // TODO
-        Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
+        float finalDamage = creature.Atk.Value * skill.DamageMultiplier; // TODO
+        Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp.Value);
 
-        //Debug.Log(Hp + "/" + MaxHp);
+        Managers.Object.ShowDamageFont(CenterPosition, finalDamage, transform, false);
+        //Debug.Log(CreatureData.DescriptionTextID + ": " + Hp + "/" + MaxHp.Value);
 
         if (Hp <= 0)
         {
-            OnDead(attacker);
+            OnDead(attacker, skill);
             CreatureState = ECreatureState.Dead;
         }
+
+        // Effect 적용
+        if (skill.SkillData.EffectIds != null)
+            Effects.GenerateEffects(skill.SkillData.EffectIds.ToArray(), EEffectSpawnType.Skill);
     }
 
-    public override void OnDead(BaseObject attacker)
+    public override void OnDead(BaseObject attacker, SkillBase skill)
     {
-        base.OnDead(attacker);
-
-
+        base.OnDead(attacker, skill);
     }
     #endregion
 
@@ -227,6 +244,83 @@ public class Creature : BaseObject
         if (_coWait != null)
             StopCoroutine(_coWait);
         _coWait = null;
+    }
+    #endregion
+
+
+
+    #region Map
+    public EFindPathResult FindPathAndMoveToCellPos(Vector3 destWorldPos, int maxDepth, bool forceMoveCloser = false)
+    {
+        Vector3Int destCellPos = Managers.Map.World2Cell(destWorldPos);
+        return FindPathAndMoveToCellPos(destCellPos, maxDepth, forceMoveCloser);
+    }
+
+    public EFindPathResult FindPathAndMoveToCellPos(Vector3Int destCellPos, int maxDepth, bool forceMoveCloser = false)
+    {
+        if (LerpCellPosCompleted == false)
+            return EFindPathResult.Fail_LerpCell;
+
+        // A*
+        List<Vector3Int> path = Managers.Map.FindPath(CellPos, destCellPos, maxDepth);
+        if (path.Count < 2)
+            return EFindPathResult.Fail_NoPath;
+
+        // 가까운 두 좌표에서 이동이 반복되는 경우
+        if (forceMoveCloser)
+        {
+            Vector3Int diff1 = CellPos - destCellPos;
+            Vector3Int diff2 = path[1] - destCellPos;
+            if (diff1.sqrMagnitude <= diff2.sqrMagnitude)
+                return EFindPathResult.Fail_NoPath;
+        }
+
+        Vector3Int dirCellPos = path[1] - CellPos;
+        //Vector3Int dirCellPos = destCellPos - CellPos;
+        Vector3Int nextPos = CellPos + dirCellPos;
+
+        if (Managers.Map.MoveTo(this, nextPos) == false)
+            return EFindPathResult.Fail_MoveTo;
+
+        return EFindPathResult.Success;
+    }
+
+    public bool MoveToCellPos(Vector3Int destCellPos, int maxDepth, bool forceMoveCloser = false)
+    {
+        if (LerpCellPosCompleted == false)
+            return false;
+
+        return Managers.Map.MoveTo(this, destCellPos);
+    }
+
+    protected IEnumerator CoLerpToCellPos()
+    {
+        while (true)
+        {
+            /*Player player = this as Player;
+            if (player != null)
+            {
+                float div = 5;
+                Vector3 campPos = Managers.Object.Camp.Destination.transform.position;
+                Vector3Int campCellPos = Managers.Map.World2Cell(campPos);
+                float ratio = Math.Max(1, (CellPos - campCellPos).magnitude / div);
+
+                LerpToCellPos(CreatureData.MoveSpeed * ratio);
+            }
+            else*/
+            if(CreatureState != ECreatureState.Skill)
+                LerpToCellPos(CreatureData.MoveSpeed);
+
+            yield return null;
+        }
+    }
+    #endregion
+
+
+    #region Misc
+    protected bool IsValid(BaseObject bo)
+    {
+        return bo.IsValid();
     }
     #endregion
 }

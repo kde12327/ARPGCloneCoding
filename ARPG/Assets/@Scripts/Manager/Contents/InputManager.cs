@@ -22,6 +22,7 @@ public class InputManager
             Managers.Game.MouseState = Define.EMouseState.MouseHolding;
             Managers.Game.MovePos = point;
         }
+
         if (Input.GetMouseButtonUp(1))
         {
             Managers.Game.MouseState = Define.EMouseState.MouseUp;
@@ -29,7 +30,21 @@ public class InputManager
 
         if(Input.GetKey(KeyCode.Q))
         {
+            Managers.Game.KeyState = Define.EKeyState.Skill00;
+        }
+        else if (Input.GetKey(KeyCode.W))
+        {
             Managers.Game.KeyState = Define.EKeyState.Skill01;
         }
+        else if (Input.GetKey(KeyCode.E))
+        {
+            Managers.Game.KeyState = Define.EKeyState.Skill02;
+        }
+        else if (Input.GetKey(KeyCode.R))
+        {
+            Managers.Game.KeyState = Define.EKeyState.Skill03;
+        }
+
+
     }
 }

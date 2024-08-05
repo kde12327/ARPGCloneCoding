@@ -1,4 +1,5 @@
 using Spine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,86 @@ public class Player : Creature
 {
 
     Vector3 _destPos = Vector3.zero;
+
+
+
+    #region Stats
+    protected float _mp;
+    public float Mp
+    {
+        get { return _mp; }
+        set
+        {
+            _mp = value;
+            OnMpChanged?.Invoke(_mp / MaxMp.Value);
+        }
+    }
+    public event Action<float> OnMpChanged;
+
+    protected float _exp;
+    public float Exp
+    {
+        get { return _exp; }
+        set
+        {
+            _exp = value;
+            OnExpChanged?.Invoke(_exp / MaxExp.Value);
+        }
+    }
+    public event Action<float> OnExpChanged;
+
+    public CreatureStat MaxMp;
+    public CreatureStat MaxExp;
+
+    #endregion
+
+
+
+    private InteractiveEnv _interactTarget = null;
+    public InteractiveEnv InteractTarget 
+    {
+        get { return _interactTarget; }
+        set
+        {
+            _interactTarget = value;
+            if(value != null)
+            {
+                _destPos = _interactTarget.transform.position;
+            }
+        }
+    }
+
+    public Data.PlayerData PlayerData { get; protected set; }
+
+    public int? NextPortalId { get; set; }
+
+    public override ECreatureState CreatureState
+    {
+        get { return base.CreatureState; }
+        set
+        {
+            if (_creatureState != value)
+            {
+                base.CreatureState = value;
+                //Debug.Log("PlayerState: " + value + ", MouseState: " + _mouseState + ", KeyState: " + KeyState);
+                switch (value)
+                {
+                    case ECreatureState.Idle:
+                        OnStateIdle();
+                        break;
+                    case ECreatureState.Move:
+                        OnStateMove();
+                        break;
+                    case ECreatureState.Skill:
+                        OnStateSkill();
+                        break;
+                    case ECreatureState.Dead:
+                        OnStateDead();
+                        break;
+                }
+            }
+        }
+    }
 
     private EMouseState _mouseState = EMouseState.MouseUp;
     /*public EMouseState MouseState 
@@ -32,7 +113,7 @@ public class Player : Creature
     }*/
 
     private EKeyState _keyState = EKeyState.None;
-    /*public EKeyState KeyState
+    public EKeyState KeyState
     {
         get { return _keyState; }
         set
@@ -40,22 +121,27 @@ public class Player : Creature
             if (_keyState != value)
             {
                 _keyState = value;
-                switch (value)
+
+                if(_keyState != EKeyState.None && CreatureState != ECreatureState.Skill)
                 {
-                    case EKeyState.None:
-                        break;
-                    case EKeyState.Skill01:
-                        break;
-                    case EKeyState.Skill02:
-                        break;
-                    case EKeyState.Skill03:
-                        break;
-                    case EKeyState.Skill04:
-                        break;
+                    SkillBase skill = Skills.GetSkill((int)value);
+                    if(skill != null)
+                    {
+                        Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                        Input.mousePosition.y, -Camera.main.transform.position.z));
+                        if (skill.CanSkill())
+                        {
+                            skill.DoSkill(point);
+                        }
+                        else
+                        {
+                            _keyState = EKeyState.None;
+                        }
+                    }
                 }
             }
         }
-    }*/
+    }
 
 
     public override bool Init()
@@ -63,7 +149,7 @@ public class Player : Creature
         if (base.Init() == false)
             return false;
 
-        CreatureType = ECreatureType.Player;
+        ObjectType = EObjectType.Player;
 
         Managers.Game.OnMovePosChanged -= HandleOnMovePosChanged;
         Managers.Game.OnMovePosChanged += HandleOnMovePosChanged;
@@ -75,7 +161,29 @@ public class Player : Creature
         Collider.includeLayers = (1 << (int)Define.ELayer.Obstacle);
         Collider.excludeLayers = (1 << (int)Define.ELayer.Monster) | (1 << (int)Define.ELayer.Player);
 
+        // Map 
+        Collider.isTrigger = true;
+        RigidBody.simulated = true;
 
+        // Scene UI
+        UI_GameScene gameSceneUI = Managers.UI.GetSceneUI<UI_GameScene>();
+        OnHpChanged -= gameSceneUI.SetHpBarValue;
+        OnHpChanged += gameSceneUI.SetHpBarValue;
+
+        OnMpChanged -= gameSceneUI.SetMpBarValue;
+        OnMpChanged += gameSceneUI.SetMpBarValue;
+
+        OnExpChanged -= gameSceneUI.SetExpBarValue;
+        OnExpChanged += gameSceneUI.SetExpBarValue;
+
+        MaxMp = new CreatureStat(100.0f);
+        Mp = MaxMp.Value;
+
+        MaxExp = new CreatureStat(10.0f);
+        Exp = 0;
+
+
+        PlayerData = CreatureData as Data.PlayerData;
         return true;
     }
     public override void SetInfo(int templateID)
@@ -84,12 +192,84 @@ public class Player : Creature
 
         // State
         CreatureState = ECreatureState.Idle;
+
+        // Skill
+        Skills = gameObject.GetOrAddComponent<SkillComponent>();
+        Skills.SetInfo(this);
+
+        int skillTemplateID = CreatureData.SkillIdList[0];
+
+        string className = Managers.Data.SkillDic[skillTemplateID].ClassName;
+        SkillBase attack1 = gameObject.AddComponent(Type.GetType(className)) as SkillBase;
+        attack1.SetInfo(this, skillTemplateID);
+        SkillBase attack2 = gameObject.AddComponent(Type.GetType(className)) as SkillBase;
+        attack2.SetInfo(this, skillTemplateID);
+        SkillBase attack3 = gameObject.AddComponent(Type.GetType(className)) as SkillBase;
+        attack3.SetInfo(this, skillTemplateID);
+
+        SupportBase support1 = gameObject.AddComponent<SupportBase>();
+        support1.SetInfo(11001);
+
+        SupportBase support2 = gameObject.AddComponent<SupportBase>();
+        support2.SetInfo(11002);
+
+        attack1.AddSupport(ref support1);
+        attack2.AddSupport(ref support2);
+        attack3.AddSupport(ref support1);
+        attack3.AddSupport(ref support2);
+
+        Skills.AddSkill(attack1);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetSkill(UI_GameScene.UISkills.UI_SkillQ, attack1);
+        Skills.AddSkill(attack2);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetSkill(UI_GameScene.UISkills.UI_SkillW, attack2);
+        Skills.AddSkill(attack3);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetSkill(UI_GameScene.UISkills.UI_SkillE, attack3);
+
+        // skill cooldown test
+        int skillTemplateID2 = 10004;
+        string className2 = Managers.Data.SkillDic[skillTemplateID2].ClassName;
+        SkillBase attack4 = gameObject.AddComponent(Type.GetType(className2)) as SkillBase;
+        attack4.SetInfo(this, skillTemplateID2);
+        Skills.AddSkill(attack4);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetSkill(UI_GameScene.UISkills.UI_SkillR, attack4);
+
+
+
     }
 
     private void Start()
     {
-        _destPos = transform.position;
+    }
 
+    public void OnMapChange()
+    {
+        InteractTarget = null;
+
+        if(NextPortalId != null)
+        {
+            Portal NextPortal = null;
+
+            foreach (Env env in Managers.Object.Envs)
+            {
+                if (env.DataTemplateID == NextPortalId)
+                {
+                    NextPortal = env as Portal;
+                }
+            }
+            NextPortalId = null;
+
+            SetCellPos(Managers.Map.World2Cell(NextPortal.transform.position), true);
+            _destPos = transform.position;
+        }
+    }
+
+    public override void SetCellPos(Vector3Int cellPos, bool forceMove = false)
+    {
+        base.SetCellPos(cellPos, forceMove);
+        if(forceMove == true)
+        {
+            _destPos = transform.position;
+        }
     }
 
     private void Update()
@@ -97,35 +277,34 @@ public class Player : Creature
         Vector3 dir = (_destPos - transform.position);
         //Debug.Log(dir.sqrMagnitude);
 
-        if(_keyState == EKeyState.Skill01)
+        if(CreatureState != ECreatureState.Skill)
         {
-            SetRigidBodyVelocity(Vector3.zero);
-        }
-        else if (dir.sqrMagnitude > StopTheshold)
-        {
-            SetRigidBodyVelocity(dir.normalized * MoveSpeed);
-            CreatureState = Define.ECreatureState.Move;
-        }
-        else
-        {
-            if (_mouseState == EMouseState.MouseUp)
+            if (Managers.Map.World2Cell(_destPos) == Managers.Map.World2Cell(transform.position))
             {
-                _mouseState = EMouseState.None;
-                SetRigidBodyVelocity(Vector3.zero);
                 CreatureState = Define.ECreatureState.Idle;
+                if(InteractTarget != null &&(transform.position - InteractTarget.transform.position).sqrMagnitude < 1)
+                {
+                    InteractTarget.Interact(this);
+                    InteractTarget = null;
+                }
             }
-            
+            else
+            {
+                CreatureState = Define.ECreatureState.Move;
+                EFindPathResult result = FindPathAndMoveToCellPos(_destPos, PLAYER_DEFAULT_MOVE_DEPTH);
+            }
+
         }
 
+        if (_mouseState == EMouseState.MouseUp)
+        {
+            _mouseState = EMouseState.None;
+        }
+
+        
     }
 
-    private void FixedUpdate()
-    {
-        DrawDebugBox(this.transform.position + new Vector3(1, -0.5f), new Vector2(6, 3));
-
-    }
-
-    protected override void UpdateIdle() 
+    /*protected override void UpdateIdle() 
     {
 
     }
@@ -141,13 +320,31 @@ public class Player : Creature
     protected override void UpdateDead() 
     {
     
+    }*/
+
+    private void OnStateIdle()
+    {
+        //SetRigidBodyVelocity(Vector3.zero);
+    }
+    private void OnStateMove()
+    {
+        KeyState = EKeyState.None;
+    }
+    private void OnStateSkill()
+    {
+        //SetRigidBodyVelocity(Vector3.zero);
+    }
+    private void OnStateDead()
+    {
+        //SetRigidBodyVelocity(Vector3.zero);
     }
 
     private void HandleOnMovePosChanged(Vector3 pos)
     {
         _destPos = pos;
-        Debug.Log(_destPos);
-        
+        InteractTarget = null;
+
+
     }
 
     private void HandleOnMouseStateChanged(EMouseState mouseState)
@@ -167,66 +364,17 @@ public class Player : Creature
                 break;
         }
     }
+
+
+
     private void HandleOnKeyStateChanged(EKeyState keyState)
     {
-        switch (keyState)
-        {
-            case Define.EKeyState.None:
-                _keyState = keyState;
-                break;
-            case Define.EKeyState.Skill01:
-                _keyState = keyState;
-                CreatureState = ECreatureState.Skill;
-                break;
-            case Define.EKeyState.Skill02:
-                _keyState = keyState;
-                break;
-            case Define.EKeyState.Skill03:
-                _keyState = keyState;
-                break;
-            case Define.EKeyState.Skill04:
-                _keyState = keyState;
-                break;
-            default:
-                break;
-        }
+        KeyState = keyState;
     }
 
     public override void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
     {
         base.OnAnimEventHandler(trackEntry, e);
-
-        // TODO
-        CreatureState = ECreatureState.Idle;
-        _keyState = EKeyState.None;
-
-
-        //Skill
-        Collider2D[] colliders = Physics2D.OverlapBoxAll(this.transform.position + new Vector3(1, -0.5f), new Vector2(6, 3), 0);
-        foreach (Collider2D collider in colliders)
-        {
-            switch (collider.tag)
-            {
-                case "Monster":
-                    Monster monster = collider.GetComponent<Monster>();
-
-                    if (monster != null && monster.GetComponent<Rigidbody2D>() != null && monster.CreatureState != ECreatureState.Dead)
-                    {
-                        monster.OnDamaged(this);
-                    }
-                    break;
-                case "Env":
-                    Env env = collider.GetComponent<Env>();
-
-                    if (env != null && env.EnvState != EEnvState.Dead)
-                    {
-                        env.OnDamaged(this);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
 
 
     }

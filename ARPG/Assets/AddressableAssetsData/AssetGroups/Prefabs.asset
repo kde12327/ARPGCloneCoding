@@ -23,12 +23,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5a40e413d750cdb44b0fe888fbf55284
-    m_Address: BaseMap
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e09707d07c70ff240a789d33a1a84b4c
     m_Address: Monster
     m_ReadOnly: 0
@@ -37,6 +31,36 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b0447fc76449edd479ad73f30d3c094c
     m_Address: Env
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 847db12889be72246a33418818cae96d
+    m_Address: Projectile
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17f2042330a4cd548afdf146932ebddc
+    m_Address: SpellIndicator
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 19e656ce68a04f44c902194b236bba40
+    m_Address: DamageFont
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 24293ad8f01bd334993f610a97ac6df2
+    m_Address: EffectBase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b66f3ebb073721e4590a7eef4eb22d49
+    m_Address: Portal
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
