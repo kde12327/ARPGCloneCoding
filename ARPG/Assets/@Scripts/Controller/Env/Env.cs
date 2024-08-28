@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
-public class Env : BaseObject
+public class Env : InteractableObject
 {
     public Data.EnvData EnvData { get; protected set; }
 
@@ -35,12 +35,14 @@ public class Env : BaseObject
 
 	public virtual void SetInfo(int templateID)
 	{
-		DataTemplateID = templateID;
-		EnvData = Managers.Data.EnvDic[templateID];
+		Collider.isTrigger = true;
+
+		/*DataTemplateID = templateID;
+		EnvData = Managers.Data.EnvDic[templateID];*/
 
 		// Stat
-		Hp = EnvData.MaxHp;
-		MaxHp = EnvData.MaxHp;
+		/*Hp = EnvData.MaxHp;
+		MaxHp = EnvData.MaxHp;*/
 
 		// Spine
 		/*string ranSpine = _data.SkeletonDataIDs[Random.Range(0, _data.SkeletonDataIDs.Count)];

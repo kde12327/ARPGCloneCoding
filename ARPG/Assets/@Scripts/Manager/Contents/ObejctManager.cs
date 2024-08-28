@@ -10,6 +10,8 @@ public class ObjectManager
 	public HashSet<Projectile> Projectiles { get; } = new HashSet<Projectile>();
     public HashSet<Env> Envs { get; } = new HashSet<Env>();
     public HashSet<EffectBase> Effects { get; } = new HashSet<EffectBase>();
+    public HashSet<ItemHolder> ItemHolders { get; } = new HashSet<ItemHolder>();
+
 
     #region Roots
     public Transform GetRootTransform(string name)
@@ -25,6 +27,7 @@ public class ObjectManager
     public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
 	public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
     public Transform EnvRoot { get { return GetRootTransform("@Env"); } }
+    public Transform ItemHolderRoot { get { return GetRootTransform("@ItemHolders"); } }
 
     #endregion
 
@@ -101,6 +104,13 @@ public class ObjectManager
 
             portal.SetInfo(templateID);
         }
+        else if (obj.ObjectType == EObjectType.ItemHolder)
+        {
+            obj.transform.parent = ItemHolderRoot;
+
+            ItemHolder itemHolder = go.GetOrAddComponent<ItemHolder>();
+            ItemHolders.Add(itemHolder);
+        }
 
         return obj as T;
     }
@@ -132,6 +142,11 @@ public class ObjectManager
         {
             Portal portal = obj as Portal;
             Envs.Remove(portal);
+        }
+        else if (obj.ObjectType == EObjectType.ItemHolder)
+        {
+            ItemHolder itemHolder = obj as ItemHolder;
+            ItemHolders.Remove(itemHolder);
         }
 
         Managers.Resource.Destroy(obj.gameObject);

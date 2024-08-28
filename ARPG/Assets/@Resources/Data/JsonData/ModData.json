@@ -1,0 +1,166 @@
+{
+  "mods": [
+    {
+      "DataId": 10000001,
+      "ModId": "IncressedLife1",
+      "DescriptionTextID": "건장한",
+      "Family": "IncressedLife",
+      "ItemType": 1,
+      "GenerationType": 1,
+      "ReqLevel": 1,
+      "Stats": [
+        "base_maximum_life"
+      ],
+      "MinMaxValues": [
+        40.0,
+        54.0
+      ],
+      "SpawnTags": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "Weight": 1000
+    },
+    {
+      "DataId": 10000011,
+      "ModId": "IncressedMana1",
+      "DescriptionTextID": "녹주색",
+      "Family": "IncressedMana",
+      "ItemType": 1,
+      "GenerationType": 1,
+      "ReqLevel": 1,
+      "Stats": [
+        "base_maximum_mana"
+      ],
+      "MinMaxValues": [
+        15.0,
+        19.0
+      ],
+      "SpawnTags": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "Weight": 1000
+    },
+    {
+      "DataId": 10000021,
+      "ModId": "IncressedEnergyShield1",
+      "DescriptionTextID": "반짝이는",
+      "Family": "IncressedEnergyShield",
+      "ItemType": 1,
+      "GenerationType": 1,
+      "ReqLevel": 1,
+      "Stats": [
+        "base_maximum_energy_sheild"
+      ],
+      "MinMaxValues": [
+        1.0,
+        3.0
+      ],
+      "SpawnTags": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "Weight": 1000
+    },
+    {
+      "DataId": 11000001,
+      "ModId": "Strength1",
+      "DescriptionTextID": "짐승",
+      "Family": "Strength",
+      "ItemType": 1,
+      "GenerationType": 2,
+      "ReqLevel": 1,
+      "Stats": [
+        "additional_strength"
+      ],
+      "MinMaxValues": [
+        8.0,
+        12.0
+      ],
+      "SpawnTags": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "Weight": 1000
+    },
+    {
+      "DataId": 11000011,
+      "ModId": "Dexterity1",
+      "DescriptionTextID": "몽구스",
+      "Family": "Dexterity",
+      "ItemType": 1,
+      "GenerationType": 2,
+      "ReqLevel": 1,
+      "Stats": [
+        "additional_dexterity"
+      ],
+      "MinMaxValues": [
+        8.0,
+        12.0
+      ],
+      "SpawnTags": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "Weight": 1000
+    },
+    {
+      "DataId": 11000021,
+      "ModId": "Intelligence1",
+      "DescriptionTextID": "제자",
+      "Family": "Intelligence",
+      "ItemType": 1,
+      "GenerationType": 2,
+      "ReqLevel": 1,
+      "Stats": [
+        "additional_intelligence"
+      ],
+      "MinMaxValues": [
+        8.0,
+        12.0
+      ],
+      "SpawnTags": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "Weight": 1000
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "itemBases": [
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        8
+      ],
+      "ImplicitOption": [
+        "Atk",
+        "CriRate",
+        "AttackSpeedRate"
+      ],
+      "ImplicitMinMaxValues": [
+        4.0,
+        9.0,
+        5.0,
+        5.0,
+        1.55,
+        1.55
+      ],
+      "Name": "녹슨 검",
+      "ItemType": 1,
+      "ItemSubType": 1,
+      "Icon": "Weapon1.sprite",
+      "DataId": 20100001
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        6
+      ],
+      "ImplicitOption": [
+        "Armour"
+      ],
+      "ImplicitMinMaxValues": [
+        6.0,
+        9.0
+      ],
+      "Name": "철제 투구",
+      "ItemType": 1,
+      "ItemSubType": 2,
+      "Icon": "Helmet1.sprite",
+      "DataId": 20200001
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        6
+      ],
+      "ImplicitOption": [
+        "Armour"
+      ],
+      "ImplicitMinMaxValues": [
+        6.0,
+        9.0
+      ],
+      "Name": "철제 건틀릿",
+      "ItemType": 1,
+      "ItemSubType": 3,
+      "Icon": "Gloves1.sprite",
+      "DataId": 20300001
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        6
+      ],
+      "ImplicitOption": [
+        "Armour"
+      ],
+      "ImplicitMinMaxValues": [
+        6.0,
+        9.0
+      ],
+      "Name": "철제 각반",
+      "ItemType": 1,
+      "ItemSubType": 4,
+      "Icon": "Boots1.sprite",
+      "DataId": 20400001
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        12
+      ],
+      "ImplicitOption": [
+        "Armour"
+      ],
+      "ImplicitMinMaxValues": [
+        19.0,
+        27.0
+      ],
+      "Name": "판금 조끼",
+      "ItemType": 1,
+      "ItemSubType": 5,
+      "Icon": "BodyArmour1.sprite",
+      "DataId": 20500001
+    }
+  ]
+}

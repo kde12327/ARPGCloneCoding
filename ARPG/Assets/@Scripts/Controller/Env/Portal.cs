@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Portal : InteractiveEnv
+public class Portal : Env
 {
     public string NextStageName { get; set; }
 
@@ -11,6 +11,8 @@ public class Portal : InteractiveEnv
 
 	public override void SetInfo(int templateID)
 	{
+		base.SetInfo(templateID);
+
 		DataTemplateID = templateID;
 		EnvData = Managers.Data.PortalDic[templateID];
 		PortalData = Managers.Data.PortalDic[templateID];
@@ -21,6 +23,9 @@ public class Portal : InteractiveEnv
 
 		EnvState = Define.EEnvState.Idle;
 
+		GameObject nameTagObject = Managers.Resource.Instantiate("NameTag");
+		NameTag nameTag = nameTagObject.GetComponent<NameTag>();
+		nameTag.SetInfo(this, PortalData.DescriptionTextID);
 	}
 
 	public override void Interact(Player player)

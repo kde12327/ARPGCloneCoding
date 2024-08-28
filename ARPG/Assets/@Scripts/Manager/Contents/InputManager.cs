@@ -45,6 +45,30 @@ public class InputManager
             Managers.Game.KeyState = Define.EKeyState.Skill03;
         }
 
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            string str = "";
+            foreach( var key in Managers.Object.Player.Stats.Stats)
+            {
+                str += key.Key + ", " + key.Value.Value + "\n";
+            }
+
+            Debug.Log(str);
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            /*string str = "";
+            foreach (var key in Managers.Inventory.EquippedItems)
+            {
+                str += key.Key + ", " + key.Value.ItemData.Name  + "\n";
+            }
+
+            Debug.Log(str);*/
+            Managers.UI.GetSceneUI<UI_GameScene>().InventoryToggle();
+        }
+
 
     }
 }

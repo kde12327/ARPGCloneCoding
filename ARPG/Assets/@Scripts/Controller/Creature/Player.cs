@@ -44,8 +44,8 @@ public class Player : Creature
 
 
 
-    private InteractiveEnv _interactTarget = null;
-    public InteractiveEnv InteractTarget 
+    private InteractableObject _interactTarget = null;
+    public InteractableObject InteractTarget 
     {
         get { return _interactTarget; }
         set

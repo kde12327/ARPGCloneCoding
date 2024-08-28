@@ -15,9 +15,14 @@ public class UI_Base : InitBase
 		Init();
 	}
 
+
 	protected void Bind<T>(Type type) where T : UnityEngine.Object
 	{
 		string[] names = Enum.GetNames(type);
+		BindByNames<T>(names);
+	}
+	protected void BindByNames<T>(string[] names) where T : UnityEngine.Object
+	{
 		UnityEngine.Object[] objects = new UnityEngine.Object[names.Length];
 		_objects.Add(typeof(T), objects);
 
@@ -32,13 +37,13 @@ public class UI_Base : InitBase
 				Debug.Log($"Failed to bind({names[i]})");
 		}
 	}
-
 	protected void BindObjects(Type type) { Bind<GameObject>(type); }
 	protected void BindImages(Type type) { Bind<Image>(type); }
 	protected void BindTexts(Type type) { Bind<TMP_Text>(type); }
 	protected void BindButtons(Type type) { Bind<Button>(type); }
 	protected void BindToggles(Type type) { Bind<Toggle>(type); }
 	protected void BindSliders(Type type) { Bind<Slider>(type); }
+	protected void BindByNames<T>(List<string> names) where T : UnityEngine.Object { BindByNames<T>(names.ToArray()); }
 
 
 	protected T Get<T>(int idx) where T : UnityEngine.Object
@@ -57,6 +62,7 @@ public class UI_Base : InitBase
 	protected Toggle GetToggle(int idx) { return Get<Toggle>(idx); }
 	protected Slider GetSliders(int idx) { return Get<Slider>(idx); }
 
+	
 
 	public static void BindEvent(GameObject go, Action<PointerEventData> action = null, Define.EUIEvent type = Define.EUIEvent.Click)
 	{
@@ -79,6 +85,14 @@ public class UI_Base : InitBase
 			case Define.EUIEvent.Drag:
 				evt.OnDragHandler -= action;
 				evt.OnDragHandler += action;
+				break;
+			case Define.EUIEvent.PointerEnter:
+				evt.OnPointerEnterHandler -= action;
+				evt.OnPointerEnterHandler += action;
+				break;
+			case Define.EUIEvent.PointerExit:
+				evt.OnPointerExitHandler -= action;
+				evt.OnPointerExitHandler += action;
 				break;
 		}
 	}

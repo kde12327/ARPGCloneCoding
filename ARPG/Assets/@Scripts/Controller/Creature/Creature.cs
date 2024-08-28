@@ -13,6 +13,9 @@ public class Creature : BaseObject
     public Data.CreatureData CreatureData { get; protected set; }
     public EffectComponent Effects { get; set; }
 
+    [SerializeField]
+    public StatComponent Stats;
+
     protected float StopTheshold = 0.02f;
 
 
@@ -24,20 +27,11 @@ public class Creature : BaseObject
         set
         {
             _hp = value;
-            OnHpChanged?.Invoke(_hp / MaxHp.Value);
+            OnHpChanged?.Invoke(_hp / Stats.GetStat(Stat.Life).Value);
         } 
     }
     public event Action<float> OnHpChanged;
 
-    public CreatureStat MaxHp;
-    public CreatureStat Atk;
-    public CreatureStat CriRate;
-    public CreatureStat CriDamage;
-    public CreatureStat ReduceDamageRate;
-    public CreatureStat LifeStealRate;
-    public CreatureStat ThornsDamageRate; // ½ðÁî
-    public CreatureStat MoveSpeed;
-    public CreatureStat AttackSpeedRate;
     #endregion
 
 
@@ -84,6 +78,8 @@ public class Creature : BaseObject
         Collider.offset = new Vector2(CreatureData.ColliderOffsetX, CreatureData.ColliderOffsetY);
         Collider.radius = CreatureData.ColliderRadius;
 
+        Stats = new();
+        Stats.SetInfo(this);
 
         // RigidBody
         //RigidBody.mass = CreatureData.Mass;
@@ -96,16 +92,12 @@ public class Creature : BaseObject
         // CreatureData.SkillIdList;
 
         // Stat
-        Hp = CreatureData.MaxHp;
-        MaxHp = new CreatureStat(CreatureData.MaxHp);
-        Atk = new CreatureStat(CreatureData.Atk);
-        CriRate = new CreatureStat(CreatureData.CriRate);
-        CriDamage = new CreatureStat(CreatureData.CriDamage);
-        ReduceDamageRate = new CreatureStat(0);
-        LifeStealRate = new CreatureStat(0);
-        ThornsDamageRate = new CreatureStat(0);
-        MoveSpeed = new CreatureStat(CreatureData.MoveSpeed);
-        AttackSpeedRate = new CreatureStat(1);
+        Stats.SetStat(Stat.Life, CreatureData.MaxHp, this);
+        Stats.SetStat(Stat.Atk, CreatureData.Atk, this);
+        Stats.SetStat(Stat.AttackSpeedRate, 1, this);
+        Stats.SetStat(Stat.CriRate, 0, this);
+
+        Hp = Stats.GetStat(Stat.Life).Value;
 
         // State
         CreatureState = ECreatureState.Idle;
@@ -204,8 +196,8 @@ public class Creature : BaseObject
         if (creature == null)
             return;
 
-        float finalDamage = creature.Atk.Value * skill.DamageMultiplier; // TODO
-        Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp.Value);
+        float finalDamage = creature.Stats.GetStat(Stat.Atk).Value * skill.DamageMultiplier; // TODO
+        Hp = Mathf.Clamp(Hp - finalDamage, 0, Stats.GetStat(Stat.Life).Value);
 
         Managers.Object.ShowDamageFont(CenterPosition, finalDamage, transform, false);
         //Debug.Log(CreatureData.DescriptionTextID + ": " + Hp + "/" + MaxHp.Value);

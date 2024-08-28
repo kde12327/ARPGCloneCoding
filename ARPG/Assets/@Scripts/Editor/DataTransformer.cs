@@ -24,6 +24,8 @@ public class DataTransformer : EditorWindow
 		ParseExcelDataToJson<EffectDataLoader, EffectData>("Effect");
 		ParseExcelDataToJson<EnvDataLoader, EnvData>("Env");
 		ParseExcelDataToJson<PortalDataLoader, PortalData>("Portal");
+		ParseExcelDataToJson<ModDataLoader, ModData>("Mod");
+		ParseExcelDataToJson<EquipmentItemBaseDataLoader, EquipmentItemBaseData>("EquipmentItemBase");
 
 		Debug.Log("DataTransformer Completed");
 	}
@@ -69,6 +71,7 @@ public class DataTransformer : EditorWindow
 				}
 				else
 				{
+					//Debug.Log(field.Name + ", " + field.FieldType);
 					object value = ConvertValue(row[f], field.FieldType);
 					field.SetValue(loaderData, value);
 				}

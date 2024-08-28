@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractiveEnv : Env
+public class InteractableObject : BaseObject
 {
-    
     public virtual void Interact(Player player)
     {
         Debug.Log("Interact");
@@ -16,7 +15,13 @@ public class InteractiveEnv : Env
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Managers.Object.Player.InteractTarget = this;
+            OnClick();
         }
     }
+
+    public void OnClick()
+    {
+        Managers.Object.Player.InteractTarget = this;
+    }
+
 }

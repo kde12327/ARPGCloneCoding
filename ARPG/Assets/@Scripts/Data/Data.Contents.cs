@@ -178,6 +178,88 @@ namespace Data
 	}
 	#endregion
 
+	#region Modifier
+	[Serializable]
+	public class ModData : IComparable<ModData>
+	{
+		public int DataId;
+		public string ModId;
+		public string DescriptionTextID;
+		public string Family;
+		public EItemType ItemType;
+		public EGenerateType GenerationType;
+		public int ReqLevel;
+		public List<String> Stats = new();
+		public List<float> MinMaxValues = new();
+		public List<EItemSubType> SpawnTags = new();
+		public int Weight = new();
+
+        public int CompareTo(ModData other)
+        {
+            return ReqLevel - other.ReqLevel;
+        }
+    }
+
+	[Serializable]
+	public class ModDataLoader : ILoader<int, ModData>
+	{
+		public List<ModData> mods = new List<ModData>();
+		public Dictionary<int, ModData> MakeDict()
+		{
+			Dictionary<int, ModData> dict = new Dictionary<int, ModData>();
+			foreach (ModData mod in mods)
+				dict.Add(mod.DataId, mod);
+			return dict;
+		}
+	}
+
+	#endregion
+
+	#region Item
+	// Equipment.Weapon.Dagger
+	// Consumable.Potion.Hp
+	// EItemGroupType.
+
+	[Serializable]
+	public class BaseData
+	{
+		public int DataId;
+	}
+
+	[Serializable]
+	public class ItemData : BaseData
+	{
+		public string Name;
+		public EItemType ItemType;
+		public EItemSubType ItemSubType;
+		public string Icon;
+	}
+
+	[Serializable]
+	public class EquipmentItemBaseData:ItemData
+	{
+		public int DropLevel;
+		public List<String> RequireStats = new();
+		public List<int> RequireStatValues = new();
+		public List<String> ImplicitOption = new();
+		public List<float> ImplicitMinMaxValues = new();
+
+	}
+
+	[Serializable]
+	public class EquipmentItemBaseDataLoader : ILoader<int, EquipmentItemBaseData>
+	{
+		public List<EquipmentItemBaseData> itemBases = new List<EquipmentItemBaseData>();
+		public Dictionary<int, EquipmentItemBaseData> MakeDict()
+		{
+			Dictionary<int, EquipmentItemBaseData> dict = new Dictionary<int, EquipmentItemBaseData>();
+			foreach (EquipmentItemBaseData itemBase in itemBases)
+				dict.Add(itemBase.DataId, itemBase);
+			return dict;
+		}
+	}
+
+	#endregion
 
 	#region Env
 	[Serializable]

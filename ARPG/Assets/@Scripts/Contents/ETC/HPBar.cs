@@ -29,6 +29,4 @@ public class HPBar : MonoBehaviour
         hpRatio = Mathf.Min(1, hpRatio);
         _slider.value = hpRatio;
     }
-
-    
 }

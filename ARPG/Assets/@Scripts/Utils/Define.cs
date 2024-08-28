@@ -36,6 +36,8 @@ public static class Define
         PointerDown,
         PointerUp,
         Drag,
+        PointerEnter,
+        PointerExit,
     }
 
     public enum ESound
@@ -55,7 +57,8 @@ public static class Define
         Env,
         Effect,
         Interactive,
-        Portal
+        Portal,
+        ItemHolder
     }
 
 
@@ -177,11 +180,88 @@ public static class Define
         CleanDebuff,
     }
 
+    public enum EBroadcastEventType
+    {
+        None,
+        KillMonster,
+        LevelUp,
+    }
+
     public const float EFFECT_SMALL_RADIUS = 2.5f;
     public const float EFFECT_NORMAL_RADIUS = 4.5f;
     public const float EFFECT_BIG_RADIUS = 5.5f;
 
     public const int CAMERA_PROJECTION_SIZE = 12;
+
+    #region Mod
+    public enum EGenerateType
+    {
+        None,
+        Prefix,
+        Suffix,
+        Implicit,
+
+    }
+
+
+    #endregion
+
+    #region Item
+
+    public enum EItemType
+    {
+        None,
+        Equipment,
+        Consumable,
+    }
+
+    public enum EItemSubType
+    {
+        None,
+        Weapon,
+        Helmet,
+        Gloves,
+        Boots,
+        BodyArmour,
+        Amulet,
+        Ring,
+        Belt,
+        Length
+    }
+
+    public enum EEquipSlotType
+    {
+        None,
+        Weapon = 1,
+        Helmet = 2,
+        Gloves = 3,
+        Boots = 4,
+        BodyArmour = 5,
+        Amulet = 6,
+        Ring = 7,
+        Belt = 8,
+        EquipMax,
+
+        Inventory = 100,
+        WareHouse = 200,
+    }
+
+    public enum ERarity
+    {
+        Normal,
+        Magic,
+        Rare,
+        Unique,
+    }
+
+    public enum SlotState
+    {
+        Enable,
+        Error,
+        None
+    }
+
+    #endregion
 
     #region HARD CODING
     public const float PLAYER_ATTACK_POINTX = 1.0f;
@@ -243,4 +323,24 @@ public static class SortingLayers
     public const int SKILL_EFFECT = 310;
     public const int DAMAGE_FONT = 410;
 
+}
+
+public static class Stat
+{
+    public const string Life = "Life";
+    public const string Mana = "Mana";
+    public const string EnergySheild = "EnergySheild";
+    public const string Atk = "Atk";
+    public const string CriRate = "CriRate";
+    public const string AttackSpeedRate = "AttackSpeedRate";
+    public const string Str = "Str";
+    public const string Dex = "Dex";
+    public const string Int = "Int";
+}
+
+public static class UIColor
+{
+    public static Color ENABLE = new Color32(17, 132, 52, 156);
+    public static Color ERROR = new Color32(132, 23, 17, 156);
+    public static Color TRANSPARENT = new Color32(17, 132, 52, 0);
 }
