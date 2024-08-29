@@ -70,8 +70,6 @@ public class UI_InventoryGrid : UI_Base
         {
             MousePosition = MouseToCell();
 
-            
-
             List<Vector2Int> list;
             Define.SlotState state = Managers.Inventory.GetCellList(MousePosition.Value, out list);
             ActiveCellList.AddRange(list);

@@ -139,7 +139,7 @@ public class InventoryManager
 			}
 
 
-			List<int> ids = GetIdsOnPos(pos);
+			List<int> ids = GetIdsOnPos(pos, size);
 
 			if(ids.Count == 0)
             {
@@ -353,17 +353,6 @@ public class InventoryManager
 
 	public bool ClickInventory(EEquipSlotType slotType, Vector2 pos)
     {
-		string str = "";
-		for(int y = 0; y < 5; y++)
-        {
-			for(int x = 0; x < 12; x++)
-            {
-				str += InventoryItemGrid[x, y];
-
-			}
-			str += "\n";
-        }
-		Debug.Log(str);
 		if(HoldingItem == null)
         {
 			ItemBase item = GetItemByPosInInventory(pos);
