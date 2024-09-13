@@ -9,7 +9,10 @@ public class UI_GameScene : UI_Scene
 {
     enum GameObjects
     {
-        InventoryPanel
+        PlayerInventoryPanel,
+        WarehouseInventoryPanel,
+        UI_NpcInteractionView,
+        UI_DiscriptionView,
     }
 
     enum Texts
@@ -48,10 +51,11 @@ public class UI_GameScene : UI_Scene
 
     public enum UI_InventoryGrids
     {
-        Inventory
+        PlayerInventory,
+        WarehouseInventory
     }
 
-
+    bool TEMPOPENPLAYERINVENTORYFLAG = false;
     public override bool Init()
     {
         if (base.Init() == false)
@@ -66,22 +70,44 @@ public class UI_GameScene : UI_Scene
         Bind<UI_ItemSlot>(typeof(UIItemSlots));
         Bind<UI_InventoryGrid>(typeof(UI_InventoryGrids));
 
-
-        Get<UI_InventoryGrid>((int)UI_InventoryGrids.Inventory).gameObject.BindEvent(evt =>
+        UI_InventoryGrid playerInventoryGrid = Get<UI_InventoryGrid>((int)UI_InventoryGrids.PlayerInventory);
+        playerInventoryGrid.SetInfo(Define.EEquipSlotType.PlayerInventory);
+        playerInventoryGrid.gameObject.BindEvent(evt =>
         {
-            var v = Get<UI_InventoryGrid>((int)UI_InventoryGrids.Inventory).MouseToCell();
+            var v = Get<UI_InventoryGrid>((int)UI_InventoryGrids.PlayerInventory).MouseToCell();
             //Debug.Log(v);
-            Managers.Inventory.ClickInventory(Define.EEquipSlotType.Inventory, v);
+            Managers.Inventory.ClickInventory(playerInventoryGrid.InvenType, v);
         });
 
-        Get<UI_InventoryGrid>((int)UI_InventoryGrids.Inventory).gameObject.BindEvent(evt =>
+        playerInventoryGrid.gameObject.BindEvent(evt =>
         {
-            Get<UI_InventoryGrid>((int)UI_InventoryGrids.Inventory).PointEnter();
+            Get<UI_InventoryGrid>((int)UI_InventoryGrids.PlayerInventory).PointEnter();
         }, EUIEvent.PointerEnter);
 
-        Get<UI_InventoryGrid>((int)UI_InventoryGrids.Inventory).gameObject.BindEvent(evt =>
+        playerInventoryGrid.gameObject.BindEvent(evt =>
         {
-            Get<UI_InventoryGrid>((int)UI_InventoryGrids.Inventory).PointExit();
+            Get<UI_InventoryGrid>((int)UI_InventoryGrids.PlayerInventory).PointExit();
+        }, EUIEvent.PointerExit);
+
+
+
+        UI_InventoryGrid warehouseInventoryGrid = Get<UI_InventoryGrid>((int)UI_InventoryGrids.WarehouseInventory);
+        warehouseInventoryGrid.SetInfo(Define.EEquipSlotType.WarehouseInventory);
+        warehouseInventoryGrid.gameObject.BindEvent(evt =>
+        {
+            var v = Get<UI_InventoryGrid>((int)UI_InventoryGrids.WarehouseInventory).MouseToCell();
+            //Debug.Log(v);
+            Managers.Inventory.ClickInventory(warehouseInventoryGrid.InvenType, v);
+        });
+
+        warehouseInventoryGrid.gameObject.BindEvent(evt =>
+        {
+            Get<UI_InventoryGrid>((int)UI_InventoryGrids.WarehouseInventory).PointEnter();
+        }, EUIEvent.PointerEnter);
+
+        warehouseInventoryGrid.gameObject.BindEvent(evt =>
+        {
+            Get<UI_InventoryGrid>((int)UI_InventoryGrids.WarehouseInventory).PointExit();
         }, EUIEvent.PointerExit);
 
 
@@ -91,17 +117,145 @@ public class UI_GameScene : UI_Scene
         InitSkillImage();
 
 
-        var inven = GetObject((int)GameObjects.InventoryPanel);
-        inven.SetActive(false);
+        var playerInven = GetObject((int)GameObjects.PlayerInventoryPanel);
+        playerInven.SetActive(false);
+        
+        var warehouseInven = GetObject((int)GameObjects.WarehouseInventoryPanel);
+        warehouseInven.SetActive(false);
 
+        var npcInteractinoView = GetObject((int)GameObjects.UI_NpcInteractionView);
+        npcInteractinoView.SetActive(false);
+        
+        var itemDiscriptionView = GetObject((int)GameObjects.UI_DiscriptionView);
+        itemDiscriptionView.SetActive(false);
 
         return true;
     }
 
+    
+    public void SetActiveVendor(Npc npc)
+    {
+        Debug.Log("vendor");
+    }
+
+    public void SetNpcInteraction(Npc npc)
+    {
+        var npcInteractinoView = GetObject((int)GameObjects.UI_NpcInteractionView);
+        npcInteractinoView.SetActive(true);
+        npcInteractinoView.GetComponent<UI_NpcInteractionView>().SetInfo(npc);
+    }
+
+    public void EnableNpcInteraction()
+    {
+        var npcInteractinoView = GetObject((int)GameObjects.UI_NpcInteractionView);
+        npcInteractinoView.SetActive(false);
+    }
+
+    public void SetDiscription(ItemBase item, float top, float left, float right)
+    {
+        var discriptionView = GetObject((int)GameObjects.UI_DiscriptionView);
+        discriptionView.SetActive(true);
+        discriptionView.GetComponent<UI_DiscriptionView>().SetInfo(item);
+
+        // 위치
+        // 우선순위: 위, 좌, 우
+        RectTransform discriptionRect = discriptionView.GetComponent<RectTransform>();
+
+        Vector3[] worldCorners = new Vector3[4];
+        discriptionRect.GetWorldCorners(worldCorners);
+
+        // worldCorners[0]은 좌하단, worldCorners[1]은 좌상단, worldCorners[2]은 우상단, worldCorners[3]은 우하단 좌표를 가짐
+
+        // 좌상단의 y값을 yMin으로, 좌하단의 x값을 xMin으로, 우하단의 x값을 xMax로 사용
+        float dTop = worldCorners[1].y;
+        float dBottom = worldCorners[0].y;
+        float dLeft = worldCorners[0].x;
+        float dRight = worldCorners[3].x;
+
+        /*float discriptionWidth = discriptionRect.rect.width;
+        float discriptionHeight = discriptionRect.rect.height;*/
+        float discriptionWidth = MathF.Abs(dRight - dLeft);
+        float discriptionHeight = MathF.Abs(dTop - dBottom);
+
+        Debug.Log(top + ", " + left + ", " + right);
+
+        Vector2 newPosition = Vector2.zero;
+
+
+
+        newPosition = new Vector2((right + left) / 2 , top);
+        Debug.Log(newPosition.x + ", " + newPosition.y + ", " + discriptionWidth + ", " + discriptionHeight);
+        // 1920 1080
+        //Debug.Log(Screen.width + ", " + Screen.height );
+
+
+        // 우선순위: 위쪽, 왼쪽, 오른쪽
+        if (top + discriptionHeight < Screen.height)  // 화면 안에서 위쪽에 위치 가능
+        {
+            // 중앙에 위치 (xMin과 xMax의 중간값으로 설정)
+            newPosition = new Vector2((right + left) / 2 , top);
+
+        }
+        else if (left - discriptionWidth >= 0)  // 화면 왼쪽에 위치 가능
+        {
+            // 왼쪽으로 붙여서 배치
+            newPosition = new Vector2(left - discriptionWidth / 2, top - discriptionHeight);
+        }
+        else  // 오른쪽에 배치
+        {
+            // 오른쪽으로 붙여서 배치
+            newPosition = new Vector2(right + discriptionWidth / 2, top - discriptionHeight);
+        }
+
+        // 부모 캔버스 좌표로 변환
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            gameObject.GetComponent<RectTransform>(),
+            newPosition,
+            gameObject.GetComponent<Canvas>().worldCamera,
+            out Vector2 localPoint);
+
+        // RectTransform의 위치 설정
+        discriptionRect.anchoredPosition = localPoint;
+
+    }
+
+    public void EnableDiscription()
+    {
+        var discriptionView = GetObject((int)GameObjects.UI_DiscriptionView);
+        discriptionView.SetActive(false);
+    }
+
+
     public void InventoryToggle()
     {
-        var inven = GetObject((int)GameObjects.InventoryPanel);
-        inven.SetActive(!inven.activeSelf);
+        var playerInven = GetObject((int)GameObjects.PlayerInventoryPanel);
+        playerInven.SetActive(!playerInven.activeSelf);
+    }
+
+    public void SetActiveWarehouseInventory(bool active)
+    {
+        var warehouseInven = GetObject((int)GameObjects.WarehouseInventoryPanel);
+        warehouseInven.SetActive(active);
+
+        var playerInven = GetObject((int)GameObjects.PlayerInventoryPanel);
+
+        // 인벤토리 안열린 상태에서 창고 열었을 때,
+        // 인벤토리도 같이 열리도록.
+        if (active && !playerInven.activeSelf)
+        {
+            TEMPOPENPLAYERINVENTORYFLAG = true;
+            playerInven.SetActive(true);
+        }
+
+        // 창고 열때 같이 열렸던 인벤토리면
+        // 창고 닫을 때 인벤토리도 닫도록.
+        if (!active && TEMPOPENPLAYERINVENTORYFLAG)
+        {
+            TEMPOPENPLAYERINVENTORYFLAG = false;
+            playerInven.SetActive(false);
+        }
+
+
     }
 
 
@@ -131,10 +285,28 @@ public class UI_GameScene : UI_Scene
     {
         switch (type)
         {
-            case EEquipSlotType.Inventory:
-                Get<UI_InventoryGrid>((int)UI_InventoryGrids.Inventory).PutItem(item, itemPos);
+            case EEquipSlotType.PlayerInventory:
+                Get<UI_InventoryGrid>((int)UI_InventoryGrids.PlayerInventory).PutItem(item, itemPos);
+                break;
+            case EEquipSlotType.WarehouseInventory:
+                Get<UI_InventoryGrid>((int)UI_InventoryGrids.WarehouseInventory).PutItem(item, itemPos);
                 break;
         }
+    }
+
+
+    /**
+    이동 가능하면 true, interact 등에 의해 이동 불가면 false
+    이동 불가시 해당 부분 처리
+     */
+    public bool MoveOrNext()
+    {
+        SetActiveWarehouseInventory(false);
+        EnableNpcInteraction();
+
+        // 스크립트 보거나 하는 경우 false 반환
+
+        return true;
     }
 
     public void BindItemSlotEvent()
@@ -171,9 +343,31 @@ public class UI_GameScene : UI_Scene
 
             Get<UI_ItemSlot>((int)uitype).gameObject.BindEvent(evt =>
             {
-                if (Managers.Inventory.GetEquippedItem(slotType) != null)
+                ItemBase item = Managers.Inventory.GetEquippedItem(slotType);
+
+                if (item != null)
                 {
                     Get<UI_ItemSlot>((int)uitype).SetSlotState(SlotState.Enable);
+
+                    var rect = Get<UI_ItemSlot>((int)uitype).GetComponent<RectTransform>();
+
+                    // RectTransform의 World 좌표를 구해서 화면 내 위치로 변환
+                    Vector3[] worldCorners = new Vector3[4];
+                    rect.GetWorldCorners(worldCorners);
+
+                    // worldCorners[0]은 좌하단, worldCorners[1]은 좌상단, worldCorners[2]은 우상단, worldCorners[3]은 우하단 좌표를 가짐
+
+                    // 좌상단의 y값을 yMin으로, 좌하단의 x값을 xMin으로, 우하단의 x값을 xMax로 사용
+                    float top = worldCorners[1].y;
+                    float left = worldCorners[0].x;
+                    float right = worldCorners[3].x;
+
+                    // SetDiscription 호출
+                    SetDiscription(item, top, left, right);
+                }
+                else
+                {
+                    EnableDiscription();
                 }
 
                 if (Managers.Inventory.HoldingItem != null)
@@ -187,10 +381,14 @@ public class UI_GameScene : UI_Scene
                         Get<UI_ItemSlot>((int)uitype).SetSlotState(SlotState.Error);
                     }
                 }
+
+
+
             }, EUIEvent.PointerEnter);
 
             Get<UI_ItemSlot>((int)uitype).gameObject.BindEvent(evt =>
             {
+                EnableDiscription();
                 Get<UI_ItemSlot>((int)uitype).SetSlotState(SlotState.None);
             }, EUIEvent.PointerExit);
         }
@@ -246,5 +444,18 @@ public class UI_GameScene : UI_Scene
             skill.SetSkillIcon(null);
             skill.SetSkillCooldown(0.0f);
         }
+    }
+    public Vector2Int GetInventorySize(Define.EEquipSlotType invenType)
+    {
+        switch (invenType)
+        {
+            case EEquipSlotType.PlayerInventory:
+                return Get<UI_InventoryGrid>((int)UI_InventoryGrids.PlayerInventory).GridSize;
+
+            case EEquipSlotType.WarehouseInventory:
+                return Get<UI_InventoryGrid>((int)UI_InventoryGrids.WarehouseInventory).GridSize;
+        }
+
+        return new();
     }
 }

@@ -127,7 +127,9 @@ public class MapManager
 				}
 				else if (tile.ObjectType == Define.EObjectType.Npc)
 				{
-
+					Vector3 worldPos = Cell2World(cellPos);
+					Npc npc = Managers.Object.Spawn<Npc>(worldPos, tile.DataTemplateID);
+					npc.SetCellPos(cellPos, true);
 				}
 				else if (tile.ObjectType == Define.EObjectType.Portal)
 				{

@@ -113,6 +113,27 @@ public class MapEditor : MonoBehaviour
 
             AssetDatabase.CreateAsset(customTile, path);
         }
+
+        // Npc
+        Dictionary<int, Data.NpcData> NpcDic = LoadJson<Data.NpcDataLoader, int, Data.NpcData>("NpcData").MakeDict();
+        foreach (var data in NpcDic.Values)
+        {
+
+            CustomTile customTile = ScriptableObject.CreateInstance<CustomTile>();
+            customTile.Name = data.DescriptionTextID;
+            customTile.DataTemplateID = data.DataId;
+            customTile.ObjectType = Define.EObjectType.Npc;
+
+            string name = $"{data.DataId}_{data.DescriptionTextID}";
+            string path = "Assets/@Resources/TileMaps/Tiles/Dev/Npc";
+            path = Path.Combine(path, $"{name}.Asset");
+
+            if (File.Exists(path))
+                continue;
+
+            AssetDatabase.CreateAsset(customTile, path);
+        }
+
         Debug.Log("Map Tile Generation Complete");
 
     }

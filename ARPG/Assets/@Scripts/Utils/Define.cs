@@ -78,6 +78,15 @@ public static class Define
         OnDamaged,
         Dead,
     }
+
+    public enum ENpcState
+    {
+        Idle,
+        OnDamaged,
+        Dead,
+    }
+
+
     public enum ELayer
     {
         Default = 0,
@@ -193,6 +202,14 @@ public static class Define
 
     public const int CAMERA_PROJECTION_SIZE = 12;
 
+    public enum EInteractionType
+    {
+        Warehouse,
+        Vendor
+    }
+
+
+
     #region Mod
     public enum EGenerateType
     {
@@ -242,8 +259,8 @@ public static class Define
         Belt = 8,
         EquipMax,
 
-        Inventory = 100,
-        WareHouse = 200,
+        PlayerInventory = 100,
+        WarehouseInventory = 200,
     }
 
     public enum ERarity
@@ -259,6 +276,14 @@ public static class Define
         Enable,
         Error,
         None
+    }
+
+    public enum VendorType
+    {
+        Equipment,
+        Weapon,
+        Accessory,
+        Consumable,
     }
 
     #endregion
@@ -319,8 +344,10 @@ public static class SortingLayers
     public const int SPELL_INDICATOR = 200;
     public const int CREATURE = 300;
     public const int ENV = 300;
+    public const int NPC = 300;
     public const int PROJECTILE = 310;
     public const int SKILL_EFFECT = 310;
+    public const int UI_DEFAULT = 400;
     public const int DAMAGE_FONT = 410;
 
 }
@@ -343,4 +370,14 @@ public static class UIColor
     public static Color ENABLE = new Color32(17, 132, 52, 156);
     public static Color ERROR = new Color32(132, 23, 17, 156);
     public static Color TRANSPARENT = new Color32(17, 132, 52, 0);
+
+    public static Color NORMAL = new Color32(56, 56, 58, 156);
+    public static Color MAGIC = new Color32(23, 23, 38, 156);
+    public static Color RARE = new Color32(254, 183, 64, 156);
+    public static Color UNIQUE = new Color32(57, 27, 12, 156);
+
+    public static Color NORMALTEXT = new Color32(187, 187, 187, 255);
+    public static Color MAGICTEXT = new Color32(135, 135, 254, 255);
+    public static Color RARETEXT = new Color32(254, 254, 118, 255);
+    public static Color UNIQUETEXT = new Color32(173, 94, 28, 255);
 }

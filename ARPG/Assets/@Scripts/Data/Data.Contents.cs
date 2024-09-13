@@ -241,7 +241,9 @@ namespace Data
 		public int DropLevel;
 		public List<String> RequireStats = new();
 		public List<int> RequireStatValues = new();
-		public List<String> ImplicitOption = new();
+		public List<String> DefaultOptions = new();
+		public List<float> DefaultMinMaxValues = new();
+		public List<String> ImplicitOptions	 = new();
 		public List<float> ImplicitMinMaxValues = new();
 
 	}
@@ -285,6 +287,34 @@ namespace Data
 			return dict;
 		}
 	}
+	#endregion
+
+	#region Npc
+	[Serializable]
+	public class NpcData
+	{
+		public int DataId;
+		public string DescriptionTextID;
+		public string SkeletonDataID;
+		public List<EInteractionType> InteractionTypes;
+		public List<int> ScriptIds;
+		public List<int> VendorList;
+	}
+
+	[Serializable]
+	public class NpcDataLoader : ILoader<int, NpcData>
+	{
+		public List<NpcData> npcs = new List<NpcData>();
+		public Dictionary<int, NpcData> MakeDict()
+		{
+			Dictionary<int, NpcData> dict = new Dictionary<int, NpcData>();
+			foreach (NpcData npc in npcs)
+				dict.Add(npc.DataId, npc);
+			return dict;
+		}
+	}
+
+
 	#endregion
 
 	#region EffectData

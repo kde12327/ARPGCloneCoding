@@ -9,6 +9,18 @@ public class Player : Creature
 {
 
     Vector3 _destPos = Vector3.zero;
+    Vector3 DestPos
+    {
+        get { return _destPos; }
+        set 
+        {
+
+            InteractTarget = null;
+
+            if (Managers.UI.GetSceneUI<UI_GameScene>().MoveOrNext())
+                _destPos = value; 
+        }
+    }
 
 
 
@@ -50,11 +62,11 @@ public class Player : Creature
         get { return _interactTarget; }
         set
         {
-            _interactTarget = value;
             if(value != null)
             {
-                _destPos = _interactTarget.transform.position;
+                DestPos = value.transform.position;
             }
+            _interactTarget = value;
         }
     }
 
@@ -259,7 +271,7 @@ public class Player : Creature
             NextPortalId = null;
 
             SetCellPos(Managers.Map.World2Cell(NextPortal.transform.position), true);
-            _destPos = transform.position;
+            DestPos = transform.position;
         }
     }
 
@@ -268,18 +280,18 @@ public class Player : Creature
         base.SetCellPos(cellPos, forceMove);
         if(forceMove == true)
         {
-            _destPos = transform.position;
+            DestPos = transform.position;
         }
     }
 
     private void Update()
     {
-        Vector3 dir = (_destPos - transform.position);
+        Vector3 dir = (DestPos - transform.position);
         //Debug.Log(dir.sqrMagnitude);
 
         if(CreatureState != ECreatureState.Skill)
         {
-            if (Managers.Map.World2Cell(_destPos) == Managers.Map.World2Cell(transform.position))
+            if (Managers.Map.World2Cell(DestPos) == Managers.Map.World2Cell(transform.position))
             {
                 CreatureState = Define.ECreatureState.Idle;
                 if(InteractTarget != null &&(transform.position - InteractTarget.transform.position).sqrMagnitude < 1)
@@ -291,7 +303,7 @@ public class Player : Creature
             else
             {
                 CreatureState = Define.ECreatureState.Move;
-                EFindPathResult result = FindPathAndMoveToCellPos(_destPos, PLAYER_DEFAULT_MOVE_DEPTH);
+                EFindPathResult result = FindPathAndMoveToCellPos(DestPos, PLAYER_DEFAULT_MOVE_DEPTH);
             }
 
         }
@@ -341,9 +353,7 @@ public class Player : Creature
 
     private void HandleOnMovePosChanged(Vector3 pos)
     {
-        _destPos = pos;
-        InteractTarget = null;
-
+        DestPos = pos;
 
     }
 

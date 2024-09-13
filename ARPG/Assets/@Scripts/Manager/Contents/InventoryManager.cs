@@ -17,7 +17,8 @@ public class InventoryManager
 	List<ItemBase> InventoryItems = new List<ItemBase>(); // 가방 인벤
 	List<ItemBase> WarehouseItems = new List<ItemBase>(); // 창고
 
-	int[,] InventoryItemGrid = new int[12, 5];
+	int[,] PlayerInventoryItemGrid = new int[12, 5];
+	int[,] WarehouseInventoryItemGrid = new int[12, 12];
 
 	UI_Item _holdingItem;
 	public UI_Item HoldingItem 
@@ -65,19 +66,33 @@ public class InventoryManager
 			if(equippedItem == null)
             {
 				// 장비 비었을 때 장착
-				EquipItem(uiitem.Item, uiitem.Item.GetEquipItemEquipSlot());
+				return EquipItem(uiitem.Item, uiitem.Item.GetEquipItemEquipSlot());
             }
             else
             {
-				//인벤토리에 들어가기
-            }
+				// 인벤토리에 바로
+
+				Vector2 pos = GetInventoryEmptyPosition(Define.EEquipSlotType.PlayerInventory, item.ItemSize);
+				if (pos.x != -1)
+				{
+					return AddItemInInventory(Define.EEquipSlotType.PlayerInventory, pos, item);
+				}
+				else
+				{
+					return false;
+				}
+
+
+			}
 			
         }
+
+		AllItems.Add(item);
 
 		return true;
 	}
 
-	public SlotState GetCellList(Vector2 pos, out List<Vector2Int> list)
+	public SlotState GetCellList(Define.EEquipSlotType invenType, Vector2 pos,  out List<Vector2Int> list)
     {
 
 		list = new();
@@ -85,7 +100,17 @@ public class InventoryManager
 
 		if (HoldingItem == null)
         {
-			int id = InventoryItemGrid[(int)pos.x, (int)pos.y];
+			int id = 0;
+
+			switch(invenType)
+            {
+				case EEquipSlotType.PlayerInventory:
+					id = PlayerInventoryItemGrid[(int)pos.x, (int)pos.y];
+					break;
+				case EEquipSlotType.WarehouseInventory:
+					id = WarehouseInventoryItemGrid[(int)pos.x, (int)pos.y];
+					break;
+			}
 
 			if (id != 0)
 			{
@@ -125,21 +150,24 @@ public class InventoryManager
 			int xSize = size.x;
 			int ySize = size.y;
 
+			Vector2Int sizeMax = GetInventorySize(invenType);
+
+
 			xStart = Mathf.Max(xStart, 0);
 			yStart = Mathf.Max(yStart, 0);
-			xStart = Mathf.Min(xStart, 12 - xSize);
-			yStart = Mathf.Min(yStart, 5 - ySize);
+			xStart = Mathf.Min(xStart, sizeMax.x - xSize);
+			yStart = Mathf.Min(yStart, sizeMax.y - ySize);
 
-			for (int x = xStart; x < xStart + xSize; x++)
+			for (int x = 0; x < xSize; x++)
 			{
-				for (int y = yStart; y < yStart + ySize; y++)
+				for (int y = 0; y < ySize; y++)
 				{
-					list.Add(new Vector2Int(x, y));
+					list.Add(new Vector2Int(xStart + x, yStart + y));
 				}
 			}
 
 
-			List<int> ids = GetIdsOnPos(pos, size);
+			List<int> ids = GetIdsOnPos(invenType, pos,  size);
 
 			if(ids.Count == 0)
             {
@@ -171,7 +199,7 @@ public class InventoryManager
 			DbId = itemDbId,
 			TemplateId = itemTemplateId,
 			Count = count,
-			EquipSlot = (int)EEquipSlotType.Inventory,
+			EquipSlot = (int)EEquipSlotType.PlayerInventory,
 			EnchantCount = 0,
 		};
 
@@ -202,45 +230,31 @@ public class InventoryManager
 		return item;
 	}
 
+
+	// 아이템 주웠을 때.
 	public bool AddItem(ItemBase item)
 	{
 		if (item == null)
 			return false;
 
-		switch(item.ItemType)
+		// 장착 가능한 경우에 바로 착용
+		if(item.ItemType == EItemType.Equipment && GetEquippedItemBySubType(item.ItemSubType) == null)
         {
-			case EItemType.Equipment:
-				if(GetEquippedItemBySubType(item.ItemSubType) == null)
-                {
-					EquipItem(item, item.GetEquipItemEquipSlot());
-
-					//EquippedItems.Add((int)item.ItemSubType, item);
-				}
-				else
-                {
-					if (!IsInventoryFull())
-					{
-						InventoryItems.Add(item);
-					}
-                    else
-                    {
-						return false;
-                    }
-				}
-				break;
-			case EItemType.Consumable:
-				if(!IsInventoryFull())
-                {
-					InventoryItems.Add(item);
-				}
-                else
-                {
-					return false;
-                }
-				break;
-			case EItemType.None:
+			EquipItem(item, item.GetEquipItemEquipSlot());
+		}
+        else
+        {
+			Vector2 pos = GetInventoryEmptyPosition(Define.EEquipSlotType.PlayerInventory, item.ItemSize);
+			if (pos.x != -1)
+			{
+				return AddItemInInventory(Define.EEquipSlotType.PlayerInventory, pos, item);
+			}
+			else
+			{
 				return false;
-        }
+			}
+		}
+
 
 		AllItems.Add(item);
 
@@ -351,11 +365,11 @@ public class InventoryManager
 		return true;
 	}
 
-	public bool ClickInventory(EEquipSlotType slotType, Vector2 pos)
+	public bool ClickInventory(EEquipSlotType invenType, Vector2 pos)
     {
 		if(HoldingItem == null)
         {
-			ItemBase item = GetItemByPosInInventory(pos);
+			ItemBase item = GetItemByPosInInventory(invenType, pos);
 
 			if (item == null)
             {
@@ -364,14 +378,13 @@ public class InventoryManager
 			}
 			else
             {
-				RemoveItemInInventory(item.InstanceId);
+				RemoveItemInInventory(invenType, item.InstanceId);
 				HoldingItem = item.UIItem;
 			}
         }
         else
         {
-
-			return AddHoldingItemInInventory(pos, HoldingItem.Item.ItemSize);
+			return AddItemInInventory(invenType, pos,  HoldingItem.Item, true);
 		}
 
 		
@@ -408,10 +421,20 @@ public class InventoryManager
 		return AllItems.Find(item => item.InstanceId == instanceId);
 	}
 
-	public ItemBase GetItemByPosInInventory(Vector2 pos)
+	public ItemBase GetItemByPosInInventory(Define.EEquipSlotType invenType, Vector2 pos)
     {
 
-		int id = InventoryItemGrid[(int)pos.x, (int)pos.y];
+		int id = 0;
+		switch (invenType)
+		{
+			case EEquipSlotType.PlayerInventory:
+				id = PlayerInventoryItemGrid[(int)pos.x, (int)pos.y];
+				break;
+			case EEquipSlotType.WarehouseInventory:
+				id = WarehouseInventoryItemGrid[(int)pos.x, (int)pos.y];
+				break;
+		}
+		
 
 		if(id == 0)
         {
@@ -422,30 +445,34 @@ public class InventoryManager
 			return GetItem(id);
 		}
 	}
-	public bool AddHoldingItemInInventory(Vector2 pos, Vector2Int? size =  null)
+	public bool AddItemInInventory(Define.EEquipSlotType invenType, Vector2 pos, ItemBase item, bool holdingItemFlag = false)
     {
 
-		if (!size.HasValue) size = new Vector2Int(1, 1);
+		Vector2Int size = item.ItemSize;
 
-		int xStart = (size.Value.x % 2 == 1) ?
-			(Mathf.FloorToInt(pos.x) - (size.Value.x / 2)) :
-			(Mathf.RoundToInt(pos.x) - (size.Value.x / 2));
-		int yStart = (size.Value.y % 2 == 1) ?
-			(Mathf.FloorToInt(pos.y) - (size.Value.y / 2)) :
-			(Mathf.RoundToInt(pos.y) - (size.Value.y / 2));
+
+		int xStart = (size.x % 2 == 1) ?
+			(Mathf.FloorToInt(pos.x) - (size.x / 2)) :
+			(Mathf.RoundToInt(pos.x) - (size.x / 2));
+		int yStart = (size.y % 2 == 1) ?
+			(Mathf.FloorToInt(pos.y) - (size.y / 2)) :
+			(Mathf.RoundToInt(pos.y) - (size.y / 2));
 
 		
 
-		int xSize = size.Value.x;
-		int ySize = size.Value.y;
+		int xSize = size.x;
+		int ySize = size.y;
+
+		Vector2Int sizeMax = GetInventorySize(invenType);
+
 
 		xStart = Mathf.Max(xStart, 0);
 		yStart = Mathf.Max(yStart, 0);
-		xStart = Mathf.Min(xStart, 12 - xSize);
-		yStart = Mathf.Min(yStart, 5 - ySize);
+		xStart = Mathf.Min(xStart, sizeMax.x - xSize);
+		yStart = Mathf.Min(yStart, sizeMax.y - ySize);
 
 
-		List<int> ids = GetIdsOnPos(pos, size);
+		List<int> ids = GetIdsOnPos(invenType, pos, size);
 
 		
 		if(ids.Count > 1)
@@ -457,43 +484,88 @@ public class InventoryManager
 
 		if (ids.Count == 0)
 		{
-			for (int x = xStart; x < xStart + xSize; x++)
+			for (int x = 0; x < xSize; x++)
 			{
-				for (int y = yStart; y < yStart + ySize; y++)
+				for (int y = 0; y < ySize; y++)
 				{
-					InventoryItemGrid[x, y] = HoldingItem.Item.InstanceId;
+					switch (invenType)
+                    {
+						case EEquipSlotType.PlayerInventory:
+							PlayerInventoryItemGrid[xStart + x, yStart + y] = item.InstanceId;
+							break;
+						case EEquipSlotType.WarehouseInventory:
+							WarehouseInventoryItemGrid[xStart + x, yStart + y] = item.InstanceId;
+							break;
+                    }
 				}
 			}
 
-			Managers.UI.GetSceneUI<UI_GameScene>().PutItem(EEquipSlotType.Inventory, HoldingItem, new Vector2(xStart + (float)xSize/2, yStart + (float)ySize / 2));
-			InventoryItems.Add(HoldingItem.Item);
-			HoldingItem.Item.EquipPos = new(xStart, yStart);
-			HoldingItem = null;
+			Managers.UI.GetSceneUI<UI_GameScene>().PutItem(invenType, item.UIItem, new Vector2(xStart + (float)xSize/2, yStart + (float)ySize / 2));
+			switch (invenType)
+			{
+				case EEquipSlotType.PlayerInventory:
+					InventoryItems.Add(item);
+					break;
+				case EEquipSlotType.WarehouseInventory:
+					WarehouseItems.Add(item);
+					break;
+			}
+			item.EquipPos = new(xStart, yStart);
+
+			// 홀딩 아이템 처리 부분
+			if (holdingItemFlag)
+            {
+				HoldingItem = null;
+            }
 
 		}
 		else if (ids.Count == 1)
-		{
-			ItemBase item = RemoveItemInInventory(ids[0]);
+		{	
+			// 아이템 두려는 곳에 이미 아이템이 있는 경우.
+			// 아이템을 들고 있는 경우만 여기로 옴.
+			ItemBase removeItem = RemoveItemInInventory(invenType, ids[0]);
 
-			for (int x = xStart; x < xStart + xSize; x++)
+			for (int x = 0; x < xSize; x++)
 			{
-				for (int y = yStart; y < yStart + ySize; y++)
+				for (int y = 0; y < ySize; y++)
 				{
-					InventoryItemGrid[x, y] = HoldingItem.Item.InstanceId;
+					switch (invenType)
+                    {
+						case EEquipSlotType.PlayerInventory:
+							PlayerInventoryItemGrid[xStart + x, yStart + y] = item.InstanceId;
+							break;
+						case EEquipSlotType.WarehouseInventory:
+							WarehouseInventoryItemGrid[xStart + x, yStart + y] = item.InstanceId;
+							break;
+                    }
 				}
 			}
 
-			Managers.UI.GetSceneUI<UI_GameScene>().PutItem(EEquipSlotType.Inventory, HoldingItem, new Vector2(xStart + (float)xSize/2, yStart + (float)ySize / 2));
-			InventoryItems.Add(HoldingItem.Item);
-			HoldingItem.Item.EquipPos = new(xStart, yStart);
-			HoldingItem = item.UIItem;
+			Managers.UI.GetSceneUI<UI_GameScene>().PutItem(invenType, item.UIItem, new Vector2(xStart + (float)xSize/2, yStart + (float)ySize / 2));
+			
+			switch (invenType)
+			{
+				case EEquipSlotType.PlayerInventory:
+					InventoryItems.Add(item);
+					break;
+				case EEquipSlotType.WarehouseInventory:
+					WarehouseItems.Add(item);
+					break;
+			}
+			item.EquipPos = new(xStart, yStart);
+
+			// 홀딩 아이템 처리 부분
+			if (holdingItemFlag)
+			{
+				HoldingItem = removeItem.UIItem;
+			}
 		}
 
 
 		return true;
 	}
 
-	public List<int> GetIdsOnPos(Vector2 pos, Vector2Int? size = null)
+	public List<int> GetIdsOnPos(Define.EEquipSlotType invenType, Vector2 pos, Vector2Int? size = null)
     {
 
 		if (!size.HasValue) size = new Vector2Int(1, 1);
@@ -510,18 +582,30 @@ public class InventoryManager
 		int xSize = size.Value.x;
 		int ySize = size.Value.y;
 
+		Vector2Int sizeMax = GetInventorySize(invenType);
+
+
 		xStart = Mathf.Max(xStart, 0);
 		yStart = Mathf.Max(yStart, 0);
-		xStart = Mathf.Min(xStart, 12 - xSize);
-		yStart = Mathf.Min(yStart, 5 - ySize);
+		xStart = Mathf.Min(xStart, sizeMax.x - xSize);
+		yStart = Mathf.Min(yStart, sizeMax.y - ySize);
 
 		List<int> list = new();
 
-		for (int x = xStart; x < xStart + xSize; x++)
+		for (int x = 0; x < xSize; x++)
 		{
-			for (int y = yStart; y < yStart + ySize; y++)
+			for (int y = 0; y < ySize; y++)
 			{
-				int val = InventoryItemGrid[x, y];
+				int val = 0;
+				switch(invenType)
+                {
+					case EEquipSlotType.PlayerInventory:
+						val = PlayerInventoryItemGrid[xStart + x, yStart + y];
+						break;
+					case EEquipSlotType.WarehouseInventory:
+						val = WarehouseInventoryItemGrid[xStart + x, yStart + y];
+						break;
+                }
 				if (val != 0 && list.Find(i => i == val) == 0)
 				{
 					list.Add(val);
@@ -532,23 +616,42 @@ public class InventoryManager
 		return list;
     }
 
-	public ItemBase RemoveItemInInventory(int instanceId)
+	public ItemBase RemoveItemInInventory(Define.EEquipSlotType invenType, int instanceId)
     {
-		ItemBase item = GetItemInInventory(instanceId);
+		ItemBase item = GetItemInInventory(invenType, instanceId);
 
 		for(int x = item.EquipPos.x; x < item.EquipPos.x + item.ItemSize.x; x++)
         {
 			for (int y = item.EquipPos.y; y < item.EquipPos.y + item.ItemSize.y; y++)
 			{
-				InventoryItemGrid[x, y] = 0;
+				switch(invenType)
+                {
+					case EEquipSlotType.PlayerInventory:
+						PlayerInventoryItemGrid[x, y] = 0;
+						break;
+					case EEquipSlotType.WarehouseInventory:
+						WarehouseInventoryItemGrid[x, y] = 0;
+						break;
+                }
 			}
 		}
-
-		InventoryItems.Remove(item);
+		switch (invenType)
+		{
+			case EEquipSlotType.PlayerInventory:
+				InventoryItems.Remove(item);
+				break;
+			case EEquipSlotType.WarehouseInventory:
+				WarehouseItems.Remove(item);
+				break;
+		}
 
 		return item;
 	}
 
+	public Vector2Int GetInventorySize(Define.EEquipSlotType invenType)
+    {
+		return Managers.UI.GetSceneUI<UI_GameScene>().GetInventorySize(invenType);
+	}
 	public ItemBase GetEquippedItem(EEquipSlotType equipSlotType)
 	{
 		EquippedItems.TryGetValue((int)equipSlotType, out ItemBase item);
@@ -566,14 +669,75 @@ public class InventoryManager
 		return EquippedItems.Values.Where(x => x.ItemSubType == subType).FirstOrDefault();
 	}
 
-	public ItemBase GetItemInInventory(int instanceId)
+	public ItemBase GetItemInInventory(Define.EEquipSlotType invenType, int instanceId)
 	{
-		return InventoryItems.Find(x => x.SaveData.InstanceId == instanceId);
+		switch (invenType)
+		{
+			case EEquipSlotType.PlayerInventory:
+				return InventoryItems.Find(x => x.SaveData.InstanceId == instanceId);
+			case EEquipSlotType.WarehouseInventory:
+				return WarehouseItems.Find(x => x.SaveData.InstanceId == instanceId);
+			default:
+				return null;
+		}
 	}
 
-	public bool IsInventoryFull()
+
+	/**
+	 * 공간 없을 시 (-1, -1) 반환
+	 * 아이템 둘 공간의 중앙 위치 반환
+	 */
+	public Vector2 GetInventoryEmptyPosition(Define.EEquipSlotType invenType, Vector2Int size)
 	{
-		return InventoryItems.Count >= InventorySlotCount();
+
+		Vector2Int invenSize = GetInventorySize(invenType);
+
+		int[,] inven;
+		Vector2 result = new(-1, -1);
+
+		switch (invenType)
+		{
+			case EEquipSlotType.PlayerInventory:
+				inven = PlayerInventoryItemGrid;
+				break;
+			case EEquipSlotType.WarehouseInventory:
+				inven = WarehouseInventoryItemGrid;
+				break;
+			default:
+				return result;
+		}
+
+		bool FINDFLAG = false;
+
+		for (int x = 0; x < invenSize.x - size.x + 1 && !FINDFLAG; x++)
+        {
+			for (int y = 0; y < invenSize.y - size.y + 1 && !FINDFLAG; y++)
+			{
+
+				// 아이템 사이즈만큼 체크
+				bool HASITEMFLAG = false;
+
+				for (int sizex = 0; sizex < size.x && !HASITEMFLAG; sizex++)
+				{
+					for (int sizey = 0; sizey < size.y && !HASITEMFLAG; sizey++)
+					{
+						if(inven[x + sizex, y + sizey] != 0)
+                        {
+							HASITEMFLAG = true;
+						}
+					}
+				}
+
+				if(HASITEMFLAG == false)
+                {
+					FINDFLAG = true;
+					result.x = x + size.x / 2.0f;
+					result.y = y + size.y / 2.0f;
+				}
+			}
+		}
+
+		return result;
 	}
 
 	public int InventorySlotCount()

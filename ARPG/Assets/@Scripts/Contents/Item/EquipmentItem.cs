@@ -8,9 +8,12 @@ public class EquipmentItem : ItemBase
 {
 	public EquipmentItemBaseData EquipmentItemBaseData;
 
+	public List<Modifier> DefaultMod = new();
 	public List<Modifier> ImplicitMod = new();
 	public List<Modifier> PrefixMod = new();
 	public List<Modifier> SuffixMod = new();
+
+	public ERarity Rarity { get; set; }
 
 	public EquipmentItem(int itemDataId) : base(itemDataId)
 	{
@@ -29,7 +32,11 @@ public class EquipmentItem : ItemBase
 	public List<Option> GetOptions()
     {
 		List<Option> options = new();
-		foreach(var mod in ImplicitMod)
+		foreach (var mod in DefaultMod)
+		{
+			options.AddRange(mod.Options);
+		}
+		foreach (var mod in ImplicitMod)
         {
 			options.AddRange(mod.Options);
 		}
@@ -52,12 +59,20 @@ public class EquipmentItem : ItemBase
 
 		var item = Managers.Inventory.MakeItem(itemDataId) as EquipmentItem;
 
-		item.ImplicitMod.Add(Modifier.MakeModifier(item.EquipmentItemBaseData.ImplicitOption, item.EquipmentItemBaseData.ImplicitMinMaxValues));
+		var defaultMod = Modifier.MakeModifier(item.EquipmentItemBaseData.DefaultOptions, item.EquipmentItemBaseData.DefaultMinMaxValues);
+		if(defaultMod != null)
+			item.DefaultMod.Add(defaultMod);
+
+		var implicitMod = Modifier.MakeModifier(item.EquipmentItemBaseData.ImplicitOptions, item.EquipmentItemBaseData.ImplicitMinMaxValues);
+		if (implicitMod != null)
+			item.ImplicitMod.Add(implicitMod);
 
 		int prefixNum = 0;
 		int suffixNum = 0;
 
-		switch(rarity)
+		item.Rarity = rarity;
+
+		switch (rarity)
         {
 			case ERarity.Normal:
 				break;
@@ -115,7 +130,9 @@ public class EquipmentItem : ItemBase
 					value -= modList[listidx].Weight;
 				}
 			}
-			destList.Add(Modifier.MakeModifier(mod.Stats, mod.MinMaxValues));
+			var _mod = Modifier.MakeModifier(mod.Stats, mod.MinMaxValues);
+			if (_mod != null)
+				destList.Add(_mod);
 		}
 	}
 

@@ -8,12 +8,12 @@
       "RequireStatValues": [
         8
       ],
-      "ImplicitOption": [
+      "DefaultOptions": [
         "Atk",
         "CriRate",
         "AttackSpeedRate"
       ],
-      "ImplicitMinMaxValues": [
+      "DefaultMinMaxValues": [
         4.0,
         9.0,
         5.0,
@@ -21,6 +21,8 @@
         1.55,
         1.55
       ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
       "Name": "녹슨 검",
       "ItemType": 1,
       "ItemSubType": 1,
@@ -35,13 +37,15 @@
       "RequireStatValues": [
         6
       ],
-      "ImplicitOption": [
+      "DefaultOptions": [
         "Armour"
       ],
-      "ImplicitMinMaxValues": [
+      "DefaultMinMaxValues": [
         6.0,
         9.0
       ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
       "Name": "철제 투구",
       "ItemType": 1,
       "ItemSubType": 2,
@@ -56,13 +60,15 @@
       "RequireStatValues": [
         6
       ],
-      "ImplicitOption": [
+      "DefaultOptions": [
         "Armour"
       ],
-      "ImplicitMinMaxValues": [
+      "DefaultMinMaxValues": [
         6.0,
         9.0
       ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
       "Name": "철제 건틀릿",
       "ItemType": 1,
       "ItemSubType": 3,
@@ -77,13 +83,15 @@
       "RequireStatValues": [
         6
       ],
-      "ImplicitOption": [
+      "DefaultOptions": [
         "Armour"
       ],
-      "ImplicitMinMaxValues": [
+      "DefaultMinMaxValues": [
         6.0,
         9.0
       ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
       "Name": "철제 각반",
       "ItemType": 1,
       "ItemSubType": 4,
@@ -98,13 +106,15 @@
       "RequireStatValues": [
         12
       ],
-      "ImplicitOption": [
+      "DefaultOptions": [
         "Armour"
       ],
-      "ImplicitMinMaxValues": [
+      "DefaultMinMaxValues": [
         19.0,
         27.0
       ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
       "Name": "판금 조끼",
       "ItemType": 1,
       "ItemSubType": 5,

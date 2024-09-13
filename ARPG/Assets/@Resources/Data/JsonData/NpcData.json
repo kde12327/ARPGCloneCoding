@@ -1,0 +1,19 @@
+{
+  "npcs": [
+    {
+      "DataId": 50000001,
+      "DescriptionTextID": "타클레이",
+      "SkeletonDataID": "004_SkeletonData",
+      "InteractionTypes": [
+        0
+      ],
+      "ScriptIds": null,
+      "VendorList": [
+        0,
+        1,
+        2,
+        3
+      ]
+    }
+  ]
+}

@@ -137,13 +137,13 @@ public class ItemBase
 
 	public bool IsInInventory()
 	{
-		return this.EquipSlot == (int)EEquipSlotType.Inventory;
+		return this.EquipSlot == (int)EEquipSlotType.PlayerInventory;
 
 	}
 
 	public bool IsInWarehouse()
 	{
-		return this.EquipSlot == (int)EEquipSlotType.WareHouse;
+		return this.EquipSlot == (int)EEquipSlotType.WarehouseInventory;
 	}
 	#endregion
 }
@@ -198,6 +198,9 @@ public class Modifier
 	}
 	public static Modifier MakeModifier(List<string> stats, List<float> minmax)
 	{
+		if (stats == null)
+			return null;
+
 		Modifier mod = new();
 
 		for (int i = 0; i < stats.Count; i++)

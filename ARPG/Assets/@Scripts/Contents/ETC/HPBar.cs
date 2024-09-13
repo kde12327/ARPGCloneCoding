@@ -18,7 +18,7 @@ public class HPBar : MonoBehaviour
         owner.OnHpChanged += SetValue;
 
         transform.SetParent(Owner.transform);
-        GetComponent<Canvas>().sortingOrder = 300;
+        GetComponent<Canvas>().sortingOrder = SortingLayers.UI_DEFAULT;
         transform.localPosition = new Vector2(0.2f, 2.0f);
         _slider.value = 1;
     }

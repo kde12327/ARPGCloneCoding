@@ -23,6 +23,7 @@ public class DataTransformer : EditorWindow
 		ParseExcelDataToJson<ProjectileDataLoader, ProjectileData>("Projectile");
 		ParseExcelDataToJson<EffectDataLoader, EffectData>("Effect");
 		ParseExcelDataToJson<EnvDataLoader, EnvData>("Env");
+		ParseExcelDataToJson<NpcDataLoader, NpcData>("Npc");
 		ParseExcelDataToJson<PortalDataLoader, PortalData>("Portal");
 		ParseExcelDataToJson<ModDataLoader, ModData>("Mod");
 		ParseExcelDataToJson<EquipmentItemBaseDataLoader, EquipmentItemBaseData>("EquipmentItemBase");

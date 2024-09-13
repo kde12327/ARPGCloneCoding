@@ -8,6 +8,9 @@ using UnityEngine.EventSystems;
 public class UI_InventoryGrid : UI_Base
 {
 
+    public Define.EEquipSlotType InvenType { get; set; }
+
+
     [Header("Grid Config")]
     public Vector2Int GridSize = new(5, 5);
 
@@ -51,6 +54,11 @@ public class UI_InventoryGrid : UI_Base
         return true;
     }
 
+    public void SetInfo(Define.EEquipSlotType invenType)
+    {
+        InvenType = invenType;
+    }
+
     public void Update()
     {
         // clear grid hover state
@@ -71,8 +79,15 @@ public class UI_InventoryGrid : UI_Base
             MousePosition = MouseToCell();
 
             List<Vector2Int> list;
-            Define.SlotState state = Managers.Inventory.GetCellList(MousePosition.Value, out list);
+            Define.SlotState state = Managers.Inventory.GetCellList(InvenType, MousePosition.Value,  out list);
             ActiveCellList.AddRange(list);
+
+            
+
+            float left = int.MaxValue;
+            float right = 0;
+            float top = 0;
+
 
             foreach (var cell in ActiveCellList)
             {
@@ -80,7 +95,27 @@ public class UI_InventoryGrid : UI_Base
                 if (idx != -1)
                 {
                     Get<UI_GridCell>(GetCellIdx(cell)).SetSlotState(state);
+                    var rect = Get<UI_GridCell>(GetCellIdx(cell)).GetComponent<RectTransform>();
+
+                    // RectTransform의 World 좌표를 구해서 화면 내 위치로 변환
+                    Vector3[] worldCorners = new Vector3[4];
+                    rect.GetWorldCorners(worldCorners);
+
+                    left = Mathf.Min(left, worldCorners[0].x);
+                    right = Mathf.Max(right, worldCorners[3].x);
+                    top = Mathf.Max(top, worldCorners[1].y);
                 }
+            }
+
+            ItemBase item = Managers.Inventory.GetItemByPosInInventory(InvenType, MousePosition.Value);
+
+            if (item != null)
+            {
+                Managers.UI.GetSceneUI<UI_GameScene>().SetDiscription(item, top, left, right);
+            }
+            else
+            {
+                Managers.UI.GetSceneUI<UI_GameScene>().EnableDiscription();
             }
         }
     }
@@ -99,6 +134,8 @@ public class UI_InventoryGrid : UI_Base
     public void PointExit()
     {
         IsPointEnter = false;
+        Managers.UI.GetSceneUI<UI_GameScene>().EnableDiscription();
+
     }
 
     public Vector2 MouseToCell()

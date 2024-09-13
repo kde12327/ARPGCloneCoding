@@ -17,6 +17,7 @@ public class DataManager
 	public Dictionary<int, Data.SupportData> SupportDic { get; private set; } = new Dictionary<int, Data.SupportData>();
 	public Dictionary<int, Data.ProjectileData> ProjectileDic { get; private set; } = new Dictionary<int, Data.ProjectileData>();
 	public Dictionary<int, Data.EnvData> EnvDic { get; private set; } = new Dictionary<int, Data.EnvData>();
+	public Dictionary<int, Data.NpcData> NpcDic { get; private set; } = new Dictionary<int, Data.NpcData>();
 	public Dictionary<int, Data.EffectData> EffectDic { get; private set; } = new Dictionary<int, Data.EffectData>();
 	public Dictionary<int, Data.PortalData> PortalDic { get; private set; } = new Dictionary<int, Data.PortalData>();
 	public Dictionary<int, Data.ModData> ModDic { get; private set; } = new Dictionary<int, Data.ModData>();
@@ -40,6 +41,7 @@ public class DataManager
 		SupportDic = LoadJson<Data.SupportDataLoader, int, Data.SupportData>("SupportData").MakeDict();
 		ProjectileDic = LoadJson<Data.ProjectileDataLoader, int, Data.ProjectileData>("ProjectileData").MakeDict();
 		EnvDic = LoadJson<Data.EnvDataLoader, int, Data.EnvData>("EnvData").MakeDict();
+		NpcDic = LoadJson<Data.NpcDataLoader, int, Data.NpcData>("NpcData").MakeDict();
 		EffectDic = LoadJson<Data.EffectDataLoader, int, Data.EffectData>("EffectData").MakeDict();
 		PortalDic = LoadJson<Data.PortalDataLoader, int, Data.PortalData>("PortalData").MakeDict();
 		ModDic = LoadJson<Data.ModDataLoader, int, Data.ModData>("ModData").MakeDict();

@@ -9,6 +9,7 @@ public class ObjectManager
     public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
 	public HashSet<Projectile> Projectiles { get; } = new HashSet<Projectile>();
     public HashSet<Env> Envs { get; } = new HashSet<Env>();
+    public HashSet<Npc> Npcs { get; } = new HashSet<Npc>();
     public HashSet<EffectBase> Effects { get; } = new HashSet<EffectBase>();
     public HashSet<ItemHolder> ItemHolders { get; } = new HashSet<ItemHolder>();
 
@@ -27,6 +28,7 @@ public class ObjectManager
     public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
 	public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
     public Transform EnvRoot { get { return GetRootTransform("@Env"); } }
+    public Transform NpcRoot { get { return GetRootTransform("@Npc"); } }
     public Transform ItemHolderRoot { get { return GetRootTransform("@ItemHolders"); } }
 
     #endregion
@@ -104,6 +106,15 @@ public class ObjectManager
 
             portal.SetInfo(templateID);
         }
+        else if (obj.ObjectType == EObjectType.Npc)
+        {
+            obj.transform.parent = NpcRoot;
+
+            Npc npc = go.GetComponent<Npc>();
+            Npcs.Add(npc);
+
+            npc.SetInfo(templateID);
+        }
         else if (obj.ObjectType == EObjectType.ItemHolder)
         {
             obj.transform.parent = ItemHolderRoot;
@@ -142,6 +153,11 @@ public class ObjectManager
         {
             Portal portal = obj as Portal;
             Envs.Remove(portal);
+        }
+        else if (obj.ObjectType == EObjectType.Npc)
+        {
+            Npc npc = obj as Npc;
+            Npcs.Remove(npc);
         }
         else if (obj.ObjectType == EObjectType.ItemHolder)
         {
