@@ -76,7 +76,8 @@ public class UI_NpcInteractionView : UI_Base
             go.GetComponent<UI_NpcInteraction>().SetText("아이템 구입");
             go.BindEvent(evt =>
             {
-                Managers.UI.GetSceneUI<UI_GameScene>().SetActiveVendor(npc);
+                npc.MakeSaleList();
+                Managers.UI.GetSceneUI<UI_GameScene>().SetActiveVendorInventory(npc, true);
                 Managers.UI.GetSceneUI<UI_GameScene>().EnableNpcInteraction();
             });
             InteractionList.Add(go);

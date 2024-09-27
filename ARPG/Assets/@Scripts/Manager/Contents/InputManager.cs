@@ -1,34 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputManager
 {
     public void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
-                Input.mousePosition.y, -Camera.main.transform.position.z));
+            if (Input.GetMouseButtonDown(1))
+            {
+                Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                    Input.mousePosition.y, -Camera.main.transform.position.z));
+                
+                Managers.Game.MouseState = Define.EMouseState.MouseDown;
+                Managers.Game.MovePos = point;
+            }
+            if (Input.GetMouseButton(1))
+            {
+                Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                    Input.mousePosition.y, -Camera.main.transform.position.z));
 
-            Managers.Game.MouseState = Define.EMouseState.MouseDown;
-            Managers.Game.MovePos = point;
+                Managers.Game.MouseState = Define.EMouseState.MouseHolding;
+                Managers.Game.MovePos = point;
+            }
+            if (Input.GetMouseButtonUp(1))
+            {
+                Managers.Game.MouseState = Define.EMouseState.MouseUp;
+            }
         }
-        if (Input.GetMouseButton(1))
-        {
-            Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
-                Input.mousePosition.y, -Camera.main.transform.position.z));
+        
 
-            Managers.Game.MouseState = Define.EMouseState.MouseHolding;
-            Managers.Game.MovePos = point;
-        }
-
-        if (Input.GetMouseButtonUp(1))
-        {
-            Managers.Game.MouseState = Define.EMouseState.MouseUp;
-        }
-
-        if(Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.Q))
         {
             Managers.Game.KeyState = Define.EKeyState.Skill00;
         }

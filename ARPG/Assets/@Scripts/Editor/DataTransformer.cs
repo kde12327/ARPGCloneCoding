@@ -27,6 +27,8 @@ public class DataTransformer : EditorWindow
 		ParseExcelDataToJson<PortalDataLoader, PortalData>("Portal");
 		ParseExcelDataToJson<ModDataLoader, ModData>("Mod");
 		ParseExcelDataToJson<EquipmentItemBaseDataLoader, EquipmentItemBaseData>("EquipmentItemBase");
+		ParseExcelDataToJson<ConsumableItemDataLoader, ConsumableItemData>("ConsumableItem");
+		ParseExcelDataToJson<SkillGemItemDataLoader, SkillGemItemData>("SkillGemItem");
 
 		Debug.Log("DataTransformer Completed");
 	}

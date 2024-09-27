@@ -23,6 +23,8 @@ public class DataManager
 	public Dictionary<int, Data.ModData> ModDic { get; private set; } = new Dictionary<int, Data.ModData>();
 	public Dictionary<int, Data.ItemData> ItemDic { get; private set; } = new Dictionary<int, Data.ItemData>();
 	public Dictionary<int, Data.EquipmentItemBaseData> EquipmentItemBaseDic { get; private set; } = new Dictionary<int, Data.EquipmentItemBaseData>();
+	public Dictionary<int, Data.ConsumableItemData> ConsumableItemDic { get; private set; } = new Dictionary<int, Data.ConsumableItemData>();
+	public Dictionary<int, Data.SkillGemItemData> SkillGemItemDic { get; private set; } = new Dictionary<int, Data.SkillGemItemData>();
 
 	#region Mod
 	// Modifier를 미리 리스트로 만들기
@@ -46,10 +48,18 @@ public class DataManager
 		PortalDic = LoadJson<Data.PortalDataLoader, int, Data.PortalData>("PortalData").MakeDict();
 		ModDic = LoadJson<Data.ModDataLoader, int, Data.ModData>("ModData").MakeDict();
 		EquipmentItemBaseDic = LoadJson<Data.EquipmentItemBaseDataLoader, int, Data.EquipmentItemBaseData>("EquipmentItemBaseData").MakeDict();
+		ConsumableItemDic = LoadJson<Data.ConsumableItemDataLoader, int, Data.ConsumableItemData>("ConsumableItemData").MakeDict();
+		SkillGemItemDic = LoadJson<Data.SkillGemItemDataLoader, int, Data.SkillGemItemData>("SkillGemItemData").MakeDict();
 
 		ItemDic.Clear();
 
 		foreach (var item in EquipmentItemBaseDic)
+			ItemDic.Add(item.Key, item.Value);
+		
+		foreach (var item in ConsumableItemDic)
+			ItemDic.Add(item.Key, item.Value);
+		
+		foreach (var item in SkillGemItemDic)
 			ItemDic.Add(item.Key, item.Value);
 
 		PrefixModifierData.Clear();

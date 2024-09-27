@@ -36,6 +36,5 @@ public class Portal : Env
 		player.NextPortalId = PortalData.DestPortalId;
 
 		Managers.Map.LoadMap(NextPortalData.MapName);
-
 	}
 }

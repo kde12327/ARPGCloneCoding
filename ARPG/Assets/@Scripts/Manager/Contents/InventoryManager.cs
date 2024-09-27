@@ -16,9 +16,14 @@ public class InventoryManager
 	public Dictionary<int /*EquipSlot*/, ItemBase> EquippedItems = new Dictionary<int, ItemBase>(); // 장비 인벤
 	List<ItemBase> InventoryItems = new List<ItemBase>(); // 가방 인벤
 	List<ItemBase> WarehouseItems = new List<ItemBase>(); // 창고
+	List<ItemBase> VendorItems = new List<ItemBase>(); // 상인
 
 	int[,] PlayerInventoryItemGrid = new int[12, 5];
 	int[,] WarehouseInventoryItemGrid = new int[12, 12];
+	int[,] VendorInventoryItemGrid = new int[12, 12];
+
+	public Npc Vendor { get; set; }
+
 
 	UI_Item _holdingItem;
 	public UI_Item HoldingItem 
@@ -36,6 +41,19 @@ public class InventoryManager
 		} 
 	}
 
+	ConsumableItem _usingItem;
+	public ConsumableItem UsingItem
+	{
+		get { return _usingItem; }
+		set
+		{
+			_usingItem = value;
+
+			Managers.UI.GetSceneUI<UI_GameScene>().SetUsingItem(_usingItem);
+		}
+	}
+
+	// 아이템 줍기
 	public bool PickUpItem(ItemBase item)
     {
 		UI_Item uiitem = Managers.Resource.Instantiate("UI_Item").GetComponent<UI_Item>();
@@ -92,7 +110,8 @@ public class InventoryManager
 		return true;
 	}
 
-	public SlotState GetCellList(Define.EEquipSlotType invenType, Vector2 pos,  out List<Vector2Int> list)
+	// Grid ui에서 색 칠할 때 grid cell 얻어오기
+	public ESlotState GetCellList(Define.EEquipSlotType invenType, Vector2 pos,  out List<Vector2Int> list)
     {
 
 		list = new();
@@ -101,16 +120,8 @@ public class InventoryManager
 		if (HoldingItem == null)
         {
 			int id = 0;
+			id = GetInventoryGridNum(invenType, (int)pos.x, (int)pos.y);
 
-			switch(invenType)
-            {
-				case EEquipSlotType.PlayerInventory:
-					id = PlayerInventoryItemGrid[(int)pos.x, (int)pos.y];
-					break;
-				case EEquipSlotType.WarehouseInventory:
-					id = WarehouseInventoryItemGrid[(int)pos.x, (int)pos.y];
-					break;
-			}
 
 			if (id != 0)
 			{
@@ -127,11 +138,11 @@ public class InventoryManager
 					}
 				}
 
-				return SlotState.Enable;
+				return ESlotState.Enable;
 			}
             else
             {
-				return SlotState.None;
+				return ESlotState.None;
 			}
 		}
         else
@@ -171,21 +182,24 @@ public class InventoryManager
 
 			if(ids.Count == 0)
             {
-				return SlotState.Enable;
+				return ESlotState.Enable;
 			}
 			else if (ids.Count == 1)
             {
-				return SlotState.Enable;
+				return ESlotState.Enable;
 			}
             else
             {
-				return SlotState.Error;
+				return ESlotState.Error;
 			}
 		}
 
 		
 	}
 
+
+	// 아이템 만들기
+	// TODO: savedata 관련 손봐야해서 아직 미완성
 	public ItemBase MakeItem(int itemTemplateId, int count = 1)
 	{
 		int itemDbId = Managers.Game.GenerateItemDbId();
@@ -206,6 +220,7 @@ public class InventoryManager
 		return AddItem(saveData);
 	}
 
+	// 아이템 savedata에 들어있는 정보에 따라 해당 인벤토리에 넣기
 	public ItemBase AddItem(ItemSaveData itemInfo)
 	{
 		ItemBase item = ItemBase.MakeItem(itemInfo);
@@ -224,6 +239,10 @@ public class InventoryManager
 		{
 			WarehouseItems.Add(item);
 		}
+		else if (item.IsInVendor())
+		{
+			VendorItems.Add(item);
+		}
 
 		AllItems.Add(item);
 
@@ -232,6 +251,7 @@ public class InventoryManager
 
 
 	// 아이템 주웠을 때.
+	// 안씀
 	public bool AddItem(ItemBase item)
 	{
 		if (item == null)
@@ -261,6 +281,7 @@ public class InventoryManager
 		return true;
 	}
 
+	// 아이템을 리스트에서 삭제
 	public void RemoveItem(int instanceId)
 	{
 		ItemBase item = AllItems.Find(x => x.SaveData.InstanceId == instanceId);
@@ -278,6 +299,10 @@ public class InventoryManager
 		else if (item.IsInWarehouse())
 		{
 			WarehouseItems.Remove(item);
+		}
+		else if (item.IsInVendor())
+		{
+			VendorItems.Remove(item);
 		}
 
 		AllItems.Remove(item);
@@ -365,9 +390,19 @@ public class InventoryManager
 		return true;
 	}
 
+
+	// 인벤토리 그리드를 클릭했을 때 실행
 	public bool ClickInventory(EEquipSlotType invenType, Vector2 pos)
     {
-		if(HoldingItem == null)
+
+		if(UsingItem != null)
+        {// 소모 아이템을 사용 중일 때
+			ItemBase item = GetItemByPosInInventory(invenType, pos);
+			bool result = UsingItem.UseOnItem(item);
+			UsingItem = null;
+			return result;
+		}
+		else if(HoldingItem == null)
         {
 			ItemBase item = GetItemByPosInInventory(invenType, pos);
 
@@ -378,12 +413,25 @@ public class InventoryManager
 			}
 			else
             {
-				RemoveItemInInventory(invenType, item.InstanceId);
-				HoldingItem = item.UIItem;
+				if (invenType == EEquipSlotType.VendorInventory)
+                {
+					// TODO: buy system
+					Vendor.SaleList.Remove(item);
+					RemoveItemInInventory(invenType, item.InstanceId);
+					HoldingItem = item.UIItem;
+				}
+                else
+                {
+					RemoveItemInInventory(invenType, item.InstanceId);
+					HoldingItem = item.UIItem;
+				}
 			}
         }
         else
         {
+			// 상점에는 아이템 갖다놓기 불가
+			if (invenType == EEquipSlotType.VendorInventory)
+				return false;
 			return AddItemInInventory(invenType, pos,  HoldingItem.Item, true);
 		}
 
@@ -391,7 +439,39 @@ public class InventoryManager
 
 		return true;
     }
+	
+	// 인벤토리 그리드를 우클릭했을 때 실행
+	public bool RightClickInventory(EEquipSlotType invenType, Vector2 pos)
+    {
+		if (HoldingItem != null) return false;
 
+		if (UsingItem == null)
+		{
+			if (invenType != EEquipSlotType.VendorInventory)
+			{
+				ItemBase item = GetItemByPosInInventory(invenType, pos);
+
+				if(item != null && item.ItemType == EItemType.Consumable)
+                {
+					ConsumableItem cItem = item as ConsumableItem;
+					if(!cItem.UseItem())
+                    {// 아이템에 사용되는 경우
+						UsingItem = cItem;
+					}
+				}
+			}
+		}
+		else
+		{
+			UsingItem = null;
+		}
+
+		return true;
+    }
+
+
+
+	// 들고 있는 아이템을 해당 슬롯에 장착 가능한지
 	public bool CheckHoldingItemCanEquip(EEquipSlotType slotType)
     {
 		if (HoldingItem == null) return false;
@@ -425,15 +505,8 @@ public class InventoryManager
     {
 
 		int id = 0;
-		switch (invenType)
-		{
-			case EEquipSlotType.PlayerInventory:
-				id = PlayerInventoryItemGrid[(int)pos.x, (int)pos.y];
-				break;
-			case EEquipSlotType.WarehouseInventory:
-				id = WarehouseInventoryItemGrid[(int)pos.x, (int)pos.y];
-				break;
-		}
+		id = GetInventoryGridNum(invenType, (int)pos.x, (int)pos.y);
+
 		
 
 		if(id == 0)
@@ -488,15 +561,7 @@ public class InventoryManager
 			{
 				for (int y = 0; y < ySize; y++)
 				{
-					switch (invenType)
-                    {
-						case EEquipSlotType.PlayerInventory:
-							PlayerInventoryItemGrid[xStart + x, yStart + y] = item.InstanceId;
-							break;
-						case EEquipSlotType.WarehouseInventory:
-							WarehouseInventoryItemGrid[xStart + x, yStart + y] = item.InstanceId;
-							break;
-                    }
+					SetInventoryGridNum(invenType, xStart + x, yStart + y, item.InstanceId);
 				}
 			}
 
@@ -508,6 +573,9 @@ public class InventoryManager
 					break;
 				case EEquipSlotType.WarehouseInventory:
 					WarehouseItems.Add(item);
+					break;
+				case EEquipSlotType.VendorInventory:
+					VendorItems.Add(item);
 					break;
 			}
 			item.EquipPos = new(xStart, yStart);
@@ -529,15 +597,8 @@ public class InventoryManager
 			{
 				for (int y = 0; y < ySize; y++)
 				{
-					switch (invenType)
-                    {
-						case EEquipSlotType.PlayerInventory:
-							PlayerInventoryItemGrid[xStart + x, yStart + y] = item.InstanceId;
-							break;
-						case EEquipSlotType.WarehouseInventory:
-							WarehouseInventoryItemGrid[xStart + x, yStart + y] = item.InstanceId;
-							break;
-                    }
+					SetInventoryGridNum(invenType, xStart + x, yStart + y, item.InstanceId);
+
 				}
 			}
 
@@ -550,6 +611,9 @@ public class InventoryManager
 					break;
 				case EEquipSlotType.WarehouseInventory:
 					WarehouseItems.Add(item);
+					break;
+				case EEquipSlotType.VendorInventory:
+					VendorItems.Add(item);
 					break;
 			}
 			item.EquipPos = new(xStart, yStart);
@@ -596,16 +660,7 @@ public class InventoryManager
 		{
 			for (int y = 0; y < ySize; y++)
 			{
-				int val = 0;
-				switch(invenType)
-                {
-					case EEquipSlotType.PlayerInventory:
-						val = PlayerInventoryItemGrid[xStart + x, yStart + y];
-						break;
-					case EEquipSlotType.WarehouseInventory:
-						val = WarehouseInventoryItemGrid[xStart + x, yStart + y];
-						break;
-                }
+				int val = GetInventoryGridNum(invenType, xStart + x, yStart + y);
 				if (val != 0 && list.Find(i => i == val) == 0)
 				{
 					list.Add(val);
@@ -616,6 +671,13 @@ public class InventoryManager
 		return list;
     }
 
+	public void RemoveItem(ItemBase item)
+	{
+		RemoveItemInInventory((Define.EEquipSlotType)item.EquipSlot, item.InstanceId);
+		item.Destroy();
+
+	}
+
 	public ItemBase RemoveItemInInventory(Define.EEquipSlotType invenType, int instanceId)
     {
 		ItemBase item = GetItemInInventory(invenType, instanceId);
@@ -624,15 +686,7 @@ public class InventoryManager
         {
 			for (int y = item.EquipPos.y; y < item.EquipPos.y + item.ItemSize.y; y++)
 			{
-				switch(invenType)
-                {
-					case EEquipSlotType.PlayerInventory:
-						PlayerInventoryItemGrid[x, y] = 0;
-						break;
-					case EEquipSlotType.WarehouseInventory:
-						WarehouseInventoryItemGrid[x, y] = 0;
-						break;
-                }
+				SetInventoryGridNum(invenType, x, y, 0);
 			}
 		}
 		switch (invenType)
@@ -643,10 +697,46 @@ public class InventoryManager
 			case EEquipSlotType.WarehouseInventory:
 				WarehouseItems.Remove(item);
 				break;
+			case EEquipSlotType.VendorInventory:
+				VendorItems.Remove(item);
+				break;
 		}
 
 		return item;
 	}
+
+	// 상점 아이템 리스트 한번에 입력
+	public void SetVendorSaleList(List<ItemBase> items)
+    {
+		EEquipSlotType invenType = EEquipSlotType.VendorInventory;
+
+		foreach (var item in items)
+        {
+			AddItemInInventory(invenType, item.EquipPos, item);
+		}
+    }
+
+	// 상점 세팅 초기화
+	public void ClearVendorInventory()
+    {
+		EEquipSlotType invenType = EEquipSlotType.VendorInventory;
+
+
+		VendorItems.Clear();
+		Vector2Int sizeMax = GetInventorySize(invenType);
+
+
+		List<int> list = new();
+
+		for (int x = 0; x < sizeMax.x; x++)
+		{
+			for (int y = 0; y < sizeMax.y; y++)
+			{
+				SetInventoryGridNum(invenType, x, y, 0);
+			}
+		}
+	}
+
 
 	public Vector2Int GetInventorySize(Define.EEquipSlotType invenType)
     {
@@ -677,6 +767,8 @@ public class InventoryManager
 				return InventoryItems.Find(x => x.SaveData.InstanceId == instanceId);
 			case EEquipSlotType.WarehouseInventory:
 				return WarehouseItems.Find(x => x.SaveData.InstanceId == instanceId);
+			case EEquipSlotType.VendorInventory:
+				return VendorItems.Find(x => x.SaveData.InstanceId == instanceId);
 			default:
 				return null;
 		}
@@ -692,20 +784,8 @@ public class InventoryManager
 
 		Vector2Int invenSize = GetInventorySize(invenType);
 
-		int[,] inven;
 		Vector2 result = new(-1, -1);
 
-		switch (invenType)
-		{
-			case EEquipSlotType.PlayerInventory:
-				inven = PlayerInventoryItemGrid;
-				break;
-			case EEquipSlotType.WarehouseInventory:
-				inven = WarehouseInventoryItemGrid;
-				break;
-			default:
-				return result;
-		}
 
 		bool FINDFLAG = false;
 
@@ -721,7 +801,7 @@ public class InventoryManager
 				{
 					for (int sizey = 0; sizey < size.y && !HASITEMFLAG; sizey++)
 					{
-						if(inven[x + sizex, y + sizey] != 0)
+						if (GetInventoryGridNum(invenType, x + sizex, y + sizey) != 0)
                         {
 							HASITEMFLAG = true;
 						}
@@ -772,6 +852,43 @@ public class InventoryManager
 						.Select(x => x.SaveData)
 						.ToList();
 	}*/
+
+
+	public int GetInventoryGridNum(EEquipSlotType invenType, int x, int y)
+    {
+		int result = -1;
+
+		switch(invenType)
+        {
+			case EEquipSlotType.PlayerInventory:
+				result = PlayerInventoryItemGrid[x, y];
+				break;
+			case EEquipSlotType.WarehouseInventory:
+				result = WarehouseInventoryItemGrid[x, y];
+				break;
+			case EEquipSlotType.VendorInventory:
+				result = VendorInventoryItemGrid[x, y];
+				break;
+		}
+
+		return result;
+    }
+
+	public void SetInventoryGridNum(EEquipSlotType invenType, int x, int y, int value)
+	{
+		switch (invenType)
+		{
+			case EEquipSlotType.PlayerInventory:
+				PlayerInventoryItemGrid[x, y] = value;
+				break;
+			case EEquipSlotType.WarehouseInventory:
+				WarehouseInventoryItemGrid[x, y] = value;
+				break;
+			case EEquipSlotType.VendorInventory:
+				VendorInventoryItemGrid[x, y] = value;
+				break;
+		}
+	}
 
 	public List<ItemSaveData> GetWarehouseItemInfos()
 	{

@@ -1,0 +1,6 @@
+﻿ ,Name,ItemType,ItemSubType,Icon,EffectType,StackSize
+20000001,감정 주문서,2,0,ScrollofWisdom.sprite,0,40
+20000002,포탈 주문서,2,0,PortalScroll.sprite,1,40
+20000003,진화의 오브,2,0,OrbOfTransmutation.sprite,2,20
+20000004,제왕의 오브,2,0,RegalOrb.sprite,3,20
+20000005,연금술의 오브,2,0,OrbOfAlchemy.sprite,4,20

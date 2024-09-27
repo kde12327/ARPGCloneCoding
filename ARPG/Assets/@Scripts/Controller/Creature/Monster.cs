@@ -193,28 +193,7 @@ public class Monster : Creature
             player.Exp++;
 
             {
-                int itemRand = UnityEngine.Random.Range(0, Managers.Data.EquipmentItemBaseDic.Count);
-                float rarityRand = UnityEngine.Random.Range(0, 10);
-
-                ERarity rarity = ERarity.Normal;
-                if(rarityRand  < 4)
-                {
-                    rarity = ERarity.Normal;
-                }
-                else if (rarityRand < 8)
-                {
-                    rarity = ERarity.Magic;
-                }
-                else if (rarityRand < 10)
-                {
-                    rarity = ERarity.Rare;
-                }
-
-                List<int> keys = new List<int>(Managers.Data.EquipmentItemBaseDic.Keys);
-                var key = keys[itemRand];
-
-
-                var item =  EquipmentItem.MakeEquipmentItem(Managers.Data.EquipmentItemBaseDic[key].DataId, rarity);
+                var item =  EquipmentItem.MakeRandomEquipmentItem();
 
                 var itemHolder = Managers.Object.Spawn<ItemHolder>(transform.position, 0);
                 itemHolder.SetInfo(0, item, transform.position);

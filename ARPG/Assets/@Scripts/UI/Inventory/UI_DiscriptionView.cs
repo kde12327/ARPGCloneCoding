@@ -37,6 +37,7 @@ public class UI_DiscriptionView : UI_Base
         return true;
     }
 
+
     public void SetInfo(ItemBase item)
     {
 
@@ -199,6 +200,11 @@ public class UI_DiscriptionView : UI_Base
 
 
 
+        }
+        else if(item.ItemType == Define.EItemType.Consumable)
+        {
+            GetImage((int)Images.DiscriptionNameImage).color = UIColor.RARE;
+            GetText((int)Texts.DiscriptionNameText).color = UIColor.RARETEXT;
         }
     }
 }

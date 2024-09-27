@@ -11,9 +11,13 @@ public class ItemBase
 	public EItemType ItemType;
 	public EItemSubType ItemSubType { get; private set; }
 
+	public bool IsDiscriptionDirty { get; set; }
+
 	public ItemSaveData SaveData { get; set; }
 
 	public UI_Item UIItem { get; set; }
+
+	public ERarity Rarity { get; set; }
 
 	public int InstanceId
 	{
@@ -99,7 +103,10 @@ public class ItemBase
 				item = new EquipmentItem(itemInfo.TemplateId);
 				break;
 			case EItemType.Consumable:
-				//item = new Consumable(itemInfo.TemplateId);
+				item = new ConsumableItem(itemInfo.TemplateId);
+				break;
+			case EItemType.SkillGem:
+				item = new SkillGemItem(itemInfo.TemplateId);
 				break;
 		}
 
@@ -113,8 +120,47 @@ public class ItemBase
 		return item;
 	}
 
+	public void Destroy()
+    {
+		if (UIItem != null)
+		{
+			Managers.Resource.Destroy(UIItem.gameObject);
+		}
+	}
+
+	~ItemBase()
+	{
+		if (UIItem != null)
+		{
+			Managers.Resource.Destroy(UIItem.gameObject);
+		}
+	}
+
+	public virtual bool UpgradeRarity(Define.ERarity curRarity, Define.ERarity destRarity)
+    {
+		if(curRarity != Rarity)
+        {
+			return false;
+        }
+
+		return HasRarity();
+    }
 
 	#region Helpers
+
+	public bool HasRarity()
+    {
+        switch (ItemType)
+        {
+			case EItemType.Equipment:
+				return true;
+			case EItemType.Consumable:
+				return false;
+			default:
+				return false;
+        }
+    }
+
 	public bool IsEquippable()
 	{
 		return GetEquipItemEquipSlot() != EEquipSlotType.None;
@@ -144,6 +190,11 @@ public class ItemBase
 	public bool IsInWarehouse()
 	{
 		return this.EquipSlot == (int)EEquipSlotType.WarehouseInventory;
+	}
+	
+	public bool IsInVendor()
+	{
+		return this.EquipSlot == (int)EEquipSlotType.VendorInventory;
 	}
 	#endregion
 }

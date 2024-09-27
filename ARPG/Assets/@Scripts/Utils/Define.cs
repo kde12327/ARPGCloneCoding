@@ -230,6 +230,7 @@ public static class Define
         None,
         Equipment,
         Consumable,
+        SkillGem,
     }
 
     public enum EItemSubType
@@ -261,6 +262,7 @@ public static class Define
 
         PlayerInventory = 100,
         WarehouseInventory = 200,
+        VendorInventory = 300,
     }
 
     public enum ERarity
@@ -271,19 +273,34 @@ public static class Define
         Unique,
     }
 
-    public enum SlotState
+    public enum ESlotState
     {
         Enable,
         Error,
         None
     }
 
-    public enum VendorType
+    public enum EVendorType
     {
         Equipment,
         Weapon,
         Accessory,
         Consumable,
+    }
+
+    public enum EConsumableEffectType
+    {
+        IdentifiesItem,
+        CreatesPortalToTown,
+        UpgradeNormalToMagic,
+        UpgradeMagicToRare,
+        UpgradeNormalToRare,
+    }
+
+    public enum ESkillGemType
+    {
+        SkillGem,
+        SupportGem
     }
 
     #endregion

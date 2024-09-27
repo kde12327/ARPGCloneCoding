@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using static Define;
 
 [RequireComponent(typeof(RectTransform))]
 public class UI_InventoryGrid : UI_Base
 {
 
-    public Define.EEquipSlotType InvenType { get; set; }
+    public Define.EEquipSlotType InvenType = EEquipSlotType.None;
 
 
     [Header("Grid Config")]
@@ -51,6 +51,33 @@ public class UI_InventoryGrid : UI_Base
 
         BindByNames<UI_GridCell>(GridCellNames);
 
+        gameObject.BindEvent(evt =>
+        {
+            if(evt.button == PointerEventData.InputButton.Left)
+            {
+                var v = MouseToCell();
+                Debug.Log(v);
+                Managers.Inventory.ClickInventory(InvenType, v);
+            }
+            else if(evt.button == PointerEventData.InputButton.Right)
+            {
+                var v = MouseToCell();
+                Debug.Log("rihgt click");
+                Managers.Inventory.RightClickInventory(InvenType, v);
+            }
+
+        }, EUIEvent.Click);
+
+        gameObject.BindEvent(evt =>
+        {
+            PointEnter();
+        }, EUIEvent.PointerEnter);
+
+        gameObject.BindEvent(evt =>
+        {
+            PointExit();
+        }, EUIEvent.PointerExit);
+
         return true;
     }
 
@@ -67,7 +94,7 @@ public class UI_InventoryGrid : UI_Base
             int idx = GetCellIdx(cell);
             if (idx != -1)
             {
-                Get<UI_GridCell>(idx).SetSlotState(Define.SlotState.None);
+                Get<UI_GridCell>(idx).SetSlotState(Define.ESlotState.None);
             }
         }
 
@@ -79,7 +106,7 @@ public class UI_InventoryGrid : UI_Base
             MousePosition = MouseToCell();
 
             List<Vector2Int> list;
-            Define.SlotState state = Managers.Inventory.GetCellList(InvenType, MousePosition.Value,  out list);
+            Define.ESlotState state = Managers.Inventory.GetCellList(InvenType, MousePosition.Value,  out list);
             ActiveCellList.AddRange(list);
 
             
@@ -112,6 +139,11 @@ public class UI_InventoryGrid : UI_Base
             if (item != null)
             {
                 Managers.UI.GetSceneUI<UI_GameScene>().SetDiscription(item, top, left, right);
+                if(item.ItemType == EItemType.Equipment)
+                {
+                    var eItem = item as EquipmentItem;
+                    eItem.UIItem.SetActiveSocket(true);
+                }
             }
             else
             {

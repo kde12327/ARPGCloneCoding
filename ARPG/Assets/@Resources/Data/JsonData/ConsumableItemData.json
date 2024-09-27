@@ -1,0 +1,49 @@
+{
+  "items": [
+    {
+      "EffectType": 0,
+      "StackSize": 40,
+      "Name": "감정 주문서",
+      "ItemType": 2,
+      "ItemSubType": 0,
+      "Icon": "ScrollofWisdom.sprite",
+      "DataId": 20000001
+    },
+    {
+      "EffectType": 1,
+      "StackSize": 40,
+      "Name": "포탈 주문서",
+      "ItemType": 2,
+      "ItemSubType": 0,
+      "Icon": "PortalScroll.sprite",
+      "DataId": 20000002
+    },
+    {
+      "EffectType": 2,
+      "StackSize": 20,
+      "Name": "진화의 오브",
+      "ItemType": 2,
+      "ItemSubType": 0,
+      "Icon": "OrbOfTransmutation.sprite",
+      "DataId": 20000003
+    },
+    {
+      "EffectType": 3,
+      "StackSize": 20,
+      "Name": "제왕의 오브",
+      "ItemType": 2,
+      "ItemSubType": 0,
+      "Icon": "RegalOrb.sprite",
+      "DataId": 20000004
+    },
+    {
+      "EffectType": 4,
+      "StackSize": 20,
+      "Name": "연금술의 오브",
+      "ItemType": 2,
+      "ItemSubType": 0,
+      "Icon": "OrbOfAlchemy.sprite",
+      "DataId": 20000005
+    }
+  ]
+}

@@ -77,6 +77,90 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 149fa851e63b83e40be270537200c613
+    m_Address: RegalOrb.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5edc1dfb7f2bc6c4a95aff68db34f11b
+    m_Address: PortalScroll.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd83efa7f4a59be429136f1e0ef467e5
+    m_Address: OrbOfAlchemy.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 30d0b54a0e635d442b163bd02dd8e1d6
+    m_Address: ScrollofWisdom.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0472b388551acc24d9ff58e4af9bd107
+    m_Address: OrbOfTransmutation.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 79bce69fd6023124b99a4e0183714d86
+    m_Address: Double_Strike_inventory_icon.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65bf91d963731a24b92c6718c9ecd871
+    m_Address: Faster_Attacks_Support_inventory_icon.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b041ffd688f95184e97dc72d00a97cc5
+    m_Address: Leap_Slam_inventory_icon.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 784ff42c012a412458d3537ce0c38b37
+    m_Address: Melee_Physical_Damage_Support_inventory_icon.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60df6c4191a1a2647b16eff76e9039ba
+    m_Address: WhiteSocket.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 11e85d1761fb4134ab8793a724d70f4d
+    m_Address: RedSocket.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fff9165257aa79f4f9a51f450b1c04ef
+    m_Address: Link.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c4554d239167f9459673423b767f8fe
+    m_Address: GreenSocket.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e10313c1299d0ae41942798b7c5943ba
+    m_Address: BlueSocket.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d9824849e4582004ba9e5a22c383251d, type: 2}
   m_SchemaSet:

@@ -44,17 +44,17 @@ public class UI_ItemSlot : UI_Base
         return item;
     }
 
-    public void SetSlotState(SlotState state)
+    public void SetSlotState(ESlotState state)
     {
         switch(state)
         {
-            case SlotState.Enable:
+            case ESlotState.Enable:
                 GetImage((int)Images.HoverImage).color = UIColor.ENABLE;
                 break;
-            case SlotState.Error:
+            case ESlotState.Error:
                 GetImage((int)Images.HoverImage).color = UIColor.ERROR;
                 break;
-            case SlotState.None:
+            case ESlotState.None:
                 GetImage((int)Images.HoverImage).color = UIColor.TRANSPARENT;
                 break;
         }

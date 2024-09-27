@@ -248,6 +248,9 @@ namespace Data
 
 	}
 
+	
+
+
 	[Serializable]
 	public class EquipmentItemBaseDataLoader : ILoader<int, EquipmentItemBaseData>
 	{
@@ -260,6 +263,47 @@ namespace Data
 			return dict;
 		}
 	}
+
+	[Serializable]
+	public class ConsumableItemData : ItemData
+	{
+		public EConsumableEffectType EffectType;
+		public int StackSize;
+	}
+
+	[Serializable]
+	public class ConsumableItemDataLoader : ILoader<int, ConsumableItemData>
+	{
+		public List<ConsumableItemData> items = new List<ConsumableItemData>();
+		public Dictionary<int, ConsumableItemData> MakeDict()
+		{
+			Dictionary<int, ConsumableItemData> dict = new Dictionary<int, ConsumableItemData>();
+			foreach (ConsumableItemData item in items)
+				dict.Add(item.DataId, item);
+			return dict;
+		}
+	}
+
+	[Serializable]
+	public class SkillGemItemData : ItemData
+	{
+		public ESkillGemType SkillGemType;
+		public int SkillId;
+	}
+
+	[Serializable]
+	public class SkillGemItemDataLoader : ILoader<int, SkillGemItemData>
+	{
+		public List<SkillGemItemData> items = new List<SkillGemItemData>();
+		public Dictionary<int, SkillGemItemData> MakeDict()
+		{
+			Dictionary<int, SkillGemItemData> dict = new Dictionary<int, SkillGemItemData>();
+			foreach (SkillGemItemData item in items)
+				dict.Add(item.DataId, item);
+			return dict;
+		}
+	}
+
 
 	#endregion
 
@@ -298,7 +342,7 @@ namespace Data
 		public string SkeletonDataID;
 		public List<EInteractionType> InteractionTypes;
 		public List<int> ScriptIds;
-		public List<int> VendorList;
+		public List<EVendorType> VendorList;
 	}
 
 	[Serializable]

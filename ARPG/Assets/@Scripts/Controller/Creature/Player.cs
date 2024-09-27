@@ -44,14 +44,23 @@ public class Player : Creature
         set
         {
             _exp = value;
-            OnExpChanged?.Invoke(_exp / MaxExp.Value);
+
+            if (MaxExp > _exp)
+            {
+                Level++;
+                _exp -= MaxExp;
+            }
+
+            OnExpChanged?.Invoke(_exp / MaxExp);
         }
     }
     public event Action<float> OnExpChanged;
 
     public CreatureStat MaxMp;
-    public CreatureStat MaxExp;
+    public int MaxExp;
 
+    public int Level = 1;
+    
     #endregion
 
 
@@ -191,7 +200,7 @@ public class Player : Creature
         MaxMp = new CreatureStat(100.0f);
         Mp = MaxMp.Value;
 
-        MaxExp = new CreatureStat(10.0f);
+        MaxExp = 10;
         Exp = 0;
 
 

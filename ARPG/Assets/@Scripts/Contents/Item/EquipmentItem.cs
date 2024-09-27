@@ -4,6 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
+
+public enum ESocketColor
+{
+	Red,
+	Green,
+	Blue,
+	White
+}
+
 public class EquipmentItem : ItemBase
 {
 	public EquipmentItemBaseData EquipmentItemBaseData;
@@ -13,7 +22,8 @@ public class EquipmentItem : ItemBase
 	public List<Modifier> PrefixMod = new();
 	public List<Modifier> SuffixMod = new();
 
-	public ERarity Rarity { get; set; }
+	public List<ESocketColor> Socket { get; set; }
+	public int Link { get; set; }
 
 	public EquipmentItem(int itemDataId) : base(itemDataId)
 	{
@@ -52,12 +62,142 @@ public class EquipmentItem : ItemBase
 		return options;
     }
 
+	public override bool UpgradeRarity(Define.ERarity curRarity, Define.ERarity destRarity)
+	{
+		if(base.UpgradeRarity(curRarity, destRarity) == false)
+        {
+			return false;
+        }
 
-	public static EquipmentItem MakeEquipmentItem(int itemDataId, ERarity rarity)
+		Rarity = destRarity;
+
+		int prefixNum = 0;
+		int suffixNum = 0;
+
+		Debug.Log(destRarity);
+
+        switch (destRarity)
+        {
+			case ERarity.Normal:
+				break;
+			case ERarity.Magic:
+                {
+					int rand = Random.Range(0, 3);
+					switch(rand)
+                    {
+						case 0:
+							prefixNum = 1;
+							suffixNum = 0;
+							break;
+						case 1:
+							prefixNum = 0;
+							suffixNum = 1;
+							break;
+						case 2:
+							prefixNum = 1;
+							suffixNum = 1;
+							break;
+                    }
+				}
+				break;
+			case ERarity.Rare:
+                {
+					int affixNum = Random.Range(4, 7);
+
+					while(prefixNum + suffixNum < affixNum)
+                    {
+						if(prefixNum == 3)
+                        {
+							suffixNum++;
+							continue;
+                        }
+						else if(suffixNum == 3)
+                        {
+							prefixNum++;
+							continue;
+						}
+
+
+						int rand = Random.Range(0, 2);
+						if(rand == 0)
+                        {
+							prefixNum++;
+						}
+                        else
+                        {
+							suffixNum++;
+						}
+					}
+
+				}
+				break;
+			case ERarity.Unique:
+				break;
+		}
+
+		List<ModData> prefixList = Managers.Data.PrefixModifierData[ItemSubType];
+		List<ModData> suffixList = Managers.Data.SuffixModifierData[ItemSubType];
+
+
+		Debug.Log(prefixNum +", "+  suffixNum);
+		MakeModifiers(PrefixMod, prefixNum - PrefixMod.Count, prefixList);
+		MakeModifiers(SuffixMod, suffixNum - SuffixMod.Count, suffixList);
+
+		return true;
+	}
+
+
+	public static EquipmentItem MakeRandomEquipmentItem()
+    {
+		int itemRand = UnityEngine.Random.Range(0, Managers.Data.EquipmentItemBaseDic.Count);
+		float rarityRand = UnityEngine.Random.Range(0, 10);
+
+		ERarity rarity = ERarity.Normal;
+		if (rarityRand < 4)
+		{
+			rarity = ERarity.Normal;
+		}
+		else if (rarityRand < 8)
+		{
+			rarity = ERarity.Magic;
+		}
+		else if (rarityRand < 10)
+		{
+			rarity = ERarity.Rare;
+		}
+
+		List<int> keys = new List<int>(Managers.Data.EquipmentItemBaseDic.Keys);
+		var key = keys[itemRand];
+
+
+		List<ESocketColor> socket = new();
+
+		
+		int socketRand = UnityEngine.Random.Range(0, 7);
+
+		int linkRand = UnityEngine.Random.Range(0, socketRand);
+
+		int link = linkRand;
+
+		while (0 < socketRand-- )
+        {
+			float socketColorRnad = UnityEngine.Random.Range(0, 3);
+			socket.Add((ESocketColor)socketColorRnad);
+		}
+
+
+
+		return EquipmentItem.MakeEquipmentItem(Managers.Data.EquipmentItemBaseDic[key].DataId, rarity, socket, link);
+	}
+
+	public static EquipmentItem MakeEquipmentItem(int itemDataId, ERarity rarity, List<ESocketColor> socket, int link)
     {
 		
 
 		var item = Managers.Inventory.MakeItem(itemDataId) as EquipmentItem;
+
+		item.Socket = socket;
+		item.Link = link;
 
 		var defaultMod = Modifier.MakeModifier(item.EquipmentItemBaseData.DefaultOptions, item.EquipmentItemBaseData.DefaultMinMaxValues);
 		if(defaultMod != null)

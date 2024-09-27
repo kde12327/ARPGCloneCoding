@@ -12,13 +12,22 @@ public class UI_Item : UI_Base
     [SerializeField]
     bool IsItemHolding = false;
 
+    [SerializeField]
+    bool IsItemUsing = false;
+
+    bool IsShowSocket = false;
+
+    enum Texts
+    {
+        StackSizeText
+    }
     enum Images
     {
         ItemImage
     }
     enum GameObjects
     {
-        ItemImage
+        SocketPanel
     }
     public override bool Init()
     {
@@ -26,6 +35,7 @@ public class UI_Item : UI_Base
             return false;
 
         BindImages(typeof(Images));
+        BindTexts(typeof(Texts));
         BindObjects(typeof(GameObjects));
 
         /*GetObject((int)GameObjects.ItemImage).BindEvent((evt) =>
@@ -36,6 +46,10 @@ public class UI_Item : UI_Base
             Managers.Inventory.HoldingItem = this;
         }, Define.EUIEvent.Click);*/
 
+        GetText((int)Texts.StackSizeText).gameObject.SetActive(false);
+        GetObject((int)GameObjects.SocketPanel).SetActive(false);
+
+        
 
         return true;
     }
@@ -45,6 +59,10 @@ public class UI_Item : UI_Base
         GetImage((int)Images.ItemImage).sprite = Managers.Resource.Load<Sprite>(Item.ItemData.Icon);
         item.UIItem = this;
         GetImage((int)Images.ItemImage).GetComponent<RectTransform>().sizeDelta *= Item.ItemSize;
+        if(item.ItemType == Define.EItemType.Consumable)
+        {
+            GetText((int)Texts.StackSizeText).gameObject.SetActive(true);
+        }
     }
 
     public void ItemHold()
@@ -54,6 +72,11 @@ public class UI_Item : UI_Base
         GetImage((int)Images.ItemImage).raycastTarget = false;
     }
 
+    public void ItemUsing()
+    {
+        IsItemUsing = true;
+    }
+
     public void ItemLetGo()
     {
         IsItemHolding = false;
@@ -61,11 +84,37 @@ public class UI_Item : UI_Base
         GetImage((int)Images.ItemImage).raycastTarget = true;
     }
 
+    public void SetActiveSocket(bool value)
+    {
+        IsShowSocket = true;
+    }
+
     private void Update()
     {
         if(IsItemHolding)
         {
             transform.position = Input.mousePosition;
+        }
+
+        if(IsItemUsing)
+        {
+
+        }
+
+        if(Item.ItemType == Define.EItemType.Consumable)
+        {
+            ConsumableItem item = Item as ConsumableItem;
+            GetText((int)Texts.StackSizeText).text = item.StackSize.ToString();
+        }
+
+        if (Item.EquipSlot > (int)Define.EEquipSlotType.PlayerInventory && IsShowSocket && Item.ItemType == Define.EItemType.Equipment)
+        {
+            GetObject((int)GameObjects.SocketPanel).SetActive(true);
+            IsShowSocket = false;
+        }
+        else
+        {
+            GetObject((int)GameObjects.SocketPanel).SetActive(false);
         }
     }
 }
