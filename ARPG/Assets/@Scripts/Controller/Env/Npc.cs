@@ -86,8 +86,8 @@ public class Npc : InteractableObject
 				var item = EquipmentItem.MakeRandomEquipmentItem();
 				UI_Item uiitem = Managers.Resource.Instantiate("UI_Item").GetComponent<UI_Item>();
 				uiitem.SetInfo(item);
-
 				Vector2 pos = Managers.Inventory.GetInventoryEmptyPosition(Define.EEquipSlotType.VendorInventory, item.ItemSize);
+				item.EquipSlot = Define.EEquipSlotType.VendorInventory;
 
 				Managers.Inventory.AddItemInInventory(Define.EEquipSlotType.VendorInventory, pos, item);
 
@@ -101,6 +101,7 @@ public class Npc : InteractableObject
 				var citem = ConsumableItem.MakeConsumableItem(Managers.Data.ConsumableItemDic[key].DataId, Managers.Data.ConsumableItemDic[key].StackSize);
 				UI_Item cuiitem = Managers.Resource.Instantiate("UI_Item").GetComponent<UI_Item>();
 				cuiitem.SetInfo(citem);
+				citem.EquipSlot = Define.EEquipSlotType.VendorInventory;
 
 				Vector2 cpos = Managers.Inventory.GetInventoryEmptyPosition(Define.EEquipSlotType.VendorInventory, citem.ItemSize);
 
@@ -116,6 +117,7 @@ public class Npc : InteractableObject
 				var sitem = SkillGemItem.MakeSkillGemItem(Managers.Data.SkillGemItemDic[key].DataId);
 				UI_Item suiitem = Managers.Resource.Instantiate("UI_Item").GetComponent<UI_Item>();
 				suiitem.SetInfo(sitem);
+				sitem.EquipSlot = Define.EEquipSlotType.VendorInventory;
 
 				Vector2 spos = Managers.Inventory.GetInventoryEmptyPosition(Define.EEquipSlotType.VendorInventory, sitem.ItemSize);
 

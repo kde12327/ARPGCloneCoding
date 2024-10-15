@@ -8,6 +8,9 @@ public class SkillComponent : InitBase
 	public List<SkillBase> SkillList { get; } = new List<SkillBase>();
 	public List<SkillBase> ActiveSkills { get; set; } = new List<SkillBase>();
 
+	Dictionary<UI_GameScene.UISkills, SkillBase> SkillMacro { get; set; } = new Dictionary<UI_GameScene.UISkills, SkillBase>();
+
+
 	Creature _owner;
 
 	public SkillBase CurrentSkill

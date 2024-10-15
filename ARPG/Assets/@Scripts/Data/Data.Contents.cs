@@ -289,6 +289,7 @@ namespace Data
 	{
 		public ESkillGemType SkillGemType;
 		public int SkillId;
+		public ESocketColor SkillGemColor;
 	}
 
 	[Serializable]

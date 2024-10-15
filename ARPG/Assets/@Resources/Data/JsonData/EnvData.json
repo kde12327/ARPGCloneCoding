@@ -21,6 +21,16 @@
         "wood_1_SkeletonData",
         "wood_2_SkeletonData"
       ]
+    },
+    {
+      "DataId": 301001,
+      "DescriptionTextID": "웨이포인트",
+      "PrefabLabel": "Waypoint",
+      "MaxHp": 0.0,
+      "IsInteractable": 1,
+      "SkeletonDataIDs": [
+        "0"
+      ]
     }
   ]
 }

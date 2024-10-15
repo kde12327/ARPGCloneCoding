@@ -42,7 +42,7 @@ public class ItemBase
 		set { SaveData.Count = value; }
 	}
 
-	public int EquipSlot
+	public EEquipSlotType EquipSlot
 	{
 		get { return SaveData.EquipSlot; }
 		set { SaveData.EquipSlot = value; }
@@ -177,24 +177,24 @@ public class ItemBase
 	public bool IsEquippedItem()
 	{
 		
-		return this.EquipSlot > (int)EEquipSlotType.None && this.EquipSlot < (int)EEquipSlotType.EquipMax;
+		return this.EquipSlot > EEquipSlotType.None && this.EquipSlot < EEquipSlotType.EquipMax;
 
 	}
 
 	public bool IsInInventory()
 	{
-		return this.EquipSlot == (int)EEquipSlotType.PlayerInventory;
+		return this.EquipSlot == EEquipSlotType.PlayerInventory;
 
 	}
 
 	public bool IsInWarehouse()
 	{
-		return this.EquipSlot == (int)EEquipSlotType.WarehouseInventory;
+		return this.EquipSlot == EEquipSlotType.WarehouseInventory;
 	}
 	
 	public bool IsInVendor()
 	{
-		return this.EquipSlot == (int)EEquipSlotType.VendorInventory;
+		return this.EquipSlot == EEquipSlotType.VendorInventory;
 	}
 	#endregion
 }

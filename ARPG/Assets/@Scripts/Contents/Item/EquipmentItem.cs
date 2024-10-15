@@ -23,7 +23,32 @@ public class EquipmentItem : ItemBase
 	public List<Modifier> SuffixMod = new();
 
 	public List<ESocketColor> Socket { get; set; }
-	public int Link { get; set; }
+	public List<bool> Link { get; set; }
+
+	public SkillGemItem[] SkillGems = new SkillGemItem[6];
+
+	public int MaxSocket 
+	{
+        get 
+		{
+			if(ItemSize.x == 1 && ItemSize.y == 3)
+            {
+				return 3;
+            }
+			else if(ItemSize.x == 2 && ItemSize.y == 2)
+            {
+				return 4;
+			}
+			else if(ItemSize.x == 2 && ItemSize.y == 3)
+            {
+				return 6;
+			}
+            else
+            {
+				return 0;
+            }
+		}
+	}
 
 	public EquipmentItem(int itemDataId) : base(itemDataId)
 	{
@@ -34,10 +59,66 @@ public class EquipmentItem : ItemBase
 
 	public override bool Init()
 	{
-		
-		
+
 		return true;
 	}
+
+	public void SetSkillGem(SkillGemItem item, int socketNumber)
+    {
+		SkillGems[socketNumber] = item;
+
+        if (IsEquippedItem())
+        {
+			Managers.Object.Player.OnChangeSkillSetting();
+		}
+	}
+
+
+	public List<List<SkillGemItem>> GetSkills()
+    {
+		List<List<SkillGemItem>> skills = new();
+
+		for(int i = 0; i < 6; i++)
+        {
+			if (SkillGems[i] == null) continue;
+
+			List<SkillGemItem> skill = new();
+			if(SkillGems[i].SkillGemItemData.SkillGemType == ESkillGemType.SkillGem)
+            {
+				skill.Add(SkillGems[i]);
+
+				List<int> linkedGemIdx = new();
+				
+				for(int idx = i - 1; idx >= 0; idx--)
+                {
+					if (!Link[idx]) break;
+
+                    if (SkillGems[idx] != null
+						&& SkillGems[idx].SkillGemItemData.SkillGemType == ESkillGemType.SupportGem)
+                    {
+						// TODO: 서폿젬 태그 관련 로직 추가
+						skill.Add(SkillGems[idx]);
+					}
+                }
+				for (int idx = i + 1; idx < Link.Count; idx++)
+				{
+					if (!Link[idx]) break;
+
+					if (SkillGems[idx] != null
+						&& SkillGems[idx].SkillGemItemData.SkillGemType == ESkillGemType.SupportGem)
+					{
+						// TODO: 서폿젬 태그 관련 로직 추가
+						skill.Add(SkillGems[idx]);
+					}
+				}
+
+			}
+			if(skill.Count != 0)
+				skills.Add(skill);
+		}
+		return skills;
+	}
+
 
 	public List<Option> GetOptions()
     {
@@ -170,34 +251,44 @@ public class EquipmentItem : ItemBase
 		var key = keys[itemRand];
 
 
-		List<ESocketColor> socket = new();
-
 		
-		int socketRand = UnityEngine.Random.Range(0, 7);
-
-		int linkRand = UnityEngine.Random.Range(0, socketRand);
-
-		int link = linkRand;
-
-		while (0 < socketRand-- )
-        {
-			float socketColorRnad = UnityEngine.Random.Range(0, 3);
-			socket.Add((ESocketColor)socketColorRnad);
-		}
 
 
 
-		return EquipmentItem.MakeEquipmentItem(Managers.Data.EquipmentItemBaseDic[key].DataId, rarity, socket, link);
+		return EquipmentItem.MakeEquipmentItem(Managers.Data.EquipmentItemBaseDic[key].DataId, rarity);
 	}
 
-	public static EquipmentItem MakeEquipmentItem(int itemDataId, ERarity rarity, List<ESocketColor> socket, int link)
+	public static EquipmentItem MakeEquipmentItem(int itemDataId, ERarity rarity)
     {
 		
 
 		var item = Managers.Inventory.MakeItem(itemDataId) as EquipmentItem;
 
+		List<ESocketColor> socket = new();
+
+
+		int socketRand = UnityEngine.Random.Range(1, item.MaxSocket + 1);
+
+
+
+		while (0 < socketRand--)
+		{
+			float socketColorRnad = UnityEngine.Random.Range(0, 3);
+			socket.Add((ESocketColor)socketColorRnad);
+		}
+
 		item.Socket = socket;
+
+		List<bool> link = new();
+
+		for (int i = 0; i < socket.Count - 1; i++)
+        {
+			int linkRand = UnityEngine.Random.Range(0, 2);
+
+			link.Add(linkRand == 0);
+		}
 		item.Link = link;
+
 
 		var defaultMod = Modifier.MakeModifier(item.EquipmentItemBaseData.DefaultOptions, item.EquipmentItemBaseData.DefaultMinMaxValues);
 		if(defaultMod != null)

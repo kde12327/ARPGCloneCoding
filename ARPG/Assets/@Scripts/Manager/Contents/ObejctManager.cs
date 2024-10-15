@@ -20,6 +20,10 @@ public class ObjectManager
         GameObject root = GameObject.Find(name);
         if (root == null)
             root = new GameObject { name = name };
+        if(name == "@Players")
+        {
+            GameObject.DontDestroyOnLoad(root);
+        }
 
         return root.transform;
     }

@@ -27,7 +27,8 @@ public class UI_TitleScene : UI_Scene
 		GetObject((int)GameObjects.StartImage).BindEvent((evt) =>
 		{
 			Debug.Log("ChangeScene");
-			Managers.Scene.LoadScene(EScene.GameScene);
+			Managers.Scene.CreateOrLoadGameSceneByName("ACT01_01_Map");
+			//Managers.Scene.LoadScene(EScene.GameScene);
 		});
 
 		GetObject((int)GameObjects.StartImage).gameObject.SetActive(false);

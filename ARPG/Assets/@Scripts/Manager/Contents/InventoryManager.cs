@@ -13,7 +13,7 @@ public class InventoryManager
 	public List<ItemBase> AllItems { get; } = new List<ItemBase>();
 
 	// Cache
-	public Dictionary<int /*EquipSlot*/, ItemBase> EquippedItems = new Dictionary<int, ItemBase>(); // 장비 인벤
+	public Dictionary<EEquipSlotType /*EquipSlot*/, ItemBase> EquippedItems = new Dictionary<EEquipSlotType, ItemBase>(); // 장비 인벤
 	List<ItemBase> InventoryItems = new List<ItemBase>(); // 가방 인벤
 	List<ItemBase> WarehouseItems = new List<ItemBase>(); // 창고
 	List<ItemBase> VendorItems = new List<ItemBase>(); // 상인
@@ -213,7 +213,7 @@ public class InventoryManager
 			DbId = itemDbId,
 			TemplateId = itemTemplateId,
 			Count = count,
-			EquipSlot = (int)EEquipSlotType.PlayerInventory,
+			EquipSlot = EEquipSlotType.PlayerInventory,
 			EnchantCount = 0,
 		};
 
@@ -323,11 +323,14 @@ public class InventoryManager
 			return false;
 
 		// 아이템 장착
-		eitem.EquipSlot = (int)equipSlotType;
-		EquippedItems[(int)equipSlotType] = eitem;
+		eitem.EquipSlot = equipSlotType;
+		EquippedItems[equipSlotType] = eitem;
 
 		Managers.Object.Player.Stats.EquipItem(eitem);
+		Managers.Object.Player.OnChangeSkillSetting();
 		Managers.UI.GetSceneUI<UI_GameScene>().EquipItem(equipSlotType, eitem.UIItem);
+		item.EquipSlot = itemSlot;
+
 
 		return true;
 	}
@@ -341,10 +344,12 @@ public class InventoryManager
 		if (item == null)
 			return;
 
-		EquippedItems.Remove((int)item.EquipSlot);
+		EquippedItems.Remove(item.EquipSlot);
 
 
 		Managers.Object.Player.Stats.UnEquipItem(item);
+		Managers.Object.Player.OnChangeSkillSetting();
+
 		item.EquipSlot = (int)EEquipSlotType.None;
 	}
 
@@ -524,6 +529,7 @@ public class InventoryManager
 		Vector2Int size = item.ItemSize;
 
 
+
 		int xStart = (size.x % 2 == 1) ?
 			(Mathf.FloorToInt(pos.x) - (size.x / 2)) :
 			(Mathf.RoundToInt(pos.x) - (size.x / 2));
@@ -579,6 +585,7 @@ public class InventoryManager
 					break;
 			}
 			item.EquipPos = new(xStart, yStart);
+			item.EquipSlot = invenType;
 
 			// 홀딩 아이템 처리 부분
 			if (holdingItemFlag)
@@ -617,6 +624,7 @@ public class InventoryManager
 					break;
 			}
 			item.EquipPos = new(xStart, yStart);
+			item.EquipSlot = invenType;
 
 			// 홀딩 아이템 처리 부분
 			if (holdingItemFlag)
@@ -682,6 +690,8 @@ public class InventoryManager
     {
 		ItemBase item = GetItemInInventory(invenType, instanceId);
 
+		if (item == null) Debug.Log("Item null");
+
 		for(int x = item.EquipPos.x; x < item.EquipPos.x + item.ItemSize.x; x++)
         {
 			for (int y = item.EquipPos.y; y < item.EquipPos.y + item.ItemSize.y; y++)
@@ -744,7 +754,7 @@ public class InventoryManager
 	}
 	public ItemBase GetEquippedItem(EEquipSlotType equipSlotType)
 	{
-		EquippedItems.TryGetValue((int)equipSlotType, out ItemBase item);
+		EquippedItems.TryGetValue(equipSlotType, out ItemBase item);
 
 		return item;
 	}

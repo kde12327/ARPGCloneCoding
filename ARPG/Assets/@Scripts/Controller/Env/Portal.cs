@@ -35,6 +35,6 @@ public class Portal : Env
 		PortalData NextPortalData = Managers.Data.PortalDic[PortalData.DestPortalId];
 		player.NextPortalId = PortalData.DestPortalId;
 
-		Managers.Map.LoadMap(NextPortalData.MapName);
+		Managers.Scene.CreateOrLoadGameSceneByName(NextPortalData.MapName);
 	}
 }

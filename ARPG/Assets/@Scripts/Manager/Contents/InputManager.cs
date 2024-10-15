@@ -7,6 +7,7 @@ public class InputManager
 {
     public void Update()
     {
+        if (EventSystem.current == null) return;
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {

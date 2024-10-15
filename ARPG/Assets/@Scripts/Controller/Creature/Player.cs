@@ -218,48 +218,50 @@ public class Player : Creature
         Skills = gameObject.GetOrAddComponent<SkillComponent>();
         Skills.SetInfo(this);
 
-        int skillTemplateID = CreatureData.SkillIdList[0];
-
-        string className = Managers.Data.SkillDic[skillTemplateID].ClassName;
-        SkillBase attack1 = gameObject.AddComponent(Type.GetType(className)) as SkillBase;
-        attack1.SetInfo(this, skillTemplateID);
-        SkillBase attack2 = gameObject.AddComponent(Type.GetType(className)) as SkillBase;
-        attack2.SetInfo(this, skillTemplateID);
-        SkillBase attack3 = gameObject.AddComponent(Type.GetType(className)) as SkillBase;
-        attack3.SetInfo(this, skillTemplateID);
-
-        SupportBase support1 = gameObject.AddComponent<SupportBase>();
-        support1.SetInfo(11001);
-
-        SupportBase support2 = gameObject.AddComponent<SupportBase>();
-        support2.SetInfo(11002);
-
-        attack1.AddSupport(ref support1);
-        attack2.AddSupport(ref support2);
-        attack3.AddSupport(ref support1);
-        attack3.AddSupport(ref support2);
-
-        Skills.AddSkill(attack1);
-        Managers.UI.GetSceneUI<UI_GameScene>().SetSkill(UI_GameScene.UISkills.UI_SkillQ, attack1);
-        Skills.AddSkill(attack2);
-        Managers.UI.GetSceneUI<UI_GameScene>().SetSkill(UI_GameScene.UISkills.UI_SkillW, attack2);
-        Skills.AddSkill(attack3);
-        Managers.UI.GetSceneUI<UI_GameScene>().SetSkill(UI_GameScene.UISkills.UI_SkillE, attack3);
-
-        // skill cooldown test
-        int skillTemplateID2 = 10004;
-        string className2 = Managers.Data.SkillDic[skillTemplateID2].ClassName;
-        SkillBase attack4 = gameObject.AddComponent(Type.GetType(className2)) as SkillBase;
-        attack4.SetInfo(this, skillTemplateID2);
-        Skills.AddSkill(attack4);
-        Managers.UI.GetSceneUI<UI_GameScene>().SetSkill(UI_GameScene.UISkills.UI_SkillR, attack4);
-
-
+      
 
     }
 
     private void Start()
     {
+    }
+
+    public void OnChangeSkillSetting()
+    {
+        List<ItemBase> items = Managers.Inventory.GetEquippedItems();
+        List<List<SkillGemItem>> skills = new();
+        for (int i = 0; i < items.Count; i++)
+        {
+            EquipmentItem eItem = items[i] as EquipmentItem;
+            List<List<SkillGemItem>> _skills = eItem.GetSkills();
+            if(_skills.Count != 0)
+                skills.AddRange(_skills);
+        }
+
+        for (int i = 0; i < skills.Count; i++)
+        {
+            int skillId = skills[i][0].SkillGemItemData.SkillId;
+            
+            string className = Managers.Data.SkillDic[skillId].ClassName;
+            SkillBase skillBase = gameObject.AddComponent(Type.GetType(className)) as SkillBase;
+            skillBase.SetInfo(this, skillId);
+
+            for (int j = 1; j < skills[i].Count; j++)
+            {
+                Debug.Log(skills[i][j].SkillGemItemData.Name);
+
+                SupportBase supportBase = new SupportBase();
+                supportBase.SetInfo(skills[i][j].SkillGemItemData.SkillId);
+
+                skillBase.AddSupport(supportBase);
+            }
+
+            Skills.AddSkill(skillBase);
+
+            Managers.UI.GetSceneUI<UI_GameScene>().SetSkill((UI_GameScene.UISkills)(i+3), skillBase);
+
+
+        }
     }
 
     public void OnMapChange()
@@ -293,8 +295,10 @@ public class Player : Creature
         }
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         Vector3 dir = (DestPos - transform.position);
         //Debug.Log(dir.sqrMagnitude);
 
@@ -313,6 +317,10 @@ public class Player : Creature
             {
                 CreatureState = Define.ECreatureState.Move;
                 EFindPathResult result = FindPathAndMoveToCellPos(DestPos, PLAYER_DEFAULT_MOVE_DEPTH);
+                if (result != EFindPathResult.Success)
+                {
+                    //Debug.Log(result);
+                }
             }
 
         }

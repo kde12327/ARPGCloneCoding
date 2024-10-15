@@ -88,7 +88,7 @@ public class ConsumableItem : ItemBase
 
 	public static ConsumableItem MakeConsumableItem(int itemDataId, int stackSize)
 	{
-        Debug.Log(itemDataId + " , "+ stackSize);
+        //Debug.Log(itemDataId + " , "+ stackSize);
 		var item = Managers.Inventory.MakeItem(itemDataId) as ConsumableItem;
         item.StackSize = stackSize;
 

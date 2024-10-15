@@ -1,3 +1,4 @@
 ﻿DataId,DescriptionTextID,PrefabLabel,MaxHp,IsInteractable,SpineNames
 300001,나무1,GatherablePrefab,10,0,wood_1_SkeletonData&wood_2_SkeletonData
 301000,미네랄1,GatherablePrefab,10,0,wood_1_SkeletonData&wood_2_SkeletonData
+301001,웨이포인트,Waypoint,0,1,0

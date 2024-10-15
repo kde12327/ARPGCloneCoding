@@ -14,6 +14,7 @@ public class UI_GameScene : UI_Scene
         VendorInventoryPanel,
         UI_NpcInteractionView,
         UI_DiscriptionView,
+        UI_WaypointView,
     }
 
     enum Images
@@ -98,6 +99,9 @@ public class UI_GameScene : UI_Scene
         
         var itemDiscriptionView = GetObject((int)GameObjects.UI_DiscriptionView);
         itemDiscriptionView.SetActive(false);
+        
+        var waypointView = GetObject((int)GameObjects.UI_WaypointView);
+        waypointView.SetActive(false);
 
         var usingItemImage = GetImage((int)Images.UsingItemImage);
         usingItemImage.gameObject.SetActive(false);
@@ -129,18 +133,27 @@ public class UI_GameScene : UI_Scene
         }
     }
 
+    public void SetActiveWaypointView(bool isActive)
+    {
+        var waypointView = GetObject((int)GameObjects.UI_WaypointView);
+        waypointView.SetActive(isActive);
+    }
+
     public void SetNpcInteraction(Npc npc)
     {
         var npcInteractinoView = GetObject((int)GameObjects.UI_NpcInteractionView);
         npcInteractinoView.SetActive(true);
         npcInteractinoView.GetComponent<UI_NpcInteractionView>().SetInfo(npc);
     }
+    
+    
 
     public void EnableNpcInteraction()
     {
         var npcInteractinoView = GetObject((int)GameObjects.UI_NpcInteractionView);
         npcInteractinoView.SetActive(false);
     }
+
 
 
     public void SetDiscription(ItemBase item, float top, float left, float right)
@@ -325,7 +338,7 @@ public class UI_GameScene : UI_Scene
         SetActiveWarehouseInventory(false);
         SetActiveVendorInventory(null, false);
         EnableNpcInteraction();
-
+        SetActiveWaypointView(false);
         // 스크립트 보거나 하는 경우 false 반환
 
         return true;
@@ -386,11 +399,11 @@ public class UI_GameScene : UI_Scene
 
                     // SetDiscription 호출
                     SetDiscription(item, top, left, right);
-                    if (item.ItemType == EItemType.Equipment)
+                    /*if (item.ItemType == EItemType.Equipment)
                     {
                         var eItem = item as EquipmentItem;
                         eItem.UIItem.SetActiveSocket(true);
-                    }
+                    }*/
                 }
                 else
                 {
@@ -418,11 +431,11 @@ public class UI_GameScene : UI_Scene
                 ItemBase item = Managers.Inventory.GetEquippedItem(slotType);
 
                 EnableDiscription();
-                if (item != null && item.ItemType == EItemType.Equipment)
+                /*if (item != null && item.ItemType == EItemType.Equipment)
                 {
                     var eItem = item as EquipmentItem;
                     eItem.UIItem.SetActiveSocket(false);
-                }
+                }*/
                 Get<UI_ItemSlot>((int)uitype).SetSlotState(ESlotState.None);
             }, EUIEvent.PointerExit);
         }

@@ -107,12 +107,18 @@ public class Creature : BaseObject
         Effects.SetInfo(this);
 
         // Map
-        StartCoroutine(CoLerpToCellPos());
+        //StartCoroutine(CoLerpToCellPos());
 
         // HPBar
         GameObject go = Managers.Resource.Instantiate("HPBar");
         HPBar hp = go.GetComponent<HPBar>();
         hp.SetInfo(this);
+    }
+
+    protected virtual void Update()
+    {
+        if (CreatureState != ECreatureState.Skill)
+            LerpToCellPos(CreatureData.MoveSpeed);
     }
 
     protected override void UpdateAnimation()
@@ -130,7 +136,10 @@ public class Creature : BaseObject
                 break;
             case ECreatureState.OnDamaged:
                 PlayAnimation(0, AnimName.IDLE, true);
-                Skills.CurrentSkill.CancelSkill();
+                if(Skills.CurrentSkill != null)
+                {
+                    Skills.CurrentSkill.CancelSkill();
+                }
                 break;
             case ECreatureState.Dead:
                 PlayAnimation(0, AnimName.DEAD, true);

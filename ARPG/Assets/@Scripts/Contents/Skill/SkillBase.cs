@@ -98,7 +98,10 @@ public abstract class SkillBase : InitBase
 
 	private IEnumerator CoCountdownCooldown()
 	{
-		OnCooldownStarted.Invoke(SkillData.CoolTime);
+		if(OnCooldownStarted != null)
+        {
+			OnCooldownStarted.Invoke(SkillData.CoolTime);
+		}
 
 		// 준비된 스킬에서 제거
 		if (Owner.Skills != null)
@@ -139,7 +142,7 @@ public abstract class SkillBase : InitBase
         projectile.SetSpawnInfo(Owner, this, excludeMask, Target);
     }
 
-    public void AddSupport(ref SupportBase support)
+    public void AddSupport(SupportBase support)
 	{
 		SupportList.Add(support);
 

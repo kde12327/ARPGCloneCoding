@@ -2,7 +2,9 @@ using Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static Define;
 
 [RequireComponent(typeof(RectTransform))]
 public class UI_Item : UI_Base
@@ -15,7 +17,7 @@ public class UI_Item : UI_Base
     [SerializeField]
     bool IsItemUsing = false;
 
-    bool IsShowSocket = false;
+    bool SETLINKFLAG = false;
 
     enum Texts
     {
@@ -27,7 +29,8 @@ public class UI_Item : UI_Base
     }
     enum GameObjects
     {
-        SocketPanel
+        SocketPanel,
+        LinkPanel
     }
     public override bool Init()
     {
@@ -38,18 +41,51 @@ public class UI_Item : UI_Base
         BindTexts(typeof(Texts));
         BindObjects(typeof(GameObjects));
 
-        /*GetObject((int)GameObjects.ItemImage).BindEvent((evt) =>
+        GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
         {
-            Debug.Log(Data.Name + "Item Clicked");
-            transform.SetParent(Managers.UI.GetSceneUI<UI_GameScene>().transform);
-            IsItemHolding = true;
-            Managers.Inventory.HoldingItem = this;
-        }, Define.EUIEvent.Click);*/
+            
+
+            if (evt.button == PointerEventData.InputButton.Left)
+            {
+                
+                Debug.Log("UIItem" + Item + ", " + (EEquipSlotType)Item.EquipSlot + ", " + Item.EquipPos);
+                if (Item.IsEquippedItem())
+                {
+                    Managers.Inventory.ClickSlot((EEquipSlotType)Item.EquipSlot);
+                }
+                else
+                {
+                    Managers.Inventory.ClickInventory((EEquipSlotType)Item.EquipSlot, Item.EquipPos + Item.ItemSize / 2 );
+                }
+            }
+            else if (evt.button == PointerEventData.InputButton.Right)
+            {
+                if (Item.IsEquippedItem())
+                {
+                    Debug.Log("장착한 아이템에는 사용 불가");
+                }
+                else
+                {
+                    Managers.Inventory.RightClickInventory((EEquipSlotType)Item.EquipSlot, Item.EquipPos + Item.ItemSize / 2);
+                }
+            }
+        }, Define.EUIEvent.Click);
+/*
+        GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
+        {
+            SetActiveSocket(true);
+        }, Define.EUIEvent.PointerUp);
+
+        GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
+        {
+            SetActiveSocket(false);
+        }, Define.EUIEvent.PointerExit);*/
 
         GetText((int)Texts.StackSizeText).gameObject.SetActive(false);
-        GetObject((int)GameObjects.SocketPanel).SetActive(false);
 
-        
+        GetObject((int)GameObjects.SocketPanel).SetActive(false);
+        GetObject((int)GameObjects.LinkPanel).SetActive(false);
+
 
         return true;
     }
@@ -63,7 +99,78 @@ public class UI_Item : UI_Base
         {
             GetText((int)Texts.StackSizeText).gameObject.SetActive(true);
         }
+        if(item.ItemType == Define.EItemType.Equipment)
+        {
+            var eItem = item as EquipmentItem;
+            GetObject((int)GameObjects.SocketPanel).SetActive(true);
+            GetObject((int)GameObjects.LinkPanel).SetActive(true);
+            SetSocket();
+            SETLINKFLAG = true;
+        }
+
     }
+
+    void SetSocket()
+    {
+        var item = Item as EquipmentItem;
+
+        List<ESocketColor> sockets = item.Socket;
+        
+
+
+        GameObject SocketPanel = GetObject((int)GameObjects.SocketPanel);
+
+        if(Item.ItemSize.x == 1 || sockets.Count == 1)
+        {
+            SocketPanel.GetComponent<CustomGridLayoutGroup>().constraintCount = 1;
+        }
+        else
+        {
+            SocketPanel.GetComponent<CustomGridLayoutGroup>().constraintCount = 2;
+        }
+
+        for (int i = 0; i < sockets.Count; i++)
+        {
+            GameObject socket = Managers.Resource.Instantiate("UI_Socket", SocketPanel.transform);
+            socket.GetComponent<UI_Socket>().SetInfo(sockets[i], Item as EquipmentItem, i);
+        }
+    }
+
+    void SetLink()
+    {
+        var item = Item as EquipmentItem;
+
+        List<bool> links = item.Link;
+
+        string str = "";
+        for (int i = 0; i < links.Count; i++)
+        {
+            str += links[i];
+        }
+        Debug.Log(str);
+
+        GameObject SocketPanel = GetObject((int)GameObjects.SocketPanel);
+        RectTransform SocketRect = SocketPanel.GetComponent<RectTransform>();
+        GameObject LinkPanel = GetObject((int)GameObjects.LinkPanel);
+        LinkPanel.GetComponent<RectTransform>().sizeDelta = SocketRect.sizeDelta;
+
+        List<UI_Socket> sockets = new List<UI_Socket>(SocketPanel.GetComponentsInChildren<UI_Socket>());
+
+        for (int i = 0; i < links.Count; i++)
+        {
+            if (links[i] == false) continue;
+
+
+            GameObject link = Managers.Resource.Instantiate("UI_Link", LinkPanel.transform);
+            link.GetComponent<RectTransform>().localPosition = (sockets[i].GetComponent<RectTransform>().localPosition + sockets[i + 1].GetComponent<RectTransform>().localPosition) / 2;
+            if(i % 2 == 1 || item.ItemSize.x == 1) 
+            {
+                link.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 90);
+            }
+        }
+
+    }
+
 
     public void ItemHold()
     {
@@ -84,16 +191,39 @@ public class UI_Item : UI_Base
         GetImage((int)Images.ItemImage).raycastTarget = true;
     }
 
-    public void SetActiveSocket(bool value)
+/*    public void SetActiveSocket(bool value)
     {
-        IsShowSocket = true;
+        GetObject((int)GameObjects.SocketPanel).SetActive(value);
+    }*/
+
+    public void SetInSocket(bool value)
+    {
+        Debug.Log("SetInSocket: " + value);
+        if(value == true)
+        {
+            GetComponent<Image>().raycastTarget = false;
+            GetImage((int)Images.ItemImage).raycastTarget = false;
+        }
+        else
+        {
+            GetComponent<Image>().raycastTarget = true;
+            GetImage((int)Images.ItemImage).raycastTarget = true;
+        }
     }
 
     private void Update()
     {
+
+        if(SETLINKFLAG)
+        {
+            SETLINKFLAG = false;
+            SetLink();
+        }
+
         if(IsItemHolding)
         {
             transform.position = Input.mousePosition;
+            
         }
 
         if(IsItemUsing)
@@ -107,7 +237,7 @@ public class UI_Item : UI_Base
             GetText((int)Texts.StackSizeText).text = item.StackSize.ToString();
         }
 
-        if (Item.EquipSlot > (int)Define.EEquipSlotType.PlayerInventory && IsShowSocket && Item.ItemType == Define.EItemType.Equipment)
+        /*if (Item.EquipSlot >= (int)Define.EEquipSlotType.PlayerInventory && IsShowSocket && Item.ItemType == Define.EItemType.Equipment)
         {
             GetObject((int)GameObjects.SocketPanel).SetActive(true);
             IsShowSocket = false;
@@ -115,6 +245,8 @@ public class UI_Item : UI_Base
         else
         {
             GetObject((int)GameObjects.SocketPanel).SetActive(false);
-        }
+        }*/
     }
+
+
 }

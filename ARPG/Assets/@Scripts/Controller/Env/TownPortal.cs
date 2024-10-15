@@ -20,6 +20,6 @@ public class TownPortal : InteractableObject
 	{
 		base.Interact(player);
 
-		Managers.Map.LoadMap("ACT01_Town_Map");
+		Managers.Scene.CreateOrLoadGameSceneByName("ACT01_Town_Map");
 	}
 }

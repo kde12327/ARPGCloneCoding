@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Managers : MonoBehaviour
 {
@@ -58,6 +59,16 @@ public class Managers : MonoBehaviour
 
             //초기화
             s_instance = go.GetComponent<Managers>();
+
+            // EventSystem 생성
+            // EventSystem 게임 오브젝트 생성
+            GameObject eventSystem = new GameObject("EventSystem");
+            // EventSystem 컴포넌트 추가
+            eventSystem.AddComponent<EventSystem>();
+            // StandaloneInputModule 컴포넌트 추가
+            eventSystem.AddComponent<StandaloneInputModule>();
+            DontDestroyOnLoad(eventSystem);
+
         }
     }
 

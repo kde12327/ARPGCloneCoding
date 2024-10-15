@@ -25,7 +25,7 @@ public class ItemSaveData
     public int DbId;
     public int TemplateId;
     public int Count;
-    public int EquipSlot; // ÀåÂø + ÀÎº¥ + Ã¢°í
+    public EEquipSlotType EquipSlot; // ÀåÂø + ÀÎº¥ + Ã¢°í
                           //public int OwnerId;
     public int EnchantCount;
 }

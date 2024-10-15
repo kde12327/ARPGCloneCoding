@@ -25,7 +25,10 @@ public class UIManager
 		{
 			GameObject root = GameObject.Find("@UI_Root");
 			if (root == null)
+            {
 				root = new GameObject { name = "@UI_Root" };
+				UnityEngine.Object.DontDestroyOnLoad(root);
+			}
 			return root;
 		}
 	}
@@ -109,7 +112,12 @@ public class UIManager
 		if (string.IsNullOrEmpty(name))
 			name = typeof(T).Name;
 
-		GameObject go = Managers.Resource.Instantiate(name);
+		// 이미 있을 경우 반환
+		GameObject go = GameObject.Find(name);
+		if (go != null)
+			return go.GetComponent<T>();
+
+		go = Managers.Resource.Instantiate(name);
 		T sceneUI = Util.GetOrAddComponent<T>(go);
 		_sceneUI = sceneUI;
 

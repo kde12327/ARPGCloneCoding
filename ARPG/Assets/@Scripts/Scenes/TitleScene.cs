@@ -12,9 +12,21 @@ public class TitleScene : BaseScene
 
 		SceneType = Define.EScene.TitleScene;
 
-		//StartLoadAssets();
+        //StartLoadAssets();
 
-		return true;
+
+        // 새 카메라 게임 오브젝트 생성
+        GameObject cameraObject = new GameObject("Main Camera");
+        Camera camera = cameraObject.AddComponent<Camera>();
+        cameraObject.tag = "MainCamera";
+        camera.orthographic = true;
+        camera.clearFlags = CameraClearFlags.Skybox; // 배경을 Skybox로 설정
+        camera.orthographicSize = 6;
+        DontDestroyOnLoad(camera);
+
+
+
+        return true;
 	}
 
 	public override void Clear()

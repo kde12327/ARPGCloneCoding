@@ -104,6 +104,7 @@ public class UI_InventoryGrid : UI_Base
         if (IsPointEnter)
         {
             MousePosition = MouseToCell();
+            //Debug.Log("MousePosition: " + MousePosition);
 
             List<Vector2Int> list;
             Define.ESlotState state = Managers.Inventory.GetCellList(InvenType, MousePosition.Value,  out list);
@@ -139,11 +140,11 @@ public class UI_InventoryGrid : UI_Base
             if (item != null)
             {
                 Managers.UI.GetSceneUI<UI_GameScene>().SetDiscription(item, top, left, right);
-                if(item.ItemType == EItemType.Equipment)
+                /*if(item.ItemType == EItemType.Equipment)
                 {
                     var eItem = item as EquipmentItem;
                     eItem.UIItem.SetActiveSocket(true);
-                }
+                }*/
             }
             else
             {
@@ -202,7 +203,7 @@ public class UI_InventoryGrid : UI_Base
 
         Vector2 result = new(pos.x * girdSize.x,  -1 * pos.y * girdSize.y);
 
-        Debug.Log(pos + ", " + result);
+        //Debug.Log(pos + ", " + result);
 
 
         return result;

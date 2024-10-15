@@ -28,29 +28,39 @@ public class MapManager
 
 	public void LoadMap(string mapName)
 	{
-		DestroyMap();
+		GameObject map = Managers.Scene.FindObjectInSpecificScene(mapName, $"@Map_{mapName}");
 
-		GameObject map = Managers.Resource.Instantiate(mapName);
-		map.transform.position = Vector3.zero;
-		map.name = $"@Map_{mapName}";
+		if (map == null)
+        {
+			map = Managers.Resource.Instantiate(mapName);
+			map.transform.position = Vector3.zero;
+			map.name = $"@Map_{mapName}";
+
+			CellGrid = map.GetComponent<Grid>();
+
+			SpawnObjectsByData(map, mapName);
+		}
+        else
+        {
+			CellGrid = map.GetComponent<Grid>();
+		}
 
 		Map = map;
 		MapName = mapName;
-		CellGrid = map.GetComponent<Grid>();
+
 
 		ParseCollisionData(map, mapName);
 
-		SpawnObjectsByData(map, mapName);
 
 		Managers.Object.Player?.OnMapChange();
 	}
 
 	public void DestroyMap()
 	{
-		ClearObjects();
+		/*ClearObjects();
 
 		if (Map != null)
-			Managers.Resource.Destroy(Map);
+			Managers.Resource.Destroy(Map);*/
 	}
 
 	void ParseCollisionData(GameObject map, string mapName, string tilemap = "Tilemap_Collision")
@@ -112,9 +122,21 @@ public class MapManager
                 if (tile.ObjectType == Define.EObjectType.Env)
                 {
                     Vector3 worldPos = Cell2World(cellPos);
+
+					Data.EnvData envData = Managers.Data.EnvDic[tile.DataTemplateID];
+
+					if(envData.PrefabLabel == "Waypoint")
+                    {
+						Waypoint env = Managers.Object.Spawn<Waypoint>(worldPos, tile.DataTemplateID);
+						env.SetCellPos(cellPos, true);
+					}
+                    else
+                    {
+						Env env = Managers.Object.Spawn<Env>(worldPos, tile.DataTemplateID);
+						env.SetCellPos(cellPos, true);
+					}
                     
-					Env env = Managers.Object.Spawn<Env>(worldPos, tile.DataTemplateID);
-					env.SetCellPos(cellPos, true);
+					
                     
 					
 

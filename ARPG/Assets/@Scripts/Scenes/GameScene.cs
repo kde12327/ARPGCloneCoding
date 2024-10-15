@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static Define;
 
 public class GameScene : BaseScene
@@ -13,14 +14,29 @@ public class GameScene : BaseScene
 
 		SceneType = EScene.GameScene;
 
+		
+
 		Managers.UI.ShowSceneUI<UI_GameScene>();
-		Managers.Map.LoadMap("ACT01_01_Map");
 
-		Player player = Managers.Object.Spawn<Player>(new Vector3Int(-10, -5, 0), PLAYER_KNIGHT_ID);
-		player.SetCellPos(new Vector3Int(-20, -8, 0), true);
+		Managers.Map.LoadMap(Managers.Scene.CurrentMapName);
 
-		CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
-		camera.Target = player;
+		/*if (Managers.Scene.MapInit)
+        {
+			Managers.Scene.MapInit = false;
+		}*/
+
+		if(Managers.Object.Player == null)
+        {
+			Player player = Managers.Object.Spawn<Player>(new Vector3Int(-10, -5, 0), PLAYER_KNIGHT_ID);
+			player.SetCellPos(new Vector3Int(-20, -8, 0), true);
+
+
+			CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
+			camera.Target = player;
+		}
+
+
+
 
 		return true;
 	}

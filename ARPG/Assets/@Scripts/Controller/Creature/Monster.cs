@@ -15,6 +15,7 @@ public class Monster : Creature
             if (_creatureState != value)
             {
                 base.CreatureState = value;
+                state = (int)value;
                 switch (value)
                 {
                     case ECreatureState.Idle:
@@ -34,6 +35,9 @@ public class Monster : Creature
         } 
     }
 
+    [SerializeField]
+    int state;
+
     public override bool Init()
     {
         if (base.Init() == false)
@@ -41,7 +45,6 @@ public class Monster : Creature
 
         ObjectType = EObjectType.Monster;
 
-        StartCoroutine(CoUpdateState());
 
         return true;
     }
@@ -62,6 +65,42 @@ public class Monster : Creature
     {
         _initPos = transform.position;
     }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        UpdateAITick -= Time.deltaTime;
+        if (UpdateAITick < 0)
+        {
+            switch (CreatureState)
+            {
+                case ECreatureState.Idle:
+                    UpdateIdle();
+                    break;
+                case ECreatureState.Move:
+                    UpdateMove();
+                    break;
+                case ECreatureState.Skill:
+                    UpdateSkill();
+                    break;
+                case ECreatureState.OnDamaged:
+                    UpdateOnDamaged();
+                    break;
+                case ECreatureState.Dead:
+                    UpdateDead();
+                    break;
+            }
+        }
+        
+    }
+    /*private void OnEnable()
+    {
+        Debug.Log("d");
+        CreatureState = ECreatureState.Idle;
+        //transform.position = _destPos;
+        //LerpCellPosCompleted = true;
+    }*/
 
     #region AI
 
@@ -111,6 +150,7 @@ public class Monster : Creature
 
         if(Target.IsValid() == false)
         {
+
             Creature creature = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Player, func: IsValid) as Creature;
             if (creature != null)
             {
@@ -119,7 +159,11 @@ public class Monster : Creature
                 return;
             }
 
-            FindPathAndMoveToCellPos(_destPos, MONSTER_DEFAULT_MOVE_DEPTH);
+            EFindPathResult result = FindPathAndMoveToCellPos(_destPos, MONSTER_DEFAULT_MOVE_DEPTH);
+            if(result != EFindPathResult.Success)
+            {
+                //Debug.Log(result);
+            }
 
             if (LerpCellPosCompleted)
             {
@@ -129,7 +173,6 @@ public class Monster : Creature
         }
         else
         {
-
             // Chase
             SkillBase skill = Skills.CurrentSkill;
             ChaseOrAttackTarget(MONSTER_SEARCH_DISTANCE, skill);

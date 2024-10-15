@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SupportBase : InitBase
+public class SupportBase
 {
     //public Creature Owner { get; protected set; }
     public Data.SupportData SupportData { get; private set; }
@@ -14,13 +14,6 @@ public class SupportBase : InitBase
 	public float AreaOfEffectIncreased { get; set; }
 	#endregion
 
-	public override bool Init()
-	{
-		if (base.Init() == false)
-			return false;
-
-		return true;
-	}
 
 	public virtual void SetInfo(int supportTemplateID)
 	{
