@@ -99,10 +99,7 @@ public class InventoryManager
 				{
 					return false;
 				}
-
-
 			}
-			
         }
 
 		AllItems.Add(item);
@@ -313,24 +310,30 @@ public class InventoryManager
 	 * 아이템을 해당 슬롯에 장착
 	 */
 
-	public bool EquipItem(ItemBase item, EEquipSlotType itemSlot)
+	public bool EquipItem(ItemBase item, EEquipSlotType slotType)
 	{
 
-		EquipmentItem eitem = item as EquipmentItem;
-
-		EEquipSlotType equipSlotType = eitem.GetEquipItemEquipSlot();
-		if (equipSlotType != itemSlot)
+		if (!item.GetCanEquipItemEquipSlot(slotType))
 			return false;
 
 		// 아이템 장착
-		eitem.EquipSlot = equipSlotType;
-		EquippedItems[equipSlotType] = eitem;
+		item.EquipSlot = slotType;
+		EquippedItems[slotType] = item;
 
-		Managers.Object.Player.Stats.EquipItem(eitem);
-		Managers.Object.Player.OnChangeSkillSetting();
-		Managers.UI.GetSceneUI<UI_GameScene>().EquipItem(equipSlotType, eitem.UIItem);
-		item.EquipSlot = itemSlot;
+		if(item.ItemData.ItemType == EItemType.Equipment)
+        {
+			EquipmentItem eitem = item as EquipmentItem;
+			Managers.Object.Player.Stats.EquipItem(eitem);
+			Managers.Object.Player.OnChangeSkillSetting();
+		}
+		else if (item.ItemData.ItemType == EItemType.Flask)
+		{
+			Managers.UI.GetSceneUI<UI_GameScene>().SetFlask(item as FlaskItem, slotType);
+		}
+		Managers.UI.GetSceneUI<UI_GameScene>().EquipItem(slotType, item.UIItem);
+		item.EquipSlot = slotType;
 
+		
 
 		return true;
 	}
@@ -340,15 +343,22 @@ public class InventoryManager
 	 */
 	public void UnEquipItem(EEquipSlotType slotType)
 	{
-		var item = GetEquippedItem(slotType) as EquipmentItem;
+		var item = GetEquippedItem(slotType);
 		if (item == null)
 			return;
 
 		EquippedItems.Remove(item.EquipSlot);
 
-
-		Managers.Object.Player.Stats.UnEquipItem(item);
-		Managers.Object.Player.OnChangeSkillSetting();
+		if(item.ItemType == EItemType.Equipment)
+        {
+			var eitem = item as EquipmentItem;
+			Managers.Object.Player.Stats.UnEquipItem(eitem);
+			Managers.Object.Player.OnChangeSkillSetting();
+		}
+		else if (item.ItemData.ItemType == EItemType.Flask)
+		{
+			Managers.UI.GetSceneUI<UI_GameScene>().SetFlask(null, slotType);
+		}
 
 		item.EquipSlot = (int)EEquipSlotType.None;
 	}
@@ -375,8 +385,9 @@ public class InventoryManager
         else
 		{// 마우스에 아이템을 들고 있을 때
 
-			if (HoldingItem.Item.GetEquipItemEquipSlot() != slotType)
+			if (!HoldingItem.Item.GetCanEquipItemEquipSlot(slotType))
 				return false;
+
 
 			ItemBase equippedItem = GetEquippedItem(slotType);
 			if (equippedItem == null)
@@ -481,7 +492,7 @@ public class InventoryManager
     {
 		if (HoldingItem == null) return false;
 
-		if(HoldingItem.Item.GetEquipItemEquipSlot() == slotType)
+		if(HoldingItem.Item.GetCanEquipItemEquipSlot(slotType))
         {
 			return true;
         }

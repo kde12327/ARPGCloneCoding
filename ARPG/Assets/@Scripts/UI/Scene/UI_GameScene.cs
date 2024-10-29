@@ -12,9 +12,17 @@ public class UI_GameScene : UI_Scene
         PlayerInventoryPanel,
         WarehouseInventoryPanel,
         VendorInventoryPanel,
+        UI_PlayerStatusView,
+        UI_PassiveSkillView,
         UI_NpcInteractionView,
         UI_DiscriptionView,
         UI_WaypointView,
+        UI_ItemFlask1,
+        UI_ItemFlask2,
+        UI_ItemFlask3,
+        UI_ItemFlask4,
+        UI_ItemFlask5,
+
     }
 
     enum Images
@@ -54,6 +62,11 @@ public class UI_GameScene : UI_Scene
         UI_ItemSlotGloves,
         UI_ItemSlotBoots,
         UI_ItemSlotBodyArmour,
+        UI_ItemSlotFlask1,
+        UI_ItemSlotFlask2,
+        UI_ItemSlotFlask3,
+        UI_ItemSlotFlask4,
+        UI_ItemSlotFlask5
     }
 
     public enum UI_InventoryGrids
@@ -102,6 +115,12 @@ public class UI_GameScene : UI_Scene
         
         var waypointView = GetObject((int)GameObjects.UI_WaypointView);
         waypointView.SetActive(false);
+        
+        var playerStatusView= GetObject((int)GameObjects.UI_PlayerStatusView);
+        playerStatusView.SetActive(false);
+
+        var passiveSkillView = GetObject((int)GameObjects.UI_PassiveSkillView);
+        passiveSkillView.SetActive(false);
 
         var usingItemImage = GetImage((int)Images.UsingItemImage);
         usingItemImage.gameObject.SetActive(false);
@@ -117,6 +136,33 @@ public class UI_GameScene : UI_Scene
         {
             usingItemImage.transform.position = Input.mousePosition;
         }
+    }
+
+    public void SetFlask(FlaskItem item, EEquipSlotType itemSlot)
+    {
+        int objectIndex = (int)GameObjects.UI_ItemFlask1;
+        switch (itemSlot)
+        {
+            case EEquipSlotType.Flask1:
+                objectIndex = (int)GameObjects.UI_ItemFlask1;
+                break;
+            case EEquipSlotType.Flask2:
+                objectIndex = (int)GameObjects.UI_ItemFlask2;
+                break;
+            case EEquipSlotType.Flask3:
+                objectIndex = (int)GameObjects.UI_ItemFlask3;
+                break;
+            case EEquipSlotType.Flask4:
+                objectIndex = (int)GameObjects.UI_ItemFlask4;
+                break;
+            case EEquipSlotType.Flask5:
+                objectIndex = (int)GameObjects.UI_ItemFlask5;
+                break;
+        }
+
+        var uiItem = GetObject(objectIndex).GetComponent<UI_Item>();
+        uiItem.SetInfo(item);
+        item.SetFlaskUIItem(uiItem);
     }
 
     public void SetUsingItem(ItemBase item)
@@ -137,6 +183,30 @@ public class UI_GameScene : UI_Scene
     {
         var waypointView = GetObject((int)GameObjects.UI_WaypointView);
         waypointView.SetActive(isActive);
+    }
+
+
+
+    public void PassiveSkillToggle()
+    {
+        var passiveSkillView = GetObject((int)GameObjects.UI_PassiveSkillView);
+        passiveSkillView.SetActive(!passiveSkillView.activeSelf);
+        /*if (passiveSkillView.activeSelf)
+        {
+            passiveSkillView.GetComponent<UI_PassiveSkillView>().UpdateStatusView();
+        }*/
+
+    }
+
+    public void PlayerStatusToggle()
+    {
+        var playerStatus = GetObject((int)GameObjects.UI_PlayerStatusView);
+        playerStatus.SetActive(!playerStatus.activeSelf);
+        if (playerStatus.activeSelf)
+        {
+            playerStatus.GetComponent<UI_PlayerStatusView>().UpdateStatusView();
+        }
+
     }
 
     public void SetNpcInteraction(Npc npc)
@@ -309,6 +379,21 @@ public class UI_GameScene : UI_Scene
             case EEquipSlotType.Gloves:
                 Get<UI_ItemSlot>((int)UIItemSlots.UI_ItemSlotGloves).SetItem(item);
                 break;
+            case EEquipSlotType.Flask1:
+                Get<UI_ItemSlot>((int)UIItemSlots.UI_ItemSlotFlask1).SetItem(item);
+                break;
+            case EEquipSlotType.Flask2:
+                Get<UI_ItemSlot>((int)UIItemSlots.UI_ItemSlotFlask2).SetItem(item);
+                break;
+            case EEquipSlotType.Flask3:
+                Get<UI_ItemSlot>((int)UIItemSlots.UI_ItemSlotFlask3).SetItem(item);
+                break;
+            case EEquipSlotType.Flask4:
+                Get<UI_ItemSlot>((int)UIItemSlots.UI_ItemSlotFlask4).SetItem(item);
+                break;
+            case EEquipSlotType.Flask5:
+                Get<UI_ItemSlot>((int)UIItemSlots.UI_ItemSlotFlask5).SetItem(item);
+                break;
         }
     }
 
@@ -365,6 +450,21 @@ public class UI_GameScene : UI_Scene
                     break;
                 case UIItemSlots.UI_ItemSlotBodyArmour:
                     slotType = EEquipSlotType.BodyArmour;
+                    break;
+                case UIItemSlots.UI_ItemSlotFlask1:
+                    slotType = EEquipSlotType.Flask1;
+                    break;
+                case UIItemSlots.UI_ItemSlotFlask2:
+                    slotType = EEquipSlotType.Flask2;
+                    break;
+                case UIItemSlots.UI_ItemSlotFlask3:
+                    slotType = EEquipSlotType.Flask3;
+                    break;
+                case UIItemSlots.UI_ItemSlotFlask4:
+                    slotType = EEquipSlotType.Flask4;
+                    break;
+                case UIItemSlots.UI_ItemSlotFlask5:
+                    slotType = EEquipSlotType.Flask5;
                     break;
             }
 

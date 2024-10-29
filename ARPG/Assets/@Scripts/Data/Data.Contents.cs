@@ -306,6 +306,59 @@ namespace Data
 	}
 
 
+	public class FlaskItemBaseData : ItemData
+	{
+		public EFlaskType FlaskType;
+		public string FlaskSprite;
+		public string FlaskFillSprite;
+		public string EffectName;
+		public float EffectValue;
+		public float EffectTime;
+		public float MaximumCharge;
+		public float ChargePerUse; 
+	}
+
+	[Serializable]
+	public class FlaskItemBaseDataLoader : ILoader<int, FlaskItemBaseData>
+	{
+		public List<FlaskItemBaseData> items = new List<FlaskItemBaseData>();
+		public Dictionary<int, FlaskItemBaseData> MakeDict()
+		{
+			Dictionary<int, FlaskItemBaseData> dict = new Dictionary<int, FlaskItemBaseData>();
+			foreach (FlaskItemBaseData item in items)
+				dict.Add(item.DataId, item);
+			return dict;
+		}
+	}
+
+	#endregion
+
+	#region PassiveSkill
+	[Serializable]
+	public class PassiveSkillData
+	{
+		public int DataId;
+		public string NameDescriptionTextID;
+		public string ContentDescriptionTextID;
+		public string Icon;
+		public List<String> StatNames = new List<String>();
+		public List<float> StatValues = new List<float>();
+		public List<int> LinkIds = new List<int>();
+		public int StartNode; // 0 - nope, 1 - startnode
+	}
+
+	[Serializable]
+	public class PassiveSkillDataLoader : ILoader<int, PassiveSkillData>
+	{
+		public List<PassiveSkillData> passiveSkills = new List<PassiveSkillData>();
+		public Dictionary<int, PassiveSkillData> MakeDict()
+		{
+			Dictionary<int, PassiveSkillData> dict = new Dictionary<int, PassiveSkillData>();
+			foreach (PassiveSkillData passive in passiveSkills)
+				dict.Add(passive.DataId, passive);
+			return dict;
+		}
+	}
 	#endregion
 
 	#region Env

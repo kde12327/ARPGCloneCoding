@@ -162,7 +162,7 @@ public abstract class SkillBase : InitBase
 			OnAttackEvent();
 	}
 
-	public bool CanSkill()
+	public virtual bool CanSkill()
     {
 		return RemainCoolTime == 0;
 	}

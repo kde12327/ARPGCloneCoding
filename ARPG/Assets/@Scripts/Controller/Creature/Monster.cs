@@ -235,6 +235,15 @@ public class Monster : Creature
             Player player = attacker as Player;
             player.Exp++;
 
+            for(EEquipSlotType i = EEquipSlotType.Flask1; i <= EEquipSlotType.Flask5; i++)
+            {
+                var item = Managers.Inventory.GetEquippedItem(i);
+                if(item != null)
+                {
+                    (item as FlaskItem).GetCharge(ERarity.Normal);
+                }
+            }
+
             {
                 var item =  EquipmentItem.MakeRandomEquipmentItem();
 

@@ -19,18 +19,23 @@ public class UI_Item : UI_Base
 
     bool SETLINKFLAG = false;
 
+    [SerializeField]
+    bool IsFlaskViewer = false;
+
     enum Texts
     {
         StackSizeText
     }
     enum Images
     {
-        ItemImage
+        ItemImage,
+        FlaskFill
     }
     enum GameObjects
     {
         SocketPanel,
-        LinkPanel
+        LinkPanel,
+        FlaskSlider
     }
     public override bool Init()
     {
@@ -70,30 +75,46 @@ public class UI_Item : UI_Base
                 }
             }
         }, Define.EUIEvent.Click);
-/*
-        GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
-        {
-            SetActiveSocket(true);
-        }, Define.EUIEvent.PointerUp);
+        /*
+                GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
+                {
+                    SetActiveSocket(true);
+                }, Define.EUIEvent.PointerUp);
 
-        GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
-        {
-            SetActiveSocket(false);
-        }, Define.EUIEvent.PointerExit);*/
+                GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
+                {
+                    SetActiveSocket(false);
+                }, Define.EUIEvent.PointerExit);*/
 
+        GetImage((int)Images.ItemImage).gameObject.SetActive(false);
         GetText((int)Texts.StackSizeText).gameObject.SetActive(false);
 
         GetObject((int)GameObjects.SocketPanel).SetActive(false);
         GetObject((int)GameObjects.LinkPanel).SetActive(false);
+        GetObject((int)GameObjects.FlaskSlider).SetActive(false);
 
 
         return true;
     }
     public void SetInfo(ItemBase item)
     {
+        GetImage((int)Images.ItemImage).gameObject.SetActive(true);
         Item = item;
+        if(Item == null)
+        {
+            GetImage((int)Images.ItemImage).gameObject.SetActive(false);
+            GetText((int)Texts.StackSizeText).gameObject.SetActive(false);
+
+            GetObject((int)GameObjects.SocketPanel).SetActive(false);
+            GetObject((int)GameObjects.LinkPanel).SetActive(false);
+            GetObject((int)GameObjects.FlaskSlider).SetActive(false);
+            return;
+        }
+
         GetImage((int)Images.ItemImage).sprite = Managers.Resource.Load<Sprite>(Item.ItemData.Icon);
-        item.UIItem = this;
+        
+        if(!IsFlaskViewer)
+            item.UIItem = this;
         GetImage((int)Images.ItemImage).GetComponent<RectTransform>().sizeDelta *= Item.ItemSize;
         if(item.ItemType == Define.EItemType.Consumable)
         {
@@ -106,6 +127,14 @@ public class UI_Item : UI_Base
             GetObject((int)GameObjects.LinkPanel).SetActive(true);
             SetSocket();
             SETLINKFLAG = true;
+        }
+        if(item.ItemType == Define.EItemType.Flask)
+        {
+            var fItem = item as FlaskItem;
+            GetObject((int)GameObjects.FlaskSlider).SetActive(true);
+
+            GetImage((int)Images.ItemImage).sprite = Managers.Resource.Load<Sprite>(fItem.FlaskItemData.FlaskSprite);
+            GetImage((int)Images.FlaskFill).sprite = Managers.Resource.Load<Sprite>(fItem.FlaskItemData.FlaskFillSprite);
         }
 
     }
@@ -171,6 +200,12 @@ public class UI_Item : UI_Base
 
     }
 
+    public void UpdateFlaskFill()
+    {
+        FlaskItem flaskItem = Item as FlaskItem;
+
+        GetObject((int)GameObjects.FlaskSlider).GetComponent<Slider>().value = flaskItem.Charge / flaskItem.MaximumCharge * 0.64f;
+    }
 
     public void ItemHold()
     {
@@ -213,6 +248,7 @@ public class UI_Item : UI_Base
 
     private void Update()
     {
+        if (Item == null) return;
 
         if(SETLINKFLAG)
         {

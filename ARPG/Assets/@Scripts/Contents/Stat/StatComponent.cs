@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,10 +20,12 @@ public class StatComponent
 
         if (!Stats.ContainsKey(statName))
         {
-            Stats.Add(statName, new());
+            Stats.Add(statName, new(statName));
         }
         Stats.TryGetValue(statName, out CreatureStat stat);
         stat.AddModifier(modifier);
+
+        OnStatChanged();
     }
 
     public void ClearModifierFromSource(object source)
@@ -31,25 +34,88 @@ public class StatComponent
         {
             stat.Value.ClearModifiersFromSource(source);
         }
+
+        OnStatChanged();
     }
 
     public CreatureStat SetStat(string statName, float value, object source)
     {
+        CreatureStat stat;
         if (!Stats.ContainsKey(statName))
         {
-            Stats.Add(statName, new());
+            Stats.Add(statName, new(value));
+            Stats.TryGetValue(statName, out stat);
         }
-        Stats.TryGetValue(statName, out CreatureStat stat);
-        stat.AddModifier(new(value, Define.EStatModType.Add, 0, source));
+        else
+        {
+            Stats.TryGetValue(statName, out stat);
+            stat.AddModifier(new(value, Define.EStatModType.Add, 0, source));
+        }
+
+        OnStatChanged();
 
         return stat;
+    }
+    public CreatureStat AddStat(string optionName, float value, object source, int order = 0)
+    {
+        string statName = "";
+        Define.EStatModType eStatModType = Define.EStatModType.Add;
+
+        switch (optionName)
+        {
+            case "base_maximum_life":
+                statName = Stat.Life;
+                eStatModType = Define.EStatModType.Add;
+                break;
+            case "base_maximum_mana":
+                statName = Stat.Mana;
+                eStatModType = Define.EStatModType.Add;
+                break;
+            case "base_maximum_energy_sheild":
+                statName = Stat.EnergySheild;
+                eStatModType = Define.EStatModType.Add;
+                break;
+            case "additional_strength":
+                statName = Stat.Str;
+                eStatModType = Define.EStatModType.Add;
+                break;
+            case "additional_dexterity":
+                statName = Stat.Dex;
+                eStatModType = Define.EStatModType.Add;
+                break;
+            case "additional_intelligence":
+                statName = Stat.Int;
+                eStatModType = Define.EStatModType.Add;
+                break;
+            default:
+                break;
+        }
+
+        CreatureStat stat;
+        if (!Stats.ContainsKey(statName))
+        {
+            Stats.Add(statName, new(statName));
+
+        }
+
+        Stats.TryGetValue(statName, out stat);
+        stat.AddModifier(new(value, eStatModType, order, source));
+
+
+        OnStatChanged();
+
+        return stat;
+
     }
 
     public CreatureStat GetStat(string statName)
     {
         if (!Stats.ContainsKey(statName))
         {
-            return null;
+            Stats.Add(statName, new(statName));
+
+
+            OnStatChanged();
         }
         Stats.TryGetValue(statName, out CreatureStat stat);
 
@@ -62,31 +128,7 @@ public class StatComponent
 
         foreach (var option in options)
         {
-
-            switch (option.Stat)
-            {
-                case "base_maximum_life":
-                    AddModifier(Stat.Life, new StatModifier(option.Value, Define.EStatModType.Add, 0, item));
-                    break;
-                case "base_maximum_mana":
-                    AddModifier(Stat.Mana, new StatModifier(option.Value, Define.EStatModType.Add, 0, item));
-                    break;
-                case "base_maximum_energy_sheild":
-                    AddModifier(Stat.EnergySheild, new StatModifier(option.Value, Define.EStatModType.Add, 0, item));
-                    break;
-                case "additional_strength":
-                    AddModifier(Stat.Str, new StatModifier(option.Value, Define.EStatModType.Add, 0, item));
-                    break;
-                case "additional_dexterity":
-                    AddModifier(Stat.Dex, new StatModifier(option.Value, Define.EStatModType.Add, 0, item));
-                    break;
-                case "additional_intelligence":
-                    AddModifier(Stat.Int, new StatModifier(option.Value, Define.EStatModType.Add, 0, item));
-                    break;
-                default:
-                    AddModifier(option.Stat, new StatModifier(option.Value, Define.EStatModType.Add, 0, item));
-                    break;
-            }
+            AddStat(option.Stat, option.Value, item);
         }
     }
 
@@ -94,5 +136,15 @@ public class StatComponent
     {
         ClearModifierFromSource(item);
     }
+
+    void OnStatChanged()
+    {
+        if (OnPlayerStatusChanged != null)
+        {
+            OnPlayerStatusChanged.Invoke();
+        }
+    }
+
+    public event Action OnPlayerStatusChanged;
 
 }

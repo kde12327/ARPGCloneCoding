@@ -21,7 +21,7 @@ public class TitleScene : BaseScene
         cameraObject.tag = "MainCamera";
         camera.orthographic = true;
         camera.clearFlags = CameraClearFlags.Skybox; // 배경을 Skybox로 설정
-        camera.orthographicSize = 6;
+        camera.orthographicSize = 12;
         DontDestroyOnLoad(camera);
 
 

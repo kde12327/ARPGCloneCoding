@@ -27,6 +27,8 @@ public class Creature : BaseObject
         set
         {
             _hp = value;
+            if (_hp > Stats.GetStat("Life").Value)
+                _hp = Stats.GetStat("Life").Value;
             OnHpChanged?.Invoke(_hp / Stats.GetStat(Stat.Life).Value);
         } 
     }

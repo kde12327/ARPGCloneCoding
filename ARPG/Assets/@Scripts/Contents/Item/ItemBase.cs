@@ -56,23 +56,36 @@ public class ItemBase
 	public Vector2Int ItemSize
     {
         get 
-		{ 
-			switch(ItemData.ItemSubType)
+		{
+            switch (ItemData.ItemType)
             {
-				case EItemSubType.Weapon:
-					return new Vector2Int(1, 3);
-				case EItemSubType.Helmet:
-					return new Vector2Int(2, 2);
-				case EItemSubType.Gloves:
-					return new Vector2Int(2, 2);
-				case EItemSubType.Boots:
-					return new Vector2Int(2, 2);
-				case EItemSubType.BodyArmour:
-					return new Vector2Int(2, 3);
+				case EItemType.Equipment:
+					switch (ItemData.ItemSubType)
+					{
+						case EItemSubType.Weapon:
+							return new Vector2Int(1, 3);
+						case EItemSubType.Helmet:
+							return new Vector2Int(2, 2);
+						case EItemSubType.Gloves:
+							return new Vector2Int(2, 2);
+						case EItemSubType.Boots:
+							return new Vector2Int(2, 2);
+						case EItemSubType.BodyArmour:
+							return new Vector2Int(2, 3);
+						default:
+							return new Vector2Int(1, 1);
+					}
+				case EItemType.Consumable:
+					return new Vector2Int(1, 1);
+				case EItemType.SkillGem:
+					return new Vector2Int(1, 1);
+				case EItemType.Flask:
+					return new Vector2Int(1, 2);
 
 				default:
 					return new Vector2Int(1, 1);
 			}
+
 		}
     }
 
@@ -107,6 +120,9 @@ public class ItemBase
 				break;
 			case EItemType.SkillGem:
 				item = new SkillGemItem(itemInfo.TemplateId);
+				break;
+			case EItemType.Flask:
+				item = new FlaskItem(itemInfo.TemplateId);
 				break;
 		}
 
@@ -171,7 +187,18 @@ public class ItemBase
 		
 
 		return (EEquipSlotType)this.ItemData.ItemSubType;
+	}
 
+	public bool GetCanEquipItemEquipSlot(EEquipSlotType equipSlotType)
+	{
+		if (
+				ItemType == EItemType.Flask
+				&& equipSlotType >= EEquipSlotType.Flask1
+				&& equipSlotType <= EEquipSlotType.Flask5
+				)
+			return true;
+
+		return GetEquipItemEquipSlot() == equipSlotType;
 	}
 
 	public bool IsEquippedItem()

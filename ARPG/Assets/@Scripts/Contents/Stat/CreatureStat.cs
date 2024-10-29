@@ -35,6 +35,42 @@ public class CreatureStat
 	{
 	}
 
+	public CreatureStat(string statName) : this()
+    {
+        switch (statName)
+        {
+			case Stat.Life:
+				BaseValue = 1000;
+				break;
+			case Stat.Mana:
+				BaseValue = 100;
+				break;
+			case Stat.EnergySheild:
+				BaseValue = 0;
+				break;
+			case Stat.Atk:
+				BaseValue = 25;
+				break;
+			case Stat.CriRate:
+				BaseValue = 0;
+				break;
+			case Stat.AttackSpeedRate:
+				BaseValue = 1;
+				break;
+			case Stat.Str:
+				BaseValue = 10;
+				break;
+			case Stat.Dex:
+				BaseValue = 10;
+				break;
+			case Stat.Int:
+				BaseValue = 10;
+				break;
+			
+
+		}
+    }
+
 	public CreatureStat(float baseValue) : this()
 	{
 		BaseValue = baseValue;

@@ -32,6 +32,8 @@ public class Player : Creature
         set
         {
             _mp = value;
+            if (_mp > Stats.GetStat("Mana").Value)
+                _mp = Stats.GetStat("Mana").Value;
             OnMpChanged?.Invoke(_mp / MaxMp.Value);
         }
     }
@@ -45,7 +47,7 @@ public class Player : Creature
         {
             _exp = value;
 
-            if (MaxExp > _exp)
+            if (MaxExp <= _exp)
             {
                 Level++;
                 _exp -= MaxExp;
@@ -60,8 +62,9 @@ public class Player : Creature
     public int MaxExp;
 
     public int Level = 1;
-    
+
     #endregion
+
 
 
 
@@ -197,12 +200,8 @@ public class Player : Creature
         OnExpChanged -= gameSceneUI.SetExpBarValue;
         OnExpChanged += gameSceneUI.SetExpBarValue;
 
-        MaxMp = new CreatureStat(100.0f);
-        Mp = MaxMp.Value;
 
-        MaxExp = 10;
-        Exp = 0;
-
+        
 
         PlayerData = CreatureData as Data.PlayerData;
         return true;
@@ -218,13 +217,23 @@ public class Player : Creature
         Skills = gameObject.GetOrAddComponent<SkillComponent>();
         Skills.SetInfo(this);
 
-      
+        MaxMp = Stats.GetStat(Stat.Mana);
+        Mp = MaxMp.Value;
+
+        MaxExp = 10;
+        Exp = 0;
 
     }
 
     private void Start()
     {
     }
+
+
+    /**
+     * 토글 적용 후 노드의 상태(bool 활성화)를 반환
+     */
+    
 
     public void OnChangeSkillSetting()
     {
@@ -233,6 +242,7 @@ public class Player : Creature
         for (int i = 0; i < items.Count; i++)
         {
             EquipmentItem eItem = items[i] as EquipmentItem;
+            if (eItem == null) continue;
             List<List<SkillGemItem>> _skills = eItem.GetSkills();
             if(_skills.Count != 0)
                 skills.AddRange(_skills);

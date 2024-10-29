@@ -10,20 +10,7 @@ public class Managers : MonoBehaviour
     private static Managers s_instance;
     private static Managers Instance { get { Init(); return s_instance; } }
 
-    #region Contents
-    private GameManager _game = new GameManager();
-    private ObjectManager _object = new ObjectManager();
-    private InputManager _input = new InputManager();
-    private MapManager _map = new MapManager();
-    private InventoryManager _inventory = new InventoryManager();
-
-    public static GameManager Game { get { return Instance?._game; } }
-    public static ObjectManager Object { get { return Instance?._object; } }
-    public static InputManager Input { get { return Instance?._input; } }
-    public static MapManager Map { get { return Instance?._map; } }
-    public static InventoryManager Inventory { get { return Instance?._inventory; } }
-
-    #endregion
+   
 
 
     #region Core
@@ -42,6 +29,22 @@ public class Managers : MonoBehaviour
     public static UIManager UI { get { return Instance?._ui; } }
     #endregion
 
+    #region Contents
+    private GameManager _game = new GameManager();
+    private ObjectManager _object = new ObjectManager();
+    private InputManager _input = new InputManager();
+    private MapManager _map = new MapManager();
+    private InventoryManager _inventory = new InventoryManager();
+    private PassiveSkillManager _passive = new PassiveSkillManager();
+
+    public static GameManager Game { get { return Instance?._game; } }
+    public static ObjectManager Object { get { return Instance?._object; } }
+    public static InputManager Input { get { return Instance?._input; } }
+    public static MapManager Map { get { return Instance?._map; } }
+    public static InventoryManager Inventory { get { return Instance?._inventory; } }
+    public static PassiveSkillManager Passive { get { return Instance?._passive; } }
+
+    #endregion
     public static void Init()
     {
         if (s_instance == null && Initialized == false)

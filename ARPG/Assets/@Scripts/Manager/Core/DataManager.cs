@@ -23,14 +23,19 @@ public class DataManager
 	public Dictionary<int, Data.ModData> ModDic { get; private set; } = new Dictionary<int, Data.ModData>();
 	public Dictionary<int, Data.ItemData> ItemDic { get; private set; } = new Dictionary<int, Data.ItemData>();
 	public Dictionary<int, Data.EquipmentItemBaseData> EquipmentItemBaseDic { get; private set; } = new Dictionary<int, Data.EquipmentItemBaseData>();
+	public Dictionary<int, Data.FlaskItemBaseData> FlaskItemBaseDic { get; private set; } = new Dictionary<int, Data.FlaskItemBaseData>();
 	public Dictionary<int, Data.ConsumableItemData> ConsumableItemDic { get; private set; } = new Dictionary<int, Data.ConsumableItemData>();
 	public Dictionary<int, Data.SkillGemItemData> SkillGemItemDic { get; private set; } = new Dictionary<int, Data.SkillGemItemData>();
+	public Dictionary<int, Data.PassiveSkillData> PassiveSkillDic { get; private set; } = new Dictionary<int, Data.PassiveSkillData>();
 
 	#region Mod
 	// Modifier를 미리 리스트로 만들기
 	public Dictionary<EItemSubType, List<Data.ModData>> PrefixModifierData { get; set; } = new Dictionary<EItemSubType, List<Data.ModData>>();
 	public Dictionary<EItemSubType, List<Data.ModData>> SuffixModifierData { get; set; } = new Dictionary<EItemSubType, List<Data.ModData>>();
 
+	// Passive Node Link graph
+
+	public Dictionary<int, List<int>> PassiveSkillLInkDic { get; private set; } = new();
 
     #endregion
 
@@ -50,6 +55,8 @@ public class DataManager
 		EquipmentItemBaseDic = LoadJson<Data.EquipmentItemBaseDataLoader, int, Data.EquipmentItemBaseData>("EquipmentItemBaseData").MakeDict();
 		ConsumableItemDic = LoadJson<Data.ConsumableItemDataLoader, int, Data.ConsumableItemData>("ConsumableItemData").MakeDict();
 		SkillGemItemDic = LoadJson<Data.SkillGemItemDataLoader, int, Data.SkillGemItemData>("SkillGemItemData").MakeDict();
+		PassiveSkillDic = LoadJson<Data.PassiveSkillDataLoader, int, Data.PassiveSkillData>("PassiveSkillData").MakeDict();
+		FlaskItemBaseDic = LoadJson<Data.FlaskItemBaseDataLoader, int, Data.FlaskItemBaseData>("FlaskItemBaseData").MakeDict();
 
 		ItemDic.Clear();
 
@@ -60,6 +67,9 @@ public class DataManager
 			ItemDic.Add(item.Key, item.Value);
 		
 		foreach (var item in SkillGemItemDic)
+			ItemDic.Add(item.Key, item.Value);
+		
+		foreach (var item in FlaskItemBaseDic)
 			ItemDic.Add(item.Key, item.Value);
 
 		PrefixModifierData.Clear();
@@ -110,6 +120,46 @@ public class DataManager
 				}
             }
 		}
+
+		// Passive Node Link Init
+		// PassiveSkillLInkDic
+
+		foreach (var skillData in PassiveSkillDic)
+		{
+			int key = skillData.Key;
+			Data.PassiveSkillData data = skillData.Value;
+			
+			if (data.LinkIds == null) continue;
+
+			for (int i = 0; i < data.LinkIds.Count; i++)
+            {
+				int targetKey = data.LinkIds[i];
+
+				if (!PassiveSkillLInkDic.ContainsKey(key))
+                {
+					PassiveSkillLInkDic[key] = new();
+				}
+
+                if (!PassiveSkillLInkDic[key].Contains(targetKey))
+                {
+					// Add Key -> TargetKey
+					PassiveSkillLInkDic[key].Add(targetKey);
+
+
+					// Add TargetKey -> Key
+					if (!PassiveSkillLInkDic.ContainsKey(targetKey))
+					{
+						PassiveSkillLInkDic[targetKey] = new();
+					}
+
+					if (!PassiveSkillLInkDic[targetKey].Contains(key))
+					{
+						PassiveSkillLInkDic[targetKey].Add(key);
+					}
+				}
+            }
+        }
+
 	}
 
 	private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>

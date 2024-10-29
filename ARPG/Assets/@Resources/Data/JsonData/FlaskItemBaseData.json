@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "FlaskType": 0,
+      "FlaskSprite": "LifeManaFlask1.sprite",
+      "FlaskFillSprite": "LifeFlaskFill1.sprite",
+      "EffectName": "LifeRegen",
+      "EffectValue": 100.0,
+      "EffectTime": 4.0,
+      "MaximumCharge": 20.0,
+      "ChargePerUse": 7.0,
+      "Name": "생명 플라스크",
+      "ItemType": 4,
+      "ItemSubType": 0,
+      "Icon": "LifeFlaskImage1.sprite",
+      "DataId": 25000001
+    },
+    {
+      "FlaskType": 1,
+      "FlaskSprite": "LifeManaFlask1.sprite",
+      "FlaskFillSprite": "ManaFlaskFill1.sprite",
+      "EffectName": "ManaRegen",
+      "EffectValue": 100.0,
+      "EffectTime": 4.0,
+      "MaximumCharge": 20.0,
+      "ChargePerUse": 7.0,
+      "Name": "마나 플라스크",
+      "ItemType": 4,
+      "ItemSubType": 0,
+      "Icon": "ManaFlaskImage1.sprite",
+      "DataId": 25000002
+    }
+  ]
+}

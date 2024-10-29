@@ -94,9 +94,9 @@ public class Npc : InteractableObject
 				SaleList.Add(item);
 			}
 
-			List<int> keys = new List<int>(Managers.Data.ConsumableItemDic.Keys);
+			List<int> consumbleKeys = new List<int>(Managers.Data.ConsumableItemDic.Keys);
 
-            foreach (var key in keys)
+            foreach (var key in consumbleKeys)
             {
 				var citem = ConsumableItem.MakeConsumableItem(Managers.Data.ConsumableItemDic[key].DataId, Managers.Data.ConsumableItemDic[key].StackSize);
 				UI_Item cuiitem = Managers.Resource.Instantiate("UI_Item").GetComponent<UI_Item>();
@@ -124,6 +124,22 @@ public class Npc : InteractableObject
 				Managers.Inventory.AddItemInInventory(Define.EEquipSlotType.VendorInventory, spos, sitem);
 
 				SaleList.Add(sitem);
+			}
+			
+			List<int> flaskKeys = new List<int>(Managers.Data.FlaskItemBaseDic.Keys);
+
+			foreach (var key in flaskKeys)
+			{
+				var fitem = FlaskItem.MakeFlaskItem(Managers.Data.FlaskItemBaseDic[key].DataId);
+				UI_Item fuiitem = Managers.Resource.Instantiate("UI_Item").GetComponent<UI_Item>();
+				fuiitem.SetInfo(fitem);
+				fitem.EquipSlot = Define.EEquipSlotType.VendorInventory;
+
+				Vector2 spos = Managers.Inventory.GetInventoryEmptyPosition(Define.EEquipSlotType.VendorInventory, fitem.ItemSize);
+
+				Managers.Inventory.AddItemInInventory(Define.EEquipSlotType.VendorInventory, spos, fitem);
+
+				SaleList.Add(fitem);
 			}
 
 

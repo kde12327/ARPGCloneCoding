@@ -231,6 +231,7 @@ public static class Define
         Equipment,
         Consumable,
         SkillGem,
+        Flask
     }
 
     public enum EItemSubType
@@ -258,6 +259,11 @@ public static class Define
         Amulet = 6,
         Ring = 7,
         Belt = 8,
+        Flask1 = 9,
+        Flask2 = 10,
+        Flask3 = 11,
+        Flask4 = 12,
+        Flask5 = 13,
         EquipMax,
 
         PlayerInventory = 100,
@@ -301,6 +307,13 @@ public static class Define
     {
         SkillGem,
         SupportGem
+    }
+
+    public enum EFlaskType
+    {
+        Life,
+        Mana,
+        Utility,
     }
 
     #endregion

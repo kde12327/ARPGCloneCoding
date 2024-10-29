@@ -60,21 +60,44 @@ public class InputManager
             }
 
             Debug.Log(str);
+            Managers.UI.GetSceneUI<UI_GameScene>().PlayerStatusToggle();
+
 
         }
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            /*string str = "";
-            foreach (var key in Managers.Inventory.EquippedItems)
-            {
-                str += key.Key + ", " + key.Value.ItemData.Name  + "\n";
-            }
-
-            Debug.Log(str);*/
             Managers.UI.GetSceneUI<UI_GameScene>().InventoryToggle();
         }
-
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Managers.UI.GetSceneUI<UI_GameScene>().PassiveSkillToggle();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            var flaskItem = Managers.Inventory.GetEquippedItem(Define.EEquipSlotType.Flask1) as FlaskItem;
+            flaskItem.UseFlask();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            var flaskItem = Managers.Inventory.GetEquippedItem(Define.EEquipSlotType.Flask2) as FlaskItem;
+            flaskItem.UseFlask();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            var flaskItem = Managers.Inventory.GetEquippedItem(Define.EEquipSlotType.Flask3) as FlaskItem;
+            flaskItem.UseFlask();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            var flaskItem = Managers.Inventory.GetEquippedItem(Define.EEquipSlotType.Flask4) as FlaskItem;
+            flaskItem.UseFlask();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            var flaskItem = Managers.Inventory.GetEquippedItem(Define.EEquipSlotType.Flask5) as FlaskItem;
+            flaskItem.UseFlask();
+        }
 
     }
 }

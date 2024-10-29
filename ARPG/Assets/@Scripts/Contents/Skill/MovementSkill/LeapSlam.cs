@@ -16,8 +16,7 @@ public class LeapSlam : MovementSkill
 
     public override void DoSkill(Vector2 target)
     {
-        Debug.Log(timeElapsed);
-        if (timeElapsed > 0) return;
+        if (IsMoving) return;
 
         base.DoSkill(target);
 
@@ -73,15 +72,19 @@ public class LeapSlam : MovementSkill
             // 이동 완료 시 경과 시간 초기화 (옵션)
             if (t >= 1f)
             {
-                timeElapsed = 0f; // 또는 이동 완료 처리
+                timeElapsed = 0.0f; // 또는 이동 완료 처리
                 MoveEnd();
             }
         }
     }
 
+    public override bool CanSkill()
+    {
+        return !IsMoving;
+    }
+
     void MoveEnd()
     {
-        Debug.Log("MoveEnd");
         Vector3Int cellPos = Managers.Map.World2Cell(endPoint);
         GetComponent<Creature>().SetCellPos(cellPos, true);
         IsMoving = false;
