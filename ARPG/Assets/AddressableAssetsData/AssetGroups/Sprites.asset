@@ -191,6 +191,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 905d43b5b6c809346b75111b0df7bb9f
+    m_Address: moveicon.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b6b4fac2aa92a74391d09c272194c59
+    m_Address: interactionicon.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d9824849e4582004ba9e5a22c383251d, type: 2}
   m_SchemaSet:

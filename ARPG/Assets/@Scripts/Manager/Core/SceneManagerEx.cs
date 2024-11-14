@@ -52,6 +52,7 @@ public class SceneManagerEx
 		CurrentMapName = name;
 		SceneManager.SetActiveScene(scene);
 		Managers.Resource.Instantiate("@GameScene");
+		Managers.Quest.OnMapChanged();
 
 		//if (SceneManager.GetSceneByName(name) == null)
 		/*{

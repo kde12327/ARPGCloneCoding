@@ -207,7 +207,12 @@ public class Creature : BaseObject
         if (creature == null)
             return;
 
-        float finalDamage = creature.Stats.GetStat(Stat.Atk).Value * skill.DamageMultiplier; // TODO
+        float finalDamage = creature.Stats.GetStat(Stat.Atk).Value 
+            * skill.DamageMultiplier 
+            * creature.Stats.GetStat(Stat.Damage).Value / 100.0f
+            * creature.Stats.GetStat(Stat.MeleePhysicalDamagePercent).Value / 100.0f; 
+
+
         Hp = Mathf.Clamp(Hp - finalDamage, 0, Stats.GetStat(Stat.Life).Value);
 
         Managers.Object.ShowDamageFont(CenterPosition, finalDamage, transform, false);
@@ -227,6 +232,11 @@ public class Creature : BaseObject
     public override void OnDead(BaseObject attacker, SkillBase skill)
     {
         base.OnDead(attacker, skill);
+
+        if(attacker == Managers.Object.Player)
+        {
+            Managers.Quest.OnMonsterDead(CreatureData.DataId);
+        }
     }
     #endregion
 

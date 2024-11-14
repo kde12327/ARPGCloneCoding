@@ -22,6 +22,8 @@ public class UI_Item : UI_Base
     [SerializeField]
     bool IsFlaskViewer = false;
 
+    public bool IsReward = false;
+
     enum Texts
     {
         StackSizeText
@@ -49,11 +51,22 @@ public class UI_Item : UI_Base
         GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
         {
             
+            if(IsReward && evt.button == PointerEventData.InputButton.Left)
+            {
+                Debug.Log("RewardClick");
+                if (Managers.Inventory.HoldingItem != null) return;
+                Managers.Inventory.HoldingItem = this;
+                IsReward = false;
+                Managers.Quest.ChoiceReward();
+                return;
+            }
 
             if (evt.button == PointerEventData.InputButton.Left)
             {
                 
                 Debug.Log("UIItem" + Item + ", " + (EEquipSlotType)Item.EquipSlot + ", " + Item.EquipPos);
+                
+                
                 if (Item.IsEquippedItem())
                 {
                     Managers.Inventory.ClickSlot((EEquipSlotType)Item.EquipSlot);

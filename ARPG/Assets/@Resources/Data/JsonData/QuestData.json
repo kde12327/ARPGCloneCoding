@@ -1,0 +1,24 @@
+{
+  "quests": [
+    {
+      "DataId": 1001,
+      "NameDescriptionTextID": "몬스터 처치하기",
+      "ContentDescriptionTextID": "아무 몬스터 한마리 처치하기",
+      "QuestType": 1,
+      "QuestMapId": "ACT01_01_Map",
+      "QuestTargetId": 202001,
+      "QuestRewardType": 0,
+      "NextQuestId": 1002
+    },
+    {
+      "DataId": 1002,
+      "NameDescriptionTextID": "Npc에게 말걸기",
+      "ContentDescriptionTextID": "Npc에게 말걸기",
+      "QuestType": 3,
+      "QuestMapId": "ACT01_01_Map",
+      "QuestTargetId": 50000001,
+      "QuestRewardType": 0,
+      "NextQuestId": 0
+    }
+  ]
+}

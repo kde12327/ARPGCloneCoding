@@ -223,10 +223,13 @@ public class Player : Creature
         MaxExp = 10;
         Exp = 0;
 
+        Stats.GetStat(Stat.Life).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Str), 2, 1, EStatModType.Add, 0, this));
+        Stats.GetStat(Stat.MeleePhysicalDamagePercent).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Str), 2, 1, EStatModType.Add, 0, this));
     }
 
     private void Start()
     {
+
     }
 
 
@@ -237,6 +240,11 @@ public class Player : Creature
 
     public void OnChangeSkillSetting()
     {
+        // 아이템 제거/장착에 의한 스킬 재 세팅
+        // TODO: 스킬 완전 초기화 방식 -> 변경된 스킬만 제거/추가
+        Skills.ResetSkill();
+        Managers.UI.GetSceneUI<UI_GameScene>().InitSkillImage();
+
         List<ItemBase> items = Managers.Inventory.GetEquippedItems();
         List<List<SkillGemItem>> skills = new();
         for (int i = 0; i < items.Count; i++)

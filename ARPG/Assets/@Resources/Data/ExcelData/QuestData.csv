@@ -1,0 +1,3 @@
+﻿DataId,NameDescriptionTextID,ContentDescriptionTextID,QuestType,QuestMapId,QuestTargetId,QuestRewardType,NextQuestId
+1001,몬스터 처치하기,아무 몬스터 한마리 처치하기,1,ACT01_01_Map,202001,,1002
+1002,Npc에게 말걸기,Npc에게 말걸기,3,ACT01_01_Map,50000001,GetGloveItems,

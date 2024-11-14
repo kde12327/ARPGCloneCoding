@@ -5,12 +5,16 @@ using UnityEngine;
 using static Define;
 
 
+
+
 [Serializable]
 public class CreatureStat
 {
 	public float BaseValue { get; private set; }
 
 	private bool _isDirty = true;
+
+	private List<CreatureStat> ProportionStats = new();
 
 	[SerializeField]
 	private float _value;
@@ -22,6 +26,7 @@ public class CreatureStat
 			{
 				_value = CalculateFinalValue();
 				_isDirty = false;
+				ProportionStats.ForEach(val => val.SetDirty());
 			}
 			return _value;
 		}
@@ -30,6 +35,8 @@ public class CreatureStat
 	}
 
 	public List<StatModifier> StatModifiers = new List<StatModifier>();
+
+	public List<ProportionalStatModifier> ProportionalStatModifiers = new List<ProportionalStatModifier>();
 
 	public CreatureStat()
 	{
@@ -66,6 +73,12 @@ public class CreatureStat
 			case Stat.Int:
 				BaseValue = 10;
 				break;
+			case Stat.Damage:
+				BaseValue = 100;
+				break;
+			case Stat.MeleePhysicalDamagePercent:
+				BaseValue = 100;
+				break;
 			
 
 		}
@@ -74,7 +87,13 @@ public class CreatureStat
 	public CreatureStat(float baseValue) : this()
 	{
 		BaseValue = baseValue;
+		_isDirty = true;
 	}
+
+	public void SetDirty()
+    {
+		_isDirty = true;
+    }
 
 	public virtual void AddModifier(StatModifier modifier)
 	{
@@ -97,6 +116,8 @@ public class CreatureStat
 	{
 		int numRemovals = StatModifiers.RemoveAll(mod => mod.Source == source);
 
+		numRemovals += ProportionalStatModifiers.RemoveAll(mod => mod.Source == source);
+
 		if (numRemovals > 0)
 		{
 			_isDirty = true;
@@ -113,6 +134,32 @@ public class CreatureStat
 		return (a.Order < b.Order) ? -1 : 1;
 	}
 
+	public virtual void AddModifier(ProportionalStatModifier modifier)
+	{
+		_isDirty = true;
+		ProportionalStatModifiers.Add(modifier);
+		modifier.SourceStat.ProportionStats.Add(this);
+	}
+
+	public virtual bool RemoveModifier(ProportionalStatModifier modifier)
+	{
+		if (ProportionalStatModifiers.Remove(modifier))
+		{
+			_isDirty = true;
+			return true;
+		}
+
+		return false;
+	}
+
+
+	private int CompareOrder(ProportionalStatModifier a, ProportionalStatModifier b)
+	{
+		if (a.Order == b.Order)
+			return 0;
+
+		return (a.Order < b.Order) ? -1 : 1;
+	}
 
 	private float CalculateFinalValue()
 	{
@@ -140,6 +187,34 @@ public class CreatureStat
 					break;
 				case EStatModType.PercentMult:
 					finalValue *= 1 + modifier.Value;
+					break;
+			}
+		}
+
+		ProportionalStatModifiers.Sort(CompareOrder);
+
+		for (int i = 0; i < ProportionalStatModifiers.Count; i++)
+		{
+			ProportionalStatModifier modifier = ProportionalStatModifiers[i];
+
+			var sourceVal = modifier.SourceStat.Value;
+			var val = (int)(sourceVal / modifier.SourValuePer) * modifier.DestValue;
+
+			switch (modifier.Type)
+			{
+				case EStatModType.Add:
+					finalValue += val;
+					break;
+				case EStatModType.PercentAdd:
+					sumPercentAdd += val;
+					if (i == StatModifiers.Count - 1 || StatModifiers[i + 1].Type != EStatModType.PercentAdd)
+					{
+						finalValue *= 1 + sumPercentAdd;
+						sumPercentAdd = 0;
+					}
+					break;
+				case EStatModType.PercentMult:
+					finalValue *= 1 + val;
 					break;
 			}
 		}

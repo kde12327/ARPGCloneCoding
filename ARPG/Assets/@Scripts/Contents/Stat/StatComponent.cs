@@ -49,7 +49,7 @@ public class StatComponent
         else
         {
             Stats.TryGetValue(statName, out stat);
-            stat.AddModifier(new(value, Define.EStatModType.Add, 0, source));
+            stat.AddModifier(new StatModifier(value, Define.EStatModType.Add, 0, source));
         }
 
         OnStatChanged();
@@ -99,7 +99,7 @@ public class StatComponent
         }
 
         Stats.TryGetValue(statName, out stat);
-        stat.AddModifier(new(value, eStatModType, order, source));
+        stat.AddModifier(new StatModifier(value, eStatModType, order, source));
 
 
         OnStatChanged();

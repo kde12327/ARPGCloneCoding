@@ -59,6 +59,24 @@ public class Npc : InteractableObject
         Debug.Log("Interact Npc");
 
 		var gamescene = Managers.UI.GetSceneUI<UI_GameScene>();
+
+		// 보상받을 퀘스트가 있으면 보상 창 띄우기
+
+		foreach (int qeustId in Managers.Quest.CurrentQuestList)
+		{
+			Data.QuestData questData = Managers.Data.QuestDic[qeustId];
+
+			if (questData.QuestType == Define.EQuestType.Interact && questData.QuestTargetId == DataTemplateID)
+			{
+				var rewardItems = Managers.Quest.GetReward(questData.DataId);
+				gamescene.SetRewardItems(rewardItems);
+				gamescene.EnableNpcInteraction();
+
+				return;
+			}
+		}
+
+		// 아닌 경우 NPC 상호작용 창 띄우기
 		gamescene.SetNpcInteraction(this);
 	}
 

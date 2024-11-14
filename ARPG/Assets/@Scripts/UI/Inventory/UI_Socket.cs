@@ -48,13 +48,15 @@ public class UI_Socket : UI_Base
         {
             if (Managers.Inventory.HoldingItem != null && Managers.Inventory.HoldingItem.Item.ItemType == Define.EItemType.SkillGem)
             {
-                // 들고 있는 스킬 젬 놓기
                 UI_Item skillGemUI = Managers.Inventory.HoldingItem;
+                SkillGemItem = skillGemUI.Item as SkillGemItem;
+
+                if (SocketColor != SkillGemItem.SkillGemItemData.SkillGemColor) return;
+
+                // 들고 있는 스킬 젬 놓기
                 Managers.Inventory.HoldingItem = null;
 
-                SkillGemItem = skillGemUI.Item as SkillGemItem;
                 SkillGemItem.IsInSocket = true;
-                if (SocketColor != SkillGemItem.SkillGemItemData.SkillGemColor) return;
                 skillGemUI.transform.SetParent(GetImage((int)Images.SocketImage).gameObject.transform);
                 skillGemUI.transform.localPosition = new Vector3();
             }

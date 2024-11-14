@@ -269,6 +269,7 @@ public static class Define
         PlayerInventory = 100,
         WarehouseInventory = 200,
         VendorInventory = 300,
+        RewardView = 400,
     }
 
     public enum ERarity
@@ -315,6 +316,26 @@ public static class Define
         Mana,
         Utility,
     }
+
+    #endregion
+
+    #region Quest
+
+    public enum EQuestType
+    {
+        GetItem,
+        KillMonster,
+        UsePortal,
+        Interact,
+    }
+
+    public enum EQuestRewardType
+    {
+        GetGloveItems,
+        GetFlaskItems,
+    }
+
+
 
     #endregion
 
@@ -393,6 +414,8 @@ public static class Stat
     public const string Str = "Str";
     public const string Dex = "Dex";
     public const string Int = "Int";
+    public const string Damage = "Damage";
+    public const string MeleePhysicalDamagePercent = "MeleePhysicalDamagePercent";
 }
 
 public static class UIColor

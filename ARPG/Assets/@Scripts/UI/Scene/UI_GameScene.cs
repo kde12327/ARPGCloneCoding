@@ -22,6 +22,8 @@ public class UI_GameScene : UI_Scene
         UI_ItemFlask3,
         UI_ItemFlask4,
         UI_ItemFlask5,
+        UI_QuestView,
+        UI_RewardView,
 
     }
 
@@ -121,6 +123,9 @@ public class UI_GameScene : UI_Scene
 
         var passiveSkillView = GetObject((int)GameObjects.UI_PassiveSkillView);
         passiveSkillView.SetActive(false);
+        
+        var rewardView = GetObject((int)GameObjects.UI_RewardView);
+        rewardView.SetActive(false);
 
         var usingItemImage = GetImage((int)Images.UsingItemImage);
         usingItemImage.gameObject.SetActive(false);
@@ -136,6 +141,11 @@ public class UI_GameScene : UI_Scene
         {
             usingItemImage.transform.position = Input.mousePosition;
         }
+    }
+
+    public void SetQuests(List<int> questIds)
+    {
+        GetObject((int)GameObjects.UI_QuestView).GetComponent<UI_QuestView>().SetInfo(questIds);
     }
 
     public void SetFlask(FlaskItem item, EEquipSlotType itemSlot)
@@ -207,6 +217,26 @@ public class UI_GameScene : UI_Scene
             playerStatus.GetComponent<UI_PlayerStatusView>().UpdateStatusView();
         }
 
+    }
+
+    public void SetRewardItems(List<UI_Item> items)
+    {
+        var rewardView = GetObject((int)GameObjects.UI_RewardView);
+        rewardView.GetComponent<UI_RewardView>().SetInfo(items);
+        rewardView.SetActive(true);
+    }
+    
+    public void ClearRewardItems()
+    {
+        var rewardView = GetObject((int)GameObjects.UI_RewardView);
+        rewardView.GetComponent<UI_RewardView>().ClearGridView();
+        rewardView.SetActive(false);
+    }
+
+    public void EnableRewardView()
+    {
+        var rewardView = GetObject((int)GameObjects.UI_RewardView);
+        rewardView.SetActive(false);
     }
 
     public void SetNpcInteraction(Npc npc)
@@ -591,6 +621,14 @@ public class UI_GameScene : UI_Scene
             skill.SetSkillIcon(null);
             skill.SetSkillCooldown(0.0f);
         }
+
+        UI_Skill interact = Get<UI_Skill>(0);
+        interact.SetSkillIcon("interactionicon.sprite");
+        interact.SetSkillCooldown(0.0f);
+
+        UI_Skill move = Get<UI_Skill>(2);
+        move.SetSkillIcon("moveicon.sprite");
+        move.SetSkillCooldown(0.0f);
     }
     public Vector2Int GetInventorySize(Define.EEquipSlotType invenType)
     {

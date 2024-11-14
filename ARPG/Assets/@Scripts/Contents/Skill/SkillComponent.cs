@@ -73,4 +73,10 @@ public class SkillComponent : InitBase
 		return SkillList[skillIndex];
 	}
 
+	public void ResetSkill()
+    {
+		SkillList.Clear();
+
+	}
+
 }

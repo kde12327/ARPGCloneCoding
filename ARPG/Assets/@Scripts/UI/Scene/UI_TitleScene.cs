@@ -49,6 +49,7 @@ public class UI_TitleScene : UI_Scene
 			{
 				Managers.Data.Init();
 				Managers.Passive.Init();
+				Managers.Quest.Init();
 
 				GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);
 				GetText((int)Texts.StartText).text = "Touch Screen To Start";

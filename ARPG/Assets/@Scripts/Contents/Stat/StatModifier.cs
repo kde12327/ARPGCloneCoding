@@ -24,3 +24,23 @@ public class StatModifier
 
 	public StatModifier(float value, EStatModType type, object source) : this(value, type, (int)type, source) { }
 }
+
+public class ProportionalStatModifier
+{
+	public readonly CreatureStat SourceStat;
+	public readonly float SourValuePer;
+	public readonly float DestValue;
+	public readonly EStatModType Type;
+	public readonly int Order;
+	public readonly object Source;
+
+	public ProportionalStatModifier(CreatureStat sourceStat, float sourValuePer, float destValue, EStatModType type, int order, object source)
+	{
+		SourceStat = sourceStat;
+		SourValuePer = sourValuePer;
+		DestValue = destValue;
+		Type = type;
+		Order = order;
+		Source = source;
+	}
+}

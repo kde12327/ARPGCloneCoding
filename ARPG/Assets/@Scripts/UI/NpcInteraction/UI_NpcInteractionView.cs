@@ -48,7 +48,28 @@ public class UI_NpcInteractionView : UI_Base
         }
         InteractionList.Clear();
 
-        foreach(var interaction in Npc.NpcData.InteractionTypes)
+        // quest 
+        
+        foreach(int qeustId in Managers.Quest.CurrentQuestList)
+        {
+            Data.QuestData questData = Managers.Data.QuestDic[qeustId];
+
+            if(questData.QuestType == Define.EQuestType.Interact && questData.QuestTargetId == Npc.DataTemplateID)
+            {
+                GameObject go = Managers.Resource.Instantiate("UI_NpcInteraction", interactionParent.transform);
+                go.GetComponent<UI_NpcInteraction>().SetText(questData.NameDescriptionTextID + "º¸»ó");
+                go.BindEvent(evt =>
+                {
+                    var rewardItems = Managers.Quest.GetReward(questData.DataId);
+                    Managers.UI.GetSceneUI<UI_GameScene>().SetRewardItems(rewardItems);
+                    Managers.UI.GetSceneUI<UI_GameScene>().EnableNpcInteraction();
+                });
+                InteractionList.Add(go);
+            }
+        }
+
+        // npc interaction 
+        foreach (var interaction in Npc.NpcData.InteractionTypes)
         {
             switch (interaction)
             {
