@@ -14,6 +14,16 @@
         2,
         3
       ]
+    },
+    {
+      "DataId": 50000002,
+      "DescriptionTextID": "마법사",
+      "SkeletonDataID": "002_SkeletonData",
+      "InteractionTypes": [
+        0
+      ],
+      "ScriptIds": null,
+      "VendorList": null
     }
   ]
 }

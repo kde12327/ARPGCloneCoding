@@ -15,7 +15,10 @@ public class UI_WaypointButton : UI_Base
 
         gameObject.BindEvent((evt) => 
         {
+            Managers.Object.Player.MapArriveId = 301001;
+
             Managers.Scene.CreateOrLoadGameSceneByName(MapName);
+
         }, Define.EUIEvent.Click);
 
         return true;

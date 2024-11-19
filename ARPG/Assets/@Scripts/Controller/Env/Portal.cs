@@ -33,7 +33,7 @@ public class Portal : Env
         base.Interact(player);
 
 		PortalData NextPortalData = Managers.Data.PortalDic[PortalData.DestPortalId];
-		player.NextPortalId = PortalData.DestPortalId;
+		player.MapArriveId = PortalData.DestPortalId;
 
 		Managers.Scene.CreateOrLoadGameSceneByName(NextPortalData.MapName);
 	}

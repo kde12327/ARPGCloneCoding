@@ -27,14 +27,19 @@ public class Creature : BaseObject
         set
         {
             _hp = value;
-            if (_hp > Stats.GetStat("Life").Value)
-                _hp = Stats.GetStat("Life").Value;
+            if (_hp > Stats.GetStat(Stat.Life).Value)
+                _hp = Stats.GetStat(Stat.Life).Value;
             OnHpChanged?.Invoke(_hp / Stats.GetStat(Stat.Life).Value);
         } 
     }
     public event Action<float> OnHpChanged;
 
     #endregion
+
+    public void OnStatChanged()
+    {
+        OnHpChanged?.Invoke(Hp / Stats.GetStat(Stat.Life).Value);
+    }
 
 
     protected ECreatureState _creatureState = ECreatureState.None;

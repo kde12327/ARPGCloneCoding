@@ -139,7 +139,7 @@ public class UI_InventoryGrid : UI_Base
 
             if (item != null)
             {
-                Managers.UI.GetSceneUI<UI_GameScene>().SetDiscription(item, top, left, right);
+                //Managers.UI.GetSceneUI<UI_GameScene>().SetDiscription(item, top, left, right);
                 /*if(item.ItemType == EItemType.Equipment)
                 {
                     var eItem = item as EquipmentItem;

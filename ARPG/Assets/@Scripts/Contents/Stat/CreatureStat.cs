@@ -12,6 +12,7 @@ public class CreatureStat
 {
 	public float BaseValue { get; private set; }
 
+
 	private bool _isDirty = true;
 
 	private List<CreatureStat> ProportionStats = new();
@@ -164,7 +165,9 @@ public class CreatureStat
 	private float CalculateFinalValue()
 	{
 		float finalValue = BaseValue;
+		float sumAddValue = 0;
 		float sumPercentAdd = 0;
+		float sumPercentMult = 1;
 
 		StatModifiers.Sort(CompareOrder);
 
@@ -175,18 +178,18 @@ public class CreatureStat
 			switch (modifier.Type)
 			{
 				case EStatModType.Add:
-					finalValue += modifier.Value;
+					sumAddValue += modifier.Value;
 					break;
 				case EStatModType.PercentAdd:
 					sumPercentAdd += modifier.Value;
-					if (i == StatModifiers.Count - 1 || StatModifiers[i + 1].Type != EStatModType.PercentAdd)
+					/*if (i == StatModifiers.Count - 1 || StatModifiers[i + 1].Type != EStatModType.PercentAdd)
 					{
-						finalValue *= 1 + sumPercentAdd;
+						sumAddValue *= 1 + sumPercentAdd;
 						sumPercentAdd = 0;
-					}
+					}*/
 					break;
 				case EStatModType.PercentMult:
-					finalValue *= 1 + modifier.Value;
+					sumPercentMult *= 1 + modifier.Value;
 					break;
 			}
 		}
@@ -203,22 +206,24 @@ public class CreatureStat
 			switch (modifier.Type)
 			{
 				case EStatModType.Add:
-					finalValue += val;
+					sumAddValue += val;
 					break;
 				case EStatModType.PercentAdd:
 					sumPercentAdd += val;
-					if (i == StatModifiers.Count - 1 || StatModifiers[i + 1].Type != EStatModType.PercentAdd)
+					/*if (i == StatModifiers.Count - 1 || StatModifiers[i + 1].Type != EStatModType.PercentAdd)
 					{
 						finalValue *= 1 + sumPercentAdd;
 						sumPercentAdd = 0;
-					}
+					}*/
 					break;
 				case EStatModType.PercentMult:
-					finalValue *= 1 + val;
+					sumPercentMult *= 1 + val;
 					break;
 			}
 		}
-
+		finalValue = (BaseValue + sumAddValue) * (1 + sumPercentAdd) * sumPercentMult;
+		Debug.Log("stats: " + finalValue + ", " + sumAddValue + ", " + sumPercentAdd + ", " + sumPercentMult);
+		Debug.Log((float)Math.Round(finalValue, 4));
 		return (float)Math.Round(finalValue, 4);
 	}
 }

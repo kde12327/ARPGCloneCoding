@@ -134,6 +134,26 @@ public class MapEditor : MonoBehaviour
             AssetDatabase.CreateAsset(customTile, path);
         }
 
+        // QuestObject
+        Dictionary<int, Data.QuestObjectData> QuestObjectDic = LoadJson<Data.QuestObjectDataLoader, int, Data.QuestObjectData>("QuestObjectData").MakeDict();
+        foreach (var data in QuestObjectDic.Values)
+        {
+
+            CustomTile customTile = ScriptableObject.CreateInstance<CustomTile>();
+            customTile.Name = data.DescriptionTextId;
+            customTile.DataTemplateID = data.DataId;
+            customTile.ObjectType = Define.EObjectType.QuestObject;
+
+            string name = $"{data.DataId}_{data.DescriptionTextId}";
+            string path = "Assets/@Resources/TileMaps/Tiles/Dev/QuestObject";
+            path = Path.Combine(path, $"{name}.Asset");
+
+            if (File.Exists(path))
+                continue;
+
+            AssetDatabase.CreateAsset(customTile, path);
+        }
+
         Debug.Log("Map Tile Generation Complete");
 
     }

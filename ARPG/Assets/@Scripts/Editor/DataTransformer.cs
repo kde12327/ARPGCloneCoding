@@ -32,6 +32,7 @@ public class DataTransformer : EditorWindow
 		ParseExcelDataToJson<SkillGemItemDataLoader, SkillGemItemData>("SkillGemItem");
 		ParseExcelDataToJson<PassiveSkillDataLoader, PassiveSkillData>("PassiveSkill");
 		ParseExcelDataToJson<QuestDataLoader, QuestData>("Quest");
+		ParseExcelDataToJson<QuestObjectDataLoader, QuestObjectData>("QuestObject");
 
 		Debug.Log("DataTransformer Completed");
 	}

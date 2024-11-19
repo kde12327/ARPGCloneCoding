@@ -101,6 +101,7 @@ public class StatComponent
         Stats.TryGetValue(statName, out stat);
         stat.AddModifier(new StatModifier(value, eStatModType, order, source));
 
+        float test = stat.Value;
 
         OnStatChanged();
 

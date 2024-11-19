@@ -11,6 +11,10 @@ public class PassiveSkillManager
     {
         
     }*/
+
+    public int skillPoint = 0;
+    int usedSkillPoint = 0;
+
     public void Init()
     {
         foreach (var skill in Managers.Data.PassiveSkillDic)
@@ -23,6 +27,15 @@ public class PassiveSkillManager
     public bool TogglePassiveSkill(int dataId)
     {
         var Stats = Managers.Object.Player.Stats;
+
+        // 스킬 포인트 체크
+        if(PassiveSkills[dataId] == false)
+        {
+            if(skillPoint <= usedSkillPoint)
+            {
+                return false;
+            }
+        }
 
         // 해당 노드가 토글이 가능한지 테스트
 
@@ -76,10 +89,13 @@ public class PassiveSkillManager
                 {
                     Stats.AddStat(data.StatNames[i], data.StatValues[i], Managers.Data.PassiveSkillDic[dataId]);
                 }
+
+                usedSkillPoint++;
             }
             else
             {
                 Stats.ClearModifierFromSource(Managers.Data.PassiveSkillDic[dataId]);
+                usedSkillPoint--;
             }
         }
 /*

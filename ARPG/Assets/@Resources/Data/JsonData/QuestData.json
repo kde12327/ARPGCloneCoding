@@ -2,21 +2,91 @@
   "quests": [
     {
       "DataId": 1001,
-      "NameDescriptionTextID": "몬스터 처치하기",
-      "ContentDescriptionTextID": "아무 몬스터 한마리 처치하기",
-      "QuestType": 1,
+      "NameDescriptionTextID": "상자 열기",
+      "ContentDescriptionTextID": "상자를 열어 무기에 스킬 젬을 장착하기",
+      "QuestType": 3,
       "QuestMapId": "ACT01_01_Map",
-      "QuestTargetId": 202001,
+      "QuestTargetId": 330001,
       "QuestRewardType": 0,
       "NextQuestId": 1002
     },
     {
       "DataId": 1002,
-      "NameDescriptionTextID": "Npc에게 말걸기",
-      "ContentDescriptionTextID": "Npc에게 말걸기",
+      "NameDescriptionTextID": "슬라임 처치하기",
+      "ContentDescriptionTextID": "슬라임 한마리 처치하기",
+      "QuestType": 1,
+      "QuestMapId": "ACT01_01_Map",
+      "QuestTargetId": 202001,
+      "QuestRewardType": 0,
+      "NextQuestId": 1003
+    },
+    {
+      "DataId": 1003,
+      "NameDescriptionTextID": "마법사와 대화하기",
+      "ContentDescriptionTextID": "마법사와 대화하여 보상받기",
       "QuestType": 3,
       "QuestMapId": "ACT01_01_Map",
+      "QuestTargetId": 50000002,
+      "QuestRewardType": 0,
+      "NextQuestId": 1004
+    },
+    {
+      "DataId": 1004,
+      "NameDescriptionTextID": "나무 처치하기",
+      "ContentDescriptionTextID": "나무 처치하기",
+      "QuestType": 1,
+      "QuestMapId": "ACT01_01_Map",
+      "QuestTargetId": 202004,
+      "QuestRewardType": 0,
+      "NextQuestId": 1005
+    },
+    {
+      "DataId": 1005,
+      "NameDescriptionTextID": "타클레이와 대화하기",
+      "ContentDescriptionTextID": "타클레이와 대화하여 보상받기",
+      "QuestType": 3,
+      "QuestMapId": "ACT01_Town_Map",
       "QuestTargetId": 50000001,
+      "QuestRewardType": 0,
+      "NextQuestId": 1006
+    },
+    {
+      "DataId": 1006,
+      "NameDescriptionTextID": "잃어버린 물건 찾기",
+      "ContentDescriptionTextID": "잃어버린 물건 찾기",
+      "QuestType": 3,
+      "QuestMapId": "ACT01_02_Map",
+      "QuestTargetId": 330002,
+      "QuestRewardType": 0,
+      "NextQuestId": 1007
+    },
+    {
+      "DataId": 1007,
+      "NameDescriptionTextID": "타클레이와 대화하기",
+      "ContentDescriptionTextID": "타클레이와 대화하여 보상받기",
+      "QuestType": 3,
+      "QuestMapId": "ACT01_Town_Map",
+      "QuestTargetId": 50000001,
+      "QuestRewardType": 0,
+      "NextQuestId": 1008
+    },
+    {
+      "DataId": 1008,
+      "NameDescriptionTextID": "곰 처치하기",
+      "ContentDescriptionTextID": "곰 몬스터를 처치하기",
+      "QuestType": 1,
+      "QuestMapId": "ACT01_03_Map",
+      "QuestTargetId": 202006,
+      "QuestRewardType": 0,
+      "NextQuestId": 1009
+    },
+    {
+      "DataId": 1009,
+      "NameDescriptionTextID": "상자를 열어 보상 받기",
+      "ContentDescriptionTextID": "상자를 열어 보상 받기",
+      "QuestType": 3,
+      "QuestMapId": "ACT01_03_Map",
+      "QuestTargetId": 330003,
       "QuestRewardType": 0,
       "NextQuestId": 0
     }

@@ -161,6 +161,14 @@ public class MapManager
 					portal.SetCellPos(cellPos, true);
 
 
+				}else if (tile.ObjectType == Define.EObjectType.QuestObject)
+				{
+					Vector3 worldPos = Cell2World(cellPos);
+
+					QuestObject portal = Managers.Object.Spawn<QuestObject>(worldPos, tile.DataTemplateID);
+					portal.SetCellPos(cellPos, true);
+
+
 				}
 			}
         }

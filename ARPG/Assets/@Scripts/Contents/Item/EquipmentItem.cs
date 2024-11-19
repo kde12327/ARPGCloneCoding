@@ -258,35 +258,43 @@ public class EquipmentItem : ItemBase
 		return EquipmentItem.MakeEquipmentItem(Managers.Data.EquipmentItemBaseDic[key].DataId, rarity);
 	}
 
-	public static EquipmentItem MakeEquipmentItem(int itemDataId, ERarity rarity)
+	public static EquipmentItem MakeEquipmentItem(int itemDataId, ERarity rarity, List<ESocketColor> socket = null, List<bool> link = null)
     {
 		
 
 		var item = Managers.Inventory.MakeItem(itemDataId) as EquipmentItem;
 
-		List<ESocketColor> socket = new();
+		if(socket == null)
+        {
+			socket = new();
 
+			int socketRand = UnityEngine.Random.Range(1, item.MaxSocket + 1);
 
-		int socketRand = UnityEngine.Random.Range(1, item.MaxSocket + 1);
-
-
-
-		while (0 < socketRand--)
-		{
-			float socketColorRnad = UnityEngine.Random.Range(0, 3);
-			socket.Add((ESocketColor)socketColorRnad);
+			while (0 < socketRand--)
+			{
+				float socketColorRnad = UnityEngine.Random.Range(0, 3);
+				socket.Add((ESocketColor)socketColorRnad);
+			}
 		}
+
+
+		
 
 		item.Socket = socket;
 
-		List<bool> link = new();
-
-		for (int i = 0; i < socket.Count - 1; i++)
+		if(link == null)
         {
-			int linkRand = UnityEngine.Random.Range(0, 2);
+			link = new();
 
-			link.Add(linkRand == 0);
+			for (int i = 0; i < socket.Count - 1; i++)
+			{
+				int linkRand = UnityEngine.Random.Range(0, 2);
+
+				link.Add(linkRand == 0);
+			}
 		}
+
+		
 		item.Link = link;
 
 

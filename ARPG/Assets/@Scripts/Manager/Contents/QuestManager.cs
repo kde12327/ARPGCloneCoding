@@ -7,7 +7,7 @@ public class QuestManager
     public Dictionary<int, bool> QuestClearDic = new();
 
     public List<int> CurrentQuestList = new();
-    public List<int> CurrentMapQuestList = new();
+    List<int> CurrentMapQuestList = new();
 
     public Dictionary<int, List<UI_Item>> RewardDic = new();
 
@@ -45,7 +45,7 @@ public class QuestManager
             }
         }
 
-        Managers.UI.GetSceneUI<UI_GameScene>().SetQuests(CurrentMapQuestList);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetQuests(CurrentQuestList);
     }
 
     public void OnMonsterDead(int monsterId)
@@ -65,6 +65,33 @@ public class QuestManager
         }
         if(IsDirty)
             RefreshCurrentMapQuest();
+    }
+
+    public bool HasTargetQuest(Define.EQuestType questType, int targetId)
+    {
+        foreach (int id in CurrentQuestList)
+        {
+            var data = Managers.Data.QuestDic[id];
+            if (data.QuestType == questType && data.QuestTargetId == targetId)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void ClearTargetQuest(Define.EQuestType questType, int targetId)
+    {
+        foreach (int id in CurrentQuestList)
+        {
+            var data = Managers.Data.QuestDic[id];
+            if (data.QuestType == questType && data.QuestTargetId == targetId)
+            {
+                ClearQuest(data.DataId);
+                RefreshCurrentMapQuest();
+                return;
+            }
+        }
     }
 
     public bool ClearQuest(int id)

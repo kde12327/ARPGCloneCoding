@@ -18,6 +18,8 @@ public class SceneManagerEx
 	{
 		Scene beforeScene = SceneManager.GetActiveScene();
 
+		Debug.Log(name);
+
 		// 이전 씬 루트 컴포넌트 비활성화
 		{ 
 			GameObject[] rootObjects = beforeScene.GetRootGameObjects();
@@ -53,6 +55,9 @@ public class SceneManagerEx
 		SceneManager.SetActiveScene(scene);
 		Managers.Resource.Instantiate("@GameScene");
 		Managers.Quest.OnMapChanged();
+        Managers.Object.Player?.OnMapChange();
+
+
 
 		//if (SceneManager.GetSceneByName(name) == null)
 		/*{
@@ -68,6 +73,8 @@ public class SceneManagerEx
 		}*/
 
 	}
+
+
 
 
 	public void LoadScene(Define.EScene type)

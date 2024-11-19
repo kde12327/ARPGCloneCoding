@@ -62,10 +62,6 @@ public class InputManager
             Debug.Log(str);
             Managers.UI.GetSceneUI<UI_GameScene>().PlayerStatusToggle();
 
-            foreach(int id in Managers.Quest.CurrentQuestList)
-            {
-                Debug.Log(id);
-            }
         }
 
         if (Input.GetKeyDown(KeyCode.I))

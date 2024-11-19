@@ -28,6 +28,7 @@ public class DataManager
 	public Dictionary<int, Data.SkillGemItemData> SkillGemItemDic { get; private set; } = new Dictionary<int, Data.SkillGemItemData>();
 	public Dictionary<int, Data.PassiveSkillData> PassiveSkillDic { get; private set; } = new Dictionary<int, Data.PassiveSkillData>();
 	public Dictionary<int, Data.QuestData> QuestDic { get; private set; } = new Dictionary<int, Data.QuestData>();
+	public Dictionary<int, Data.QuestObjectData> QuestObjectDic { get; private set; } = new Dictionary<int, Data.QuestObjectData>();
 
 	#region Mod
 	// Modifier를 미리 리스트로 만들기
@@ -59,6 +60,7 @@ public class DataManager
 		PassiveSkillDic = LoadJson<Data.PassiveSkillDataLoader, int, Data.PassiveSkillData>("PassiveSkillData").MakeDict();
 		FlaskItemBaseDic = LoadJson<Data.FlaskItemBaseDataLoader, int, Data.FlaskItemBaseData>("FlaskItemBaseData").MakeDict();
 		QuestDic = LoadJson<Data.QuestDataLoader, int, Data.QuestData>("QuestData").MakeDict();
+		QuestObjectDic = LoadJson<Data.QuestObjectDataLoader, int, Data.QuestObjectData>("QuestObjectData").MakeDict();
 
 		ItemDic.Clear();
 

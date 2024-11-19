@@ -101,6 +101,18 @@ public class InventoryManager
 				}
 			}
         }
+        else
+        {
+			Vector2 pos = GetInventoryEmptyPosition(Define.EEquipSlotType.PlayerInventory, item.ItemSize);
+			if (pos.x != -1)
+			{
+				return AddItemInInventory(Define.EEquipSlotType.PlayerInventory, pos, item);
+			}
+			else
+			{
+				return false;
+			}
+		}
 
 		AllItems.Add(item);
 

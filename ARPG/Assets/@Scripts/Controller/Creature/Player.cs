@@ -50,6 +50,7 @@ public class Player : Creature
             if (MaxExp <= _exp)
             {
                 Level++;
+                Managers.Passive.skillPoint++;
                 _exp -= MaxExp;
             }
 
@@ -84,7 +85,7 @@ public class Player : Creature
 
     public Data.PlayerData PlayerData { get; protected set; }
 
-    public int? NextPortalId { get; set; }
+    public int? MapArriveId { get; set; }
 
     public override ECreatureState CreatureState
     {
@@ -223,13 +224,21 @@ public class Player : Creature
         MaxExp = 10;
         Exp = 0;
 
-        Stats.GetStat(Stat.Life).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Str), 2, 1, EStatModType.Add, 0, this));
-        Stats.GetStat(Stat.MeleePhysicalDamagePercent).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Str), 2, 1, EStatModType.Add, 0, this));
+        Stats.GetStat(Stat.Life).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Str), 1, 20, EStatModType.Add, 0, this));
+        Stats.GetStat(Stat.MeleePhysicalDamagePercent).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Str), 1, 10, EStatModType.Add, 0, this));
+
+        Stats.OnPlayerStatusChanged -= OnPlayerStatChanged;
+        Stats.OnPlayerStatusChanged += OnPlayerStatChanged;
+        OnPlayerStatChanged();
     }
 
-    private void Start()
+    public void OnPlayerStatChanged()
     {
+        
 
+
+        OnStatChanged();
+        OnMpChanged?.Invoke(Mp / Stats.GetStat(Stat.Mana).Value);
     }
 
 
@@ -284,23 +293,35 @@ public class Player : Creature
 
     public void OnMapChange()
     {
+
         InteractTarget = null;
 
-        if(NextPortalId != null)
+        if (MapArriveId != null)
         {
-            Portal NextPortal = null;
+            Env NextPoint = null;
 
-            foreach (Env env in Managers.Object.Envs)
+            Debug.Log("target: " + MapArriveId);
+
+            List<Env> Envs = new(Managers.Object.EnvRoot.GetComponentsInChildren<Env>());
+
+            foreach (Env env in Envs)
             {
-                if (env.DataTemplateID == NextPortalId)
+                Debug.Log("check: " + env.DataTemplateID);
+                if (env.DataTemplateID == MapArriveId)
                 {
-                    NextPortal = env as Portal;
+                    NextPoint = env;
+                    Debug.Log(transform.position);
+                    Debug.Log(NextPoint.transform.position);
+
                 }
             }
-            NextPortalId = null;
+            MapArriveId = null;
+            if (NextPoint != null)
+            {
+                SetCellPos(Managers.Map.World2Cell(NextPoint.transform.position), true);
+                DestPos = transform.position;
+            }
 
-            SetCellPos(Managers.Map.World2Cell(NextPortal.transform.position), true);
-            DestPos = transform.position;
         }
     }
 

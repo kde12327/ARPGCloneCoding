@@ -10,6 +10,8 @@ public class TownPortal : InteractableObject
 		if (base.Init() == false)
 			return false;
 
+		DataTemplateID = 11111;
+
 		ObjectType = Define.EObjectType.Env;
 		Collider.isTrigger = true;
 
@@ -19,6 +21,8 @@ public class TownPortal : InteractableObject
 	public override void Interact(Player player)
 	{
 		base.Interact(player);
+
+		player.MapArriveId = DataTemplateID;
 
 		Managers.Scene.CreateOrLoadGameSceneByName("ACT01_Town_Map");
 	}

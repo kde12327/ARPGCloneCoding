@@ -4,7 +4,7 @@
       "MapName": "ACT01_01_Map",
       "DestPortalId": 310001,
       "DataId": 310101,
-      "DescriptionTextID": "포탈0101",
+      "DescriptionTextID": "포탈0100",
       "PrefabLabel": "Interactable",
       "MaxHp": 0.0,
       "IsInteractable": 1,
@@ -41,6 +41,30 @@
       "DestPortalId": 310002,
       "DataId": 310201,
       "DescriptionTextID": "포탈0201",
+      "PrefabLabel": "Interactable",
+      "MaxHp": 0.0,
+      "IsInteractable": 1,
+      "SkeletonDataIDs": [
+        "0"
+      ]
+    },
+    {
+      "MapName": "ACT01_02_Map",
+      "DestPortalId": 310302,
+      "DataId": 310203,
+      "DescriptionTextID": "포탈0203",
+      "PrefabLabel": "Interactable",
+      "MaxHp": 0.0,
+      "IsInteractable": 1,
+      "SkeletonDataIDs": [
+        "0"
+      ]
+    },
+    {
+      "MapName": "ACT01_03_Map",
+      "DestPortalId": 310203,
+      "DataId": 310302,
+      "DescriptionTextID": "포탈0302",
       "PrefabLabel": "Interactable",
       "MaxHp": 0.0,
       "IsInteractable": 1,

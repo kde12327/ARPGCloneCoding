@@ -1,0 +1,25 @@
+{
+  "questObjects": [
+    {
+      "DataId": 330001,
+      "DescriptionTextId": "상자",
+      "Icon": "BoxIcon.sprite",
+      "RequiredQuestId": 1001,
+      "QuestObjectItemType": 0
+    },
+    {
+      "DataId": 330002,
+      "DescriptionTextId": "낡은 상자",
+      "Icon": "QuestObject.sprite",
+      "RequiredQuestId": 1006,
+      "QuestObjectItemType": 1
+    },
+    {
+      "DataId": 330003,
+      "DescriptionTextId": "보물 상자",
+      "Icon": "QuestObject.sprite",
+      "RequiredQuestId": 1009,
+      "QuestObjectItemType": 1
+    }
+  ]
+}

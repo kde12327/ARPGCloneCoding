@@ -335,6 +335,10 @@ public class UI_GameScene : UI_Scene
     {
         var playerInven = GetObject((int)GameObjects.PlayerInventoryPanel);
         playerInven.SetActive(!playerInven.activeSelf);
+        if (!playerInven.activeSelf)
+        {
+            EnableDiscription();
+        }
     }
 
     public void SetActiveWarehouseInventory(bool active)
@@ -358,6 +362,11 @@ public class UI_GameScene : UI_Scene
         {
             TEMPOPENPLAYERINVENTORYFLAG = false;
             playerInven.SetActive(false);
+        }
+
+        if (!warehouseInven.activeSelf)
+        {
+            EnableDiscription();
         }
 
 
@@ -528,7 +537,7 @@ public class UI_GameScene : UI_Scene
                     float right = worldCorners[3].x;
 
                     // SetDiscription »£√‚
-                    SetDiscription(item, top, left, right);
+                    //SetDiscription(item, top, left, right);
                     /*if (item.ItemType == EItemType.Equipment)
                     {
                         var eItem = item as EquipmentItem;
@@ -537,7 +546,7 @@ public class UI_GameScene : UI_Scene
                 }
                 else
                 {
-                    EnableDiscription();
+                    //EnableDiscription();
                 }
 
                 if (Managers.Inventory.HoldingItem != null)
@@ -560,7 +569,7 @@ public class UI_GameScene : UI_Scene
             {
                 ItemBase item = Managers.Inventory.GetEquippedItem(slotType);
 
-                EnableDiscription();
+                //EnableDiscription();
                 /*if (item != null && item.ItemType == EItemType.Equipment)
                 {
                     var eItem = item as EquipmentItem;

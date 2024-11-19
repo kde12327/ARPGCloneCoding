@@ -14,6 +14,7 @@ public class ObjectManager
     public HashSet<ItemHolder> ItemHolders { get; } = new HashSet<ItemHolder>();
 
 
+
     #region Roots
     public Transform GetRootTransform(string name)
     {
@@ -125,6 +126,13 @@ public class ObjectManager
 
             ItemHolder itemHolder = go.GetOrAddComponent<ItemHolder>();
             ItemHolders.Add(itemHolder);
+        }else if (obj.ObjectType == EObjectType.QuestObject)
+        {
+            obj.transform.parent = EnvRoot;
+
+            QuestObject questObject = go.GetOrAddComponent<QuestObject>();
+            questObject.SetInfo(templateID);
+            Envs.Add(questObject);
         }
 
         return obj as T;
@@ -134,7 +142,7 @@ public class ObjectManager
     {
         EObjectType objectType = obj.ObjectType;
 
-        if(objectType == EObjectType.Player)
+        if (objectType == EObjectType.Player)
         {
             Player = null;
         }
@@ -143,12 +151,12 @@ public class ObjectManager
             Monster monster = obj.GetComponent<Monster>();
             Monsters.Remove(monster);
         }
-        else if(objectType == EObjectType.Projectile)
+        else if (objectType == EObjectType.Projectile)
         {
             Projectile projectile = obj as Projectile;
             Projectiles.Remove(projectile);
         }
-        else if(objectType == EObjectType.Env)
+        else if (objectType == EObjectType.Env)
         {
             Env env = obj as Env;
             Envs.Remove(env);
@@ -167,6 +175,11 @@ public class ObjectManager
         {
             ItemHolder itemHolder = obj as ItemHolder;
             ItemHolders.Remove(itemHolder);
+        }
+        else if (obj.ObjectType == EObjectType.QuestObject)
+        {
+            QuestObject questObject = obj as QuestObject;
+            Envs.Remove(questObject);
         }
 
         Managers.Resource.Destroy(obj.gameObject);

@@ -1,5 +1,7 @@
 ﻿DataId,DescriptionTextID,PrefabLabel,MaxHp,IsInteractable,SpineNames,MapName,DestPortalId
-310101,포탈0101,Interactable,0,1,0,ACT01_01_Map,310001
+310101,포탈0100,Interactable,0,1,0,ACT01_01_Map,310001
 310001,마을포탈0001,Interactable,0,1,0,ACT01_Town_Map,310101
 310002,마을포탈0002,Interactable,0,1,0,ACT01_Town_Map,310201
 310201,포탈0201,Interactable,0,1,0,ACT01_02_Map,310002
+310203,포탈0203,Interactable,0,1,0,ACT01_02_Map,310302
+310302,포탈0302,Interactable,0,1,0,ACT01_03_Map,310203

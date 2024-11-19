@@ -41,6 +41,10 @@ public class FlaskItem : ItemBase
 			Debug.Log("UseFlask Success");
 			Charge -= FlaskItemData.ChargePerUse;
 		}
+        else
+        {
+			return;
+        }
 
 		// todo effect
 		if (FlaskItemData.FlaskType == EFlaskType.Life)

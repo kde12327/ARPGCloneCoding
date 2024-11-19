@@ -58,7 +58,8 @@ public static class Define
         Effect,
         Interactive,
         Portal,
-        ItemHolder
+        ItemHolder,
+        QuestObject,
     }
 
 
@@ -335,7 +336,11 @@ public static class Define
         GetFlaskItems,
     }
 
-
+    public enum EQuestObjectItemType
+    {
+        GetDefaultItems,
+        GetQuestObjectItem,
+    }
 
     #endregion
 
@@ -346,7 +351,7 @@ public static class Define
     public const float PLAYER_ATTACK_HEIGHT = 3.0f;
     public const float PLAYER_ATTACK_DEBUG_DURATION = 0.25f;
 
-	public const float MONSTER_SEARCH_DISTANCE = 8.0f;
+	public const float MONSTER_SEARCH_DISTANCE = 5.0f;
     public const int MONSTER_DEFAULT_MELEE_ATTACK_RANGE = 1;
     public const int MONSTER_DEFAULT_RANGED_ATTACK_RANGE = 5;
 

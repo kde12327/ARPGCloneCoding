@@ -25,11 +25,22 @@ public class UI_QuestDescriptionView : UI_Base
 
     public void SetInfo(int questId)
     {
+        string mapName = Managers.Map.MapName;
+
         QuestId = questId;
         Data.QuestData questData = Managers.Data.QuestDic[questId];
 
-        GetText((int)Texts.QuestTitleText).text = questData.NameDescriptionTextID;
-        GetText((int)Texts.QuestContentText).text = questData.ContentDescriptionTextID;
+
+        if (mapName == questData.QuestMapId)
+        {
+            GetText((int)Texts.QuestTitleText).text = questData.NameDescriptionTextID;
+            GetText((int)Texts.QuestContentText).text = questData.ContentDescriptionTextID;
+        }
+        else
+        {
+            GetText((int)Texts.QuestTitleText).text = mapName + "으로 이동하기";
+            GetText((int)Texts.QuestContentText).text = mapName + "으로 이동하기";
+        }
     }
 
 }

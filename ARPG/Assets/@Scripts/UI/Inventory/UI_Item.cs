@@ -88,6 +88,28 @@ public class UI_Item : UI_Base
                 }
             }
         }, Define.EUIEvent.Click);
+        GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
+        {
+            var rect = GetImage((int)Images.ItemImage).GetComponent<RectTransform>();
+
+            // RectTransform의 World 좌표를 구해서 화면 내 위치로 변환
+            Vector3[] worldCorners = new Vector3[4];
+            rect.GetWorldCorners(worldCorners);
+
+            float left = worldCorners[0].x;
+            float right = worldCorners[3].x;
+            float top = worldCorners[1].y;
+
+            Managers.UI.GetSceneUI<UI_GameScene>().SetDiscription(Item, top, left, right);
+        }, Define.EUIEvent.PointerEnter);
+        GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
+        {
+
+            Managers.UI.GetSceneUI<UI_GameScene>().EnableDiscription();
+        }, Define.EUIEvent.PointerExit);
+
+
+
         /*
                 GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
                 {
