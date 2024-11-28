@@ -334,6 +334,8 @@ public static class Define
     {
         GetGloveItems,
         GetFlaskItems,
+        GetLinkSkillGems,
+        GetMoveSkillGems,
     }
 
     public enum EQuestObjectItemType
@@ -376,6 +378,50 @@ public static class Define
     public const char MAP_TOOL_SEMI_WALL = '2';
 
     #endregion
+
+    public static string GetStatString(string optionName, float values)
+    {
+        string result = "";
+
+        switch (optionName)
+        {
+            case "base_maximum_life":
+                result = "생명력 " + values + " 증가";
+                break;
+            case "base_maximum_mana":
+                result = "마나 " + values + " 증가";
+                break;
+            case "base_maximum_energy_sheild":
+                result = "에너지 보호막 " + values + " 증가";
+                break;
+            case "additional_strength":
+                result = "힘 " + values + " 증가";
+                break;
+            case "additional_dexterity":
+                result = "민첩 " + values + " 증가";
+                break;
+            case "additional_intelligence":
+                result = "지능 " + values + " 증가";
+                break;
+            case "Armour":
+                result = "방어력 " + values + " 증가";
+                break;
+            case "Atk":
+                result = "공격 피해 + " + values ;
+                break;
+            case "CriRate":
+                result = "크리티컬 확률 : " + values + "%";
+                break;
+            case "AttackSpeedRate":
+                result = "공격 속도 : " + values;
+                break;
+            default:
+                result = optionName + " : " + values;
+                break;
+        }
+
+        return result;
+    }
 
 }
 
@@ -422,6 +468,8 @@ public static class Stat
     public const string Damage = "Damage";
     public const string MeleePhysicalDamagePercent = "MeleePhysicalDamagePercent";
 }
+
+
 
 public static class UIColor
 {

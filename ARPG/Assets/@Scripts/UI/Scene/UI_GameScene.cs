@@ -29,7 +29,8 @@ public class UI_GameScene : UI_Scene
 
     enum Images
     {
-        UsingItemImage
+        UsingItemImage,
+        PassiveSkillButton
     }
 
     enum Texts
@@ -130,6 +131,15 @@ public class UI_GameScene : UI_Scene
         var usingItemImage = GetImage((int)Images.UsingItemImage);
         usingItemImage.gameObject.SetActive(false);
         usingItemImage.raycastTarget = false;
+        
+        var passiveSkillButton = GetImage((int)Images.PassiveSkillButton);
+        passiveSkillButton.gameObject.SetActive(false);
+        passiveSkillButton.gameObject.BindEvent(evt =>
+        {
+            var passiveSkillView = GetObject((int)GameObjects.UI_PassiveSkillView);
+            passiveSkillView.SetActive(true);
+        });
+
 
         return true;
     }
@@ -141,6 +151,18 @@ public class UI_GameScene : UI_Scene
         {
             usingItemImage.transform.position = Input.mousePosition;
         }
+    }
+
+    public void SetWaypoints(Dictionary<string, bool> waypoints)
+    {
+        var waypointView = GetObject((int)GameObjects.UI_WaypointView);
+        waypointView.GetComponent<UI_WaypointView>().SetInfo(waypoints);
+    }
+
+    public void HasPassiveSkillPoint(bool hasPoint)
+    {
+        var passiveSkillButton = GetImage((int)Images.PassiveSkillButton);
+        passiveSkillButton.gameObject.SetActive(hasPoint);
     }
 
     public void SetQuests(List<int> questIds)

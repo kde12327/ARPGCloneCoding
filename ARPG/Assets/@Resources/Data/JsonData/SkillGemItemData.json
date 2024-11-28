@@ -21,6 +21,16 @@
       "DataId": 40000002
     },
     {
+      "SkillGemType": 0,
+      "SkillId": 10028,
+      "SkillGemColor": 1,
+      "Name": "단검 투척",
+      "ItemType": 3,
+      "ItemSubType": 0,
+      "Icon": "Double_Strike_inventory_icon.sprite",
+      "DataId": 40000003
+    },
+    {
       "SkillGemType": 1,
       "SkillId": 11001,
       "SkillGemColor": 1,

@@ -30,6 +30,9 @@ public class Waypoint : Env
 
 		Debug.Log("Waypoint");
 
+
+		Managers.Map.ActivateWaypoint(Managers.Map.MapName);
+
 		var gamescene = Managers.UI.GetSceneUI<UI_GameScene>();
 		gamescene.SetActiveWaypointView(true);
 	}

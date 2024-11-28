@@ -124,6 +124,7 @@ namespace Data
 	{
 		public int DataId;
 		public string Name;
+		public string Description;
 		public List<String> Tag;
 		public float ManaMultiplier;
 		public float DamageMultiplier;

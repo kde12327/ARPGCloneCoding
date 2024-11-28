@@ -517,14 +517,14 @@
     {
       "DataId": 10026,
       "Name": "이중 타격",
-      "ClassName": "NormalAttack",
+      "ClassName": "DoubleStrike",
       "Description": "두번의 근접 공격",
       "ProjectileId": 0,
       "PrefabLabel": null,
       "IconLabel": "Double_Strike_skill_icon.sprite",
       "AnimName": "attack",
       "CoolTime": 0.0,
-      "DamageMultiplier": 1.0,
+      "DamageMultiplier": 1.5,
       "Duration": 0.0,
       "AnimImpactDuration": 0.0,
       "CastingSound": "EnergyBolt_Start",
@@ -557,6 +557,28 @@
       "NextLevelId": 0,
       "AoEId": 0,
       "EffectSize": 1
+    },
+    {
+      "DataId": 10028,
+      "Name": "단검 투척",
+      "ClassName": "NormalAttack",
+      "Description": "주변의 적을 향해 에너지 볼트를 발사한다",
+      "ProjectileId": 70009,
+      "PrefabLabel": "ProjectilePrefab",
+      "IconLabel": "ThrowingDaggerIcon.sprite",
+      "AnimName": "attack",
+      "CoolTime": 0.0,
+      "DamageMultiplier": 1.0,
+      "Duration": 0.0,
+      "AnimImpactDuration": 0.0,
+      "CastingSound": "EnergyBolt_Start",
+      "SkillRange": 0.0,
+      "ScaleMultiplier": 1.0,
+      "TargetCount": 1,
+      "EffectIds": null,
+      "NextLevelId": 0,
+      "AoEId": 0,
+      "EffectSize": 0
     }
   ]
 }

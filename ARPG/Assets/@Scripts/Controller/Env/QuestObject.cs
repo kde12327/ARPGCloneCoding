@@ -49,10 +49,15 @@ public class QuestObject : Env
 					var defaultWeaponHolder = Managers.Object.Spawn<ItemHolder>(transform.position, 0);
 					defaultWeaponHolder.SetInfo(0, defaultWeapon, transform.position);
 
-					var skillGem = SkillGemItem.MakeSkillGemItem(40000001);
+					var skillGem1 = SkillGemItem.MakeSkillGemItem(40000001);
 
-					var skillGemHolder = Managers.Object.Spawn<ItemHolder>(transform.position, 0);
-					skillGemHolder.SetInfo(0, skillGem, transform.position);
+					var skillGemHolder1 = Managers.Object.Spawn<ItemHolder>(transform.position, 0);
+					skillGemHolder1.SetInfo(0, skillGem1, transform.position);
+
+					var skillGem2 = SkillGemItem.MakeSkillGemItem(40000003);
+
+					var skillGemHolder2 = Managers.Object.Spawn<ItemHolder>(transform.position, 0);
+					skillGemHolder2.SetInfo(0, skillGem2, transform.position);
 				}
 				break;
         }

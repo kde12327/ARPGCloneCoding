@@ -47,7 +47,7 @@
       "QuestType": 3,
       "QuestMapId": "ACT01_Town_Map",
       "QuestTargetId": 50000001,
-      "QuestRewardType": 0,
+      "QuestRewardType": 2,
       "NextQuestId": 1006
     },
     {
@@ -67,7 +67,7 @@
       "QuestType": 3,
       "QuestMapId": "ACT01_Town_Map",
       "QuestTargetId": 50000001,
-      "QuestRewardType": 0,
+      "QuestRewardType": 3,
       "NextQuestId": 1008
     },
     {

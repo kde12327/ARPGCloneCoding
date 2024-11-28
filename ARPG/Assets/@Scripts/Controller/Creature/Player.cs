@@ -219,7 +219,6 @@ public class Player : Creature
         Skills.SetInfo(this);
 
         MaxMp = Stats.GetStat(Stat.Mana);
-        Mp = MaxMp.Value;
 
         MaxExp = 10;
         Exp = 0;
@@ -227,9 +226,20 @@ public class Player : Creature
         Stats.GetStat(Stat.Life).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Str), 1, 20, EStatModType.Add, 0, this));
         Stats.GetStat(Stat.MeleePhysicalDamagePercent).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Str), 1, 10, EStatModType.Add, 0, this));
 
+        Stats.GetStat(Stat.AttackSpeedRate).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Dex), 10, 1, EStatModType.Add, 0, this));
+        Stats.GetStat(Stat.CriRate).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Dex), 1, 1, EStatModType.PercentAdd, 0, this));
+
+        Stats.GetStat(Stat.Mana).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Int), 1, 5, EStatModType.Add, 0, this));
+        Stats.GetStat(Stat.EnergySheild).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Int), 1, 5, EStatModType.Add, 0, this));
+
+
         Stats.OnPlayerStatusChanged -= OnPlayerStatChanged;
         Stats.OnPlayerStatusChanged += OnPlayerStatChanged;
         OnPlayerStatChanged();
+
+        Hp = Stats.GetStat(Stat.Life).Value;
+        Mp = MaxMp.Value;
+
     }
 
     public void OnPlayerStatChanged()
@@ -318,6 +328,7 @@ public class Player : Creature
             MapArriveId = null;
             if (NextPoint != null)
             {
+                Managers.Map.RemoveObject(this);
                 SetCellPos(Managers.Map.World2Cell(NextPoint.transform.position), true);
                 DestPos = transform.position;
             }

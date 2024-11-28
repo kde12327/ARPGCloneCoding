@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TownPortal : InteractableObject
 {
-
 	public override bool Init()
 	{
 		if (base.Init() == false)
@@ -22,8 +21,16 @@ public class TownPortal : InteractableObject
 	{
 		base.Interact(player);
 
-		player.MapArriveId = DataTemplateID;
+		player.MapArriveId = 301001;
 
 		Managers.Scene.CreateOrLoadGameSceneByName("ACT01_Town_Map");
+
+		GameObject.Destroy(this.gameObject);
 	}
+
+	public string GetSceneName()
+    {
+		return gameObject.scene.name;
+	}
+
 }

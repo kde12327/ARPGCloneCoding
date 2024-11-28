@@ -14,6 +14,7 @@ public class SceneManagerEx
 	public bool MapInit { get; set; }
 
 
+
 	public void CreateOrLoadGameSceneByName(string name)
 	{
 		Scene beforeScene = SceneManager.GetActiveScene();
@@ -88,6 +89,7 @@ public class SceneManagerEx
 		string name = System.Enum.GetName(typeof(Define.EScene), type);
 		return name;
 	}
+
 
 	public GameObject FindObjectInSpecificScene(string sceneName, string objectName)
 	{

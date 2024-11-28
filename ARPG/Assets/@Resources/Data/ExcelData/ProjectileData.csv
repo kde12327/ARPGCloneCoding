@@ -7,3 +7,4 @@
 70006,냉기 확산1,ColdSpreadProj,ParabolaMotion,wizard_shot.sprite,projectilePrefab,,,,5
 70007,냉기 확산2,ColdSpreadProj,ParabolaMotion,wizard_shot.sprite,projectilePrefab,,,,5
 70008,냉기 확산3,ColdSpreadProj,ParabolaMotion,wizard_shot.sprite,projectilePrefab,,,,5
+70009,투척용 단검,Projectile,StraightMotion,ThrowingKnife.sprite,ProjectilePrefab,,,,12

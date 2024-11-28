@@ -119,11 +119,12 @@ public class QuestManager
         if (!RewardDic.ContainsKey(id))
         {
             var data = Managers.Data.QuestDic[id];
+            List<UI_Item> items = new();
+
             switch (data.QuestRewardType)
             {
                 case Define.EQuestRewardType.GetGloveItems:
                     int gloveItemId = 20300001;
-                    List<UI_Item> items = new();
                     for(int i = 0; i < 3; i++)
                     {
                         var item = EquipmentItem.MakeEquipmentItem(gloveItemId, Define.ERarity.Rare);
@@ -133,14 +134,48 @@ public class QuestManager
                         item.EquipSlot = Define.EEquipSlotType.RewardView;
                         items.Add(uiitem);
                     }
-                    RewardDic[id] = items;
 
                     break;  
                 case Define.EQuestRewardType.GetFlaskItems:
                     
                     break;  
+                case Define.EQuestRewardType.GetLinkSkillGems:
+                    {
+                        int[] SkillGemId = {41000001, 41000002};
+                        for (int i = 0; i < SkillGemId.Length; i++)
+                        {
+                            var item = SkillGemItem.MakeSkillGemItem(SkillGemId[i]);
+                            UI_Item uiitem = Managers.Resource.Instantiate("UI_Item", Managers.UI.GetSceneUI<UI_GameScene>().transform).GetComponent<UI_Item>();
+                            uiitem.SetInfo(item);
+                            uiitem.IsReward = true;
+                            item.EquipSlot = Define.EEquipSlotType.RewardView;
+                            items.Add(uiitem);
+                        }
+
+                    }
+
+                    break;  
+                case Define.EQuestRewardType.GetMoveSkillGems:
+                    {
+                        int[] SkillGemId = { 40000002 };
+                        for (int i = 0; i < SkillGemId.Length; i++)
+                        {
+                            var item = SkillGemItem.MakeSkillGemItem(SkillGemId[i]);
+                            UI_Item uiitem = Managers.Resource.Instantiate("UI_Item", Managers.UI.GetSceneUI<UI_GameScene>().transform).GetComponent<UI_Item>();
+                            uiitem.SetInfo(item);
+                            uiitem.IsReward = true;
+                            item.EquipSlot = Define.EEquipSlotType.RewardView;
+                            items.Add(uiitem);
+                        }
+
+                    }
+                    break;  
             }
+
+            RewardDic[id] = items;
+
         }
+
 
         CurrentRewardQuestId = id;
         return RewardDic[id];

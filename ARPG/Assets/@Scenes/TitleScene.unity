@@ -298,13 +298,25 @@ PrefabInstance:
       value: UI_TitleScene
       objectReference: {fileID: 0}
     - target: {fileID: 3249150334488475441, guid: 2277729488bb431438a93bc96d9599a9, type: 3}
+      propertyPath: m_text
+      value: Start
+      objectReference: {fileID: 0}
+    - target: {fileID: 3249150334488475441, guid: 2277729488bb431438a93bc96d9599a9, type: 3}
       propertyPath: m_fontSize
       value: 44
       objectReference: {fileID: 0}
     - target: {fileID: 3249150334488475441, guid: 2277729488bb431438a93bc96d9599a9, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: c16687046770ab84db10f34da40ee817, type: 2}
+    - target: {fileID: 3249150334488475441, guid: 2277729488bb431438a93bc96d9599a9, type: 3}
       propertyPath: m_fontSizeBase
       value: 44
       objectReference: {fileID: 0}
+    - target: {fileID: 3249150334488475441, guid: 2277729488bb431438a93bc96d9599a9, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -8433120404861782891, guid: c16687046770ab84db10f34da40ee817, type: 2}
     - target: {fileID: 3249150334488475441, guid: 2277729488bb431438a93bc96d9599a9, type: 3}
       propertyPath: m_VerticalAlignment
       value: 512
@@ -312,6 +324,10 @@ PrefabInstance:
     - target: {fileID: 3249150334488475441, guid: 2277729488bb431438a93bc96d9599a9, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3249150334488475441, guid: 2277729488bb431438a93bc96d9599a9, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6314984354671727225, guid: 2277729488bb431438a93bc96d9599a9, type: 3}
       propertyPath: m_Pivot.x

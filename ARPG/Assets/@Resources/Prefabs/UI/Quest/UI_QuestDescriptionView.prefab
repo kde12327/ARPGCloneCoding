@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Quest Title
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5f7445fa937f7df41b8cf181bd982925, type: 2}
-  m_sharedMaterial: {fileID: 6327707706146042653, guid: 5f7445fa937f7df41b8cf181bd982925, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1126f64c90d7ab94cb3fda62c86df792, type: 2}
+  m_sharedMaterial: {fileID: -2257977701460441151, guid: 1126f64c90d7ab94cb3fda62c86df792, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -201,8 +201,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Quest Content
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5f7445fa937f7df41b8cf181bd982925, type: 2}
-  m_sharedMaterial: {fileID: 6327707706146042653, guid: 5f7445fa937f7df41b8cf181bd982925, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1126f64c90d7ab94cb3fda62c86df792, type: 2}
+  m_sharedMaterial: {fileID: -2257977701460441151, guid: 1126f64c90d7ab94cb3fda62c86df792, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -377,7 +377,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 80
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1

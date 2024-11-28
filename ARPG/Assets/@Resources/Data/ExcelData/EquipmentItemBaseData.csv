@@ -1,5 +1,5 @@
 ﻿ ,BaseType,ItemType,ItemSubType,Icon,DropLevel,RequireStats,RequireStatValues,DefaultOptions,DefaultMinMaxValues,ImplicitOptions,ImplicitMinMaxValues
-20100001,녹슨 검,1,1,Weapon1.sprite,1,Strength,8,Atk&CriRate&AttackSpeedRate,4&9&5&5&1.55&1.55,,
+20100001,녹슨 검,1,1,Weapon1.sprite,1,Strength,8,Atk&CriRate&AttackSpeedRate,4&9&5&5&30&30,,
 20200001,철제 투구,1,2,Helmet1.sprite,1,Strength,6,Armour,6&9,,
 20300001,철제 건틀릿,1,3,Gloves1.sprite,1,Strength,6,Armour,6&9,,
 20400001,철제 각반,1,4,Boots1.sprite,1,Strength,6,Armour,6&9,,

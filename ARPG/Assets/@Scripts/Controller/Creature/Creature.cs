@@ -215,12 +215,18 @@ public class Creature : BaseObject
         float finalDamage = creature.Stats.GetStat(Stat.Atk).Value 
             * skill.DamageMultiplier 
             * creature.Stats.GetStat(Stat.Damage).Value / 100.0f
-            * creature.Stats.GetStat(Stat.MeleePhysicalDamagePercent).Value / 100.0f; 
+            * creature.Stats.GetStat(Stat.MeleePhysicalDamagePercent).Value / 100.0f;
+        bool isCritical = UnityEngine.Random.Range(0, 100) < creature.Stats.GetStat(Stat.CriRate).Value;
+
+        if (isCritical)
+        {
+            finalDamage *= 2;
+        }
 
 
         Hp = Mathf.Clamp(Hp - finalDamage, 0, Stats.GetStat(Stat.Life).Value);
 
-        Managers.Object.ShowDamageFont(CenterPosition, finalDamage, transform, false);
+        Managers.Object.ShowDamageFont(CenterPosition, finalDamage, transform, isCritical);
         //Debug.Log(CreatureData.DescriptionTextID + ": " + Hp + "/" + MaxHp.Value);
 
         if (Hp <= 0)

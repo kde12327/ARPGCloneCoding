@@ -26,6 +26,15 @@ public class MapManager
 
 	ECellCollisionType[,] _collision;
 
+	Dictionary<string, bool> ActiveWaypoint = new()
+	{
+		{ "ACT01_01_Map", false },
+		{ "ACT01_Town_Map", false },
+		{ "ACT01_02_Map", false },
+		{ "ACT01_03_Map", false }
+	};
+
+
 	public void LoadMap(string mapName)
 	{
 		GameObject map = Managers.Scene.FindObjectInSpecificScene(mapName, $"@Map_{mapName}");
@@ -62,6 +71,17 @@ public class MapManager
 		if (Map != null)
 			Managers.Resource.Destroy(Map);*/
 	}
+
+	public void ActivateWaypoint(string mapName)
+    {
+		ActiveWaypoint[mapName] = true;
+		Managers.UI.GetSceneUI<UI_GameScene>().SetWaypoints(ActiveWaypoint);
+
+	}
+	public bool IsActiveWaypoint(string mapName)
+    {
+		return ActiveWaypoint[mapName];
+    }
 
 	void ParseCollisionData(GameObject map, string mapName, string tilemap = "Tilemap_Collision")
 	{

@@ -95,6 +95,18 @@
       "HitSound": 0.0,
       "ProjRange": 0.0,
       "ProjSpeed": 5.0
+    },
+    {
+      "DataId": 70009,
+      "Name": "투척용 단검",
+      "ClassName": "Projectile",
+      "ComponentName": "StraightMotion",
+      "ProjectileSpriteName": "ThrowingKnife.sprite",
+      "PrefabLabel": "ProjectilePrefab",
+      "Duration": 0.0,
+      "HitSound": 0.0,
+      "ProjRange": 0.0,
+      "ProjSpeed": 12.0
     }
   ]
 }
