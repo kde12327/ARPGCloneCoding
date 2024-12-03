@@ -38,8 +38,8 @@ public class UI_QuestDescriptionView : UI_Base
         }
         else
         {
-            GetText((int)Texts.QuestTitleText).text = mapName + "으로 이동하기";
-            GetText((int)Texts.QuestContentText).text = mapName + "으로 이동하기";
+            GetText((int)Texts.QuestTitleText).text = questData.QuestMapId + "으로 이동하기";
+            GetText((int)Texts.QuestContentText).text = questData.QuestMapId + "으로 이동하기";
         }
     }
 

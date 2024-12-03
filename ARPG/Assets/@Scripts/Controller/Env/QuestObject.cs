@@ -21,14 +21,17 @@ public class QuestObject : Env
 		NameTag nameTag = nameTagObject.GetComponent<NameTag>();
 		nameTag.SetInfo(this, QuestObjectData.DescriptionTextId);
 
-		if (!Managers.Quest.HasTargetQuest(Define.EQuestType.Interact, DataTemplateID))
+		/*if (!Managers.Quest.HasTargetQuest(Define.EQuestType.Interact, DataTemplateID))
 		{
 			gameObject.SetActive(false);
-		}
+		}*/
 	}
 
 	public override void Interact(Player player)
 	{
+		if (!Managers.Quest.HasTargetQuest(Define.EQuestType.Interact, DataTemplateID))
+			return;
+
 		base.Interact(player);
 
 		Debug.Log("QuestObject");
@@ -62,10 +65,8 @@ public class QuestObject : Env
 				break;
         }
 
-		if (Managers.Quest.HasTargetQuest(Define.EQuestType.Interact, DataTemplateID))
-		{
-			Managers.Quest.ClearTargetQuest(Define.EQuestType.Interact, DataTemplateID);
-		}
+		
+		Managers.Quest.ClearTargetQuest(Define.EQuestType.Interact, DataTemplateID);
 
 		Destroy(this.gameObject);
 	}

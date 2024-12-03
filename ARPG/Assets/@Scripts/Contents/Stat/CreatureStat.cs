@@ -181,7 +181,7 @@ public class CreatureStat
 					sumAddValue += modifier.Value;
 					break;
 				case EStatModType.PercentAdd:
-					sumPercentAdd += modifier.Value;
+					sumPercentAdd += modifier.Value / 100; ;
 					/*if (i == StatModifiers.Count - 1 || StatModifiers[i + 1].Type != EStatModType.PercentAdd)
 					{
 						sumAddValue *= 1 + sumPercentAdd;
@@ -189,7 +189,7 @@ public class CreatureStat
 					}*/
 					break;
 				case EStatModType.PercentMult:
-					sumPercentMult *= 1 + modifier.Value;
+					sumPercentMult *= 1 + modifier.Value / 100;
 					break;
 			}
 		}
@@ -209,7 +209,7 @@ public class CreatureStat
 					sumAddValue += val;
 					break;
 				case EStatModType.PercentAdd:
-					sumPercentAdd += val;
+					sumPercentAdd += val / 100;
 					/*if (i == StatModifiers.Count - 1 || StatModifiers[i + 1].Type != EStatModType.PercentAdd)
 					{
 						finalValue *= 1 + sumPercentAdd;
@@ -217,7 +217,7 @@ public class CreatureStat
 					}*/
 					break;
 				case EStatModType.PercentMult:
-					sumPercentMult *= 1 + val;
+					sumPercentMult *= 1 + val / 100; ;
 					break;
 			}
 		}

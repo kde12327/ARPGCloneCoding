@@ -53,7 +53,7 @@
     {
       "DataId": 1006,
       "NameDescriptionTextID": "잃어버린 물건 찾기",
-      "ContentDescriptionTextID": "잃어버린 물건 찾기",
+      "ContentDescriptionTextID": "낡은 상자를 열어 잃어버린 물건 찾기",
       "QuestType": 3,
       "QuestMapId": "ACT01_02_Map",
       "QuestTargetId": 330002,

@@ -34,11 +34,45 @@ public class Creature : BaseObject
     }
     public event Action<float> OnHpChanged;
 
+    protected float _energyShield;
+    public float EnergyShield
+    {
+        get { return _energyShield; }
+        set
+        {
+            _energyShield = value;
+            if (_energyShield > Stats.GetStat(Stat.EnergySheild).Value)
+                _energyShield = Stats.GetStat(Stat.EnergySheild).Value;
+            if(Stats.GetStat(Stat.EnergySheild).Value == 0)
+            {
+                OnEnergyShieldChanged?.Invoke(0);
+            }
+            else
+            {
+                OnEnergyShieldChanged?.Invoke(_energyShield / Stats.GetStat(Stat.EnergySheild).Value);
+            }
+        }
+    }
+    public event Action<float> OnEnergyShieldChanged;
+
+    float EnergyResetTime = 4.0f;
+    float EnergyResetTimer = 0.0f;
+    float EnergyRegen = 1.0f;
+
     #endregion
 
     public void OnStatChanged()
     {
         OnHpChanged?.Invoke(Hp / Stats.GetStat(Stat.Life).Value);
+
+        if (Stats.GetStat(Stat.EnergySheild).Value == 0)
+        {
+            OnEnergyShieldChanged?.Invoke(0);
+        }
+        else
+        {
+            OnEnergyShieldChanged?.Invoke(_energyShield / Stats.GetStat(Stat.EnergySheild).Value);
+        }
     }
 
 
@@ -126,6 +160,16 @@ public class Creature : BaseObject
     {
         if (CreatureState != ECreatureState.Skill)
             LerpToCellPos(CreatureData.MoveSpeed);
+
+
+        if(EnergyResetTimer > 0)
+        {
+            EnergyResetTimer -= Time.deltaTime;
+        }
+        else
+        {
+            EnergyShield += EnergyRegen * Time.deltaTime;
+        }
     }
 
     protected override void UpdateAnimation()
@@ -223,8 +267,25 @@ public class Creature : BaseObject
             finalDamage *= 2;
         }
 
+        float leftDamage = finalDamage;
 
-        Hp = Mathf.Clamp(Hp - finalDamage, 0, Stats.GetStat(Stat.Life).Value);
+        if (EnergyShield > 0)
+        {
+            if(leftDamage > EnergyShield)
+            {
+                leftDamage -= EnergyShield;
+                EnergyShield = 0;
+            }
+            else
+            {
+                EnergyShield -= leftDamage;
+                leftDamage = 0;
+            }
+        }
+
+        Hp = Mathf.Clamp(Hp - leftDamage, 0, Stats.GetStat(Stat.Life).Value);
+
+        EnergyResetTimer = EnergyResetTime;
 
         Managers.Object.ShowDamageFont(CenterPosition, finalDamage, transform, isCritical);
         //Debug.Log(CreatureData.DescriptionTextID + ": " + Hp + "/" + MaxHp.Value);

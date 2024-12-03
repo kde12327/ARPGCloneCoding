@@ -39,6 +39,8 @@ public class Player : Creature
     }
     public event Action<float> OnMpChanged;
 
+    
+
     protected float _exp;
     public float Exp
     {
@@ -198,6 +200,9 @@ public class Player : Creature
         OnMpChanged -= gameSceneUI.SetMpBarValue;
         OnMpChanged += gameSceneUI.SetMpBarValue;
 
+        OnEnergyShieldChanged -= gameSceneUI.SetEnergyShieldBarValue;
+        OnEnergyShieldChanged += gameSceneUI.SetEnergyShieldBarValue;
+
         OnExpChanged -= gameSceneUI.SetExpBarValue;
         OnExpChanged += gameSceneUI.SetExpBarValue;
 
@@ -230,7 +235,7 @@ public class Player : Creature
         Stats.GetStat(Stat.CriRate).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Dex), 1, 1, EStatModType.PercentAdd, 0, this));
 
         Stats.GetStat(Stat.Mana).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Int), 1, 5, EStatModType.Add, 0, this));
-        Stats.GetStat(Stat.EnergySheild).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Int), 1, 5, EStatModType.Add, 0, this));
+        Stats.GetStat(Stat.EnergySheild).AddModifier(new ProportionalStatModifier(Stats.GetStat(Stat.Int), 5, 1, EStatModType.PercentAdd, 0, this));
 
 
         Stats.OnPlayerStatusChanged -= OnPlayerStatChanged;
@@ -348,6 +353,9 @@ public class Player : Creature
     protected override void Update()
     {
         base.Update();
+
+        //Debug.Log(EnergyShield + ", " + Stats.GetStat(Stat.EnergySheild).Value);
+
 
         Vector3 dir = (DestPos - transform.position);
         //Debug.Log(dir.sqrMagnitude);

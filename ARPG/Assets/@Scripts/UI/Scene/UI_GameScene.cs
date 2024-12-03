@@ -43,6 +43,7 @@ public class UI_GameScene : UI_Scene
         HPSlider,
         MPSlider,
         EXPSlider,
+        EnergyShieldSlider
     }
 
     public enum UISkills
@@ -614,6 +615,13 @@ public class UI_GameScene : UI_Scene
         mpRatio = Mathf.Max(0, mpRatio);
         mpRatio = Mathf.Min(1, mpRatio);
         GetSliders((int)Sliders.MPSlider).value = mpRatio;
+    }
+
+    public void SetEnergyShieldBarValue(float esRatio)
+    {
+        esRatio = Mathf.Max(0, esRatio);
+        esRatio = Mathf.Min(1, esRatio);
+        GetSliders((int)Sliders.EnergyShieldSlider).value = esRatio;
     }
     public void SetExpBarValue(float expRatio)
     {

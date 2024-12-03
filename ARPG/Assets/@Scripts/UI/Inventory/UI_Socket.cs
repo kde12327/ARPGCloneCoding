@@ -116,6 +116,6 @@ public class UI_Socket : UI_Base
 
     void SkillGemUnequiped()
     {
-        EquipedItem.SkillGems[SocketNumber] = null;
+        EquipedItem.SetSkillGem(null, SocketNumber);
     }
 }
