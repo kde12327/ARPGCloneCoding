@@ -14,15 +14,19 @@ public class QuestManager
     int CurrentRewardQuestId;
     public void Init()
     {
-        foreach(var e in Managers.Data.QuestDic)
+        
+
+        foreach (var e in Managers.Data.QuestDic)
         {
             int key = e.Key;
             Data.QuestData data = e.Value;
 
             QuestClearDic[key] = false;
         }
-
         CurrentQuestList.Add(1001);
+
+        
+
     }
 
     public void OnMapChanged()
@@ -35,6 +39,7 @@ public class QuestManager
         CurrentMapQuestList.Clear();
 
         string mapName = Managers.Map.MapName;
+        
 
         foreach (int id in CurrentQuestList)
         {
@@ -44,6 +49,7 @@ public class QuestManager
                 CurrentMapQuestList.Add(id);
             }
         }
+        
 
         Managers.UI.GetSceneUI<UI_GameScene>().SetQuests(CurrentQuestList);
     }
@@ -96,6 +102,7 @@ public class QuestManager
 
     public bool ClearQuest(int id)
     {
+        Debug.Log("ClearQuest" + id);
         if (!CurrentQuestList.Contains(id))
             return false;
 
@@ -105,6 +112,7 @@ public class QuestManager
             List<int> keys = new (Managers.Data.QuestDic.Keys);
             if (keys.Contains(data.NextQuestId) && QuestClearDic[data.NextQuestId] == false)
             {
+                Debug.Log("add " + data.NextQuestId);
                 CurrentQuestList.Add(data.NextQuestId);
             } 
         }

@@ -222,8 +222,6 @@ public class CreatureStat
 			}
 		}
 		finalValue = (BaseValue + sumAddValue) * (1 + sumPercentAdd) * sumPercentMult;
-		Debug.Log("stats: " + finalValue + ", " + sumAddValue + ", " + sumPercentAdd + ", " + sumPercentMult);
-		Debug.Log((float)Math.Round(finalValue, 4));
 		return (float)Math.Round(finalValue, 4);
 	}
 }

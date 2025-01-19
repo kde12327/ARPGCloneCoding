@@ -1,7 +1,6 @@
 using Spine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Define;
 
@@ -24,13 +23,7 @@ public class DoubleStrike : NormalAttack
         base.DoSkill(target);
 
         Debug.Log("doublestrike");
-        GameObject effect = Managers.Resource.Instantiate("DoubleStrikeEffect");
-        effect.transform.position = (Vector2)Owner.transform.position + (target - (Vector2)Owner.transform.position).normalized * 1.5f ;
-        if((target - (Vector2)Owner.transform.position).x < 0)
-        {
-            effect.transform.rotation = Quaternion.Euler(0, 180,0);
-
-        }
+        
     }
 
     protected override void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
@@ -42,40 +35,52 @@ public class DoubleStrike : NormalAttack
     }
     protected override void OnAttackEvent()
     {
+        Owner.OnAnimAttacked -= OnAttackEvent;
+
+        /*GameObject effect = Managers.Resource.Instantiate("DoubleStrikeEffect");
+        effect.transform.position = (Vector2)Owner.transform.position + ((Vector2)Target - (Vector2)Owner.transform.position).normalized * 1.5f;
+        if (((Vector2)Target - (Vector2)Owner.transform.position).x < 0)
+        {
+            effect.transform.rotation = Quaternion.Euler(0, 180, 0);
+
+        }*/
+
         /*if (Owner.Target.IsValid() == false)
             return;*/
 
-        if (SkillData.ProjectileId == 0)
-        {
-            // Melee
+        
+        // Melee
             
-            /*Util.DrawDebugBox(Owner.transform.position + new Vector3(PLAYER_ATTACK_POINTX, PLAYER_ATTACK_POINTY),
-            new Vector2(PLAYER_ATTACK_WIDTH, PLAYER_ATTACK_HEIGHT),
-            PLAYER_ATTACK_DEBUG_DURATION);*/
+        /*Util.DrawDebugBox(Owner.transform.position + new Vector3(PLAYER_ATTACK_POINTX, PLAYER_ATTACK_POINTY),
+        new Vector2(PLAYER_ATTACK_WIDTH, PLAYER_ATTACK_HEIGHT),
+        PLAYER_ATTACK_DEBUG_DURATION);*/
 
-            Vector3 _skillDir = (Target - Owner.transform.position).normalized;
-            int _angleRange = 180;
-            float radius = Util.GetEffectRadius(SkillData.EffectSize);
-            List<Creature> targets = Managers.Object.FindConeRangeTargets(Owner, _skillDir, radius, _angleRange);
+        Vector3 _skillDir = (Target - Owner.transform.position).normalized;
+        int _angleRange = 180;
+        float radius = Util.GetEffectRadius(SkillData.EffectSize);
+        List<Creature> targets = Managers.Object.FindConeRangeTargets(Owner, _skillDir, radius, _angleRange);
 
-            foreach (var target in targets)
+        foreach (var target in targets)
+        {
+            if (target.IsValid())
             {
-                if (target.IsValid())
-                {
-                    target.OnDamaged(Owner, this);
-                }
+                target.OnDamaged(Owner, this);
             }
         }
-        else
+        
+
+        if (Owner.Anim == null)
         {
-            // Ranged
-            GenerateProjectile(Owner, Owner.CenterPosition);
+            OnAttackEndEvent();
         }
+    }
+    protected override void OnAttackEndEvent()
+    {
+        Owner.OnAnimAttackEnded -= OnAttackEndEvent;
 
         if (Owner.CreatureState == Define.ECreatureState.Skill)
         {
             Owner.CreatureState = Define.ECreatureState.Move;
         }
     }
-
 }

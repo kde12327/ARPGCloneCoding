@@ -25,7 +25,7 @@ namespace Data
 		public float CriRate;
 		public float CriDamage;
 		public string IconImage;
-		public string SkeletonDataID;
+		public string SpriteLibrary;
 		public List<int> SkillIdList = new List<int>();
 	}
 
@@ -371,7 +371,7 @@ namespace Data
 		public string PrefabLabel;
 		public float MaxHp;
 		public int IsInteractable;
-		public List<String> SkeletonDataIDs = new List<String>();
+		public string SpriteLibrary;
 	}
 
 	[Serializable]
@@ -394,7 +394,8 @@ namespace Data
 	{
 		public int DataId;
 		public string DescriptionTextID;
-		public string SkeletonDataID;
+		public string SpriteLibrary;
+		public string AnimState;
 		public List<EInteractionType> InteractionTypes;
 		public List<int> ScriptIds;
 		public List<EVendorType> VendorList;
@@ -422,7 +423,7 @@ namespace Data
 	{
 		public int DataId;
 		public string DescriptionTextId;
-		public string Icon;
+		public string SpriteLibrary;
 		public int RequiredQuestId;
 		public EQuestObjectItemType QuestObjectItemType;
 	}

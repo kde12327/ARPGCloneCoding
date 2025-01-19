@@ -25,8 +25,8 @@ public class Waypoint : Env
 	}
 
 	public override void Interact(Player player)
-    {
-        base.Interact(player);
+	{
+		base.Interact(player);
 
 		Debug.Log("Waypoint");
 

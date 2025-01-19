@@ -32,7 +32,10 @@ public class InputManager
                 Managers.Game.MouseState = Define.EMouseState.MouseUp;
             }
         }
-        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Managers.UI.GetSceneUI<UI_GameScene>().GameMenuToggle();
+        }
 
         if (Input.GetKey(KeyCode.Q))
         {

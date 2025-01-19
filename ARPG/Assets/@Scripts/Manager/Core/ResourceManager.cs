@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -79,9 +80,21 @@ public class ResourceManager
 		opHandle.Completed += (op) =>
 		{
 			int loadCount = 0;
-			int totalCount = op.Result.Count;
 
+			List<UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation> Result = new();
+			UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation prev = null;
 			foreach (var result in op.Result)
+			{
+				if (prev != null && prev.PrimaryKey == result.PrimaryKey) continue;
+
+				Result.Add(result);
+				prev = result;
+			}
+
+			int totalCount = Result.Count;
+
+
+			foreach (var result in Result)
 			{
 				if (result.PrimaryKey.Contains(".sprite"))
 				{

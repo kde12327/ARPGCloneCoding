@@ -11,7 +11,7 @@ public class PassiveSkillManager
     {
         
     }*/
-    int _skillPoint = 0;
+    int _skillPoint = 20;
     public int skillPoint { get { return _skillPoint; } 
         set{
             _skillPoint = value;
@@ -70,7 +70,8 @@ public class PassiveSkillManager
         {
             int id = stack.Pop();
 
-            CheckPassiveSkills.Add(id);
+            if(!CheckPassiveSkills.Contains(id))
+                CheckPassiveSkills.Add(id);
 
             var linkIds = Managers.Data.PassiveSkillLInkDic[id];
 
@@ -82,7 +83,6 @@ public class PassiveSkillManager
                 }
             }
         }
-
         if(selectedNodeCount == CheckPassiveSkills.Count)
         {
             PassiveSkills[dataId] = !PassiveSkills[dataId];

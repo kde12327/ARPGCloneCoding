@@ -31,6 +31,13 @@ public class GameScene : BaseScene
 			player.SetCellPos(new Vector3Int(-20, -8, 0), true);
 
 
+			PlayerStartingpoint startingpoint = Managers.Object.EnvRoot.GetComponentInChildren<PlayerStartingpoint>();
+			if (startingpoint != null)
+            {
+				player.SetCellPos(Managers.Map.World2Cell(startingpoint.transform.position) , true);
+
+			}
+
 			CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
 			camera.Target = player;
 		}

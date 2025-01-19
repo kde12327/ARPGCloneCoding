@@ -16,49 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: d2ab9bfbb8aaad242901f95e1d080540
-  m_SerializeEntries:
-  - m_GUID: 087c3bec9a1d50e41bef86db341c0b61
-    m_Address: Plusintelligence_passive_skill_icon.sprite
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7b2907f1446793c43b3ee27a74ae83d2
-    m_Address: Plusdexterity_passive_skill_icon.sprite
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f89c6647a24610a4ba3ab9e2b0dcefff
-    m_Address: PassiveIconFrame.sprite
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 37d5abbf84aeb3540a91f4a8a64a7499
-    m_Address: Plusstrength_passive_skill_icon.sprite
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 129feae2cfcbf394ca3747263c855cf3
-    m_Address: PassiveIconFrameSelected.sprite
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1faf9d217652b5b4c8d71e71b280e0e4
-    m_Address: PassiveSkillLinkSelected.sprite
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d387534d2174982459565f164024baa1
-    m_Address: PassiveSkillLink.sprite
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d9824849e4582004ba9e5a22c383251d, type: 2}
   m_SchemaSet:

@@ -23,11 +23,69 @@
       ],
       "ImplicitOptions": null,
       "ImplicitMinMaxValues": null,
-      "Name": "녹슨 검",
+      "Name": "돌 검",
       "ItemType": 1,
       "ItemSubType": 1,
-      "Icon": "Weapon1.sprite",
+      "Icon": "stonesword.sprite",
       "DataId": 20100001
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        8
+      ],
+      "DefaultOptions": [
+        "Atk",
+        "CriRate",
+        "AttackSpeedRate"
+      ],
+      "DefaultMinMaxValues": [
+        5.0,
+        10.0,
+        5.0,
+        5.0,
+        30.0,
+        30.0
+      ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
+      "Name": "철제 검",
+      "ItemType": 1,
+      "ItemSubType": 1,
+      "Icon": "sword_01.sprite",
+      "DataId": 20100002
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        8
+      ],
+      "DefaultOptions": [
+        "Atk",
+        "CriRate",
+        "AttackSpeedRate"
+      ],
+      "DefaultMinMaxValues": [
+        6.0,
+        11.0,
+        5.0,
+        5.0,
+        30.0,
+        30.0
+      ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
+      "Name": "황금 검",
+      "ItemType": 1,
+      "ItemSubType": 1,
+      "Icon": "sword_02.sprite",
+      "DataId": 20100003
     },
     {
       "DropLevel": 1,
@@ -49,7 +107,7 @@
       "Name": "철제 투구",
       "ItemType": 1,
       "ItemSubType": 2,
-      "Icon": "Helmet1.sprite",
+      "Icon": "headgear_01.sprite",
       "DataId": 20200001
     },
     {
@@ -65,15 +123,15 @@
       ],
       "DefaultMinMaxValues": [
         6.0,
-        9.0
+        10.0
       ],
       "ImplicitOptions": null,
       "ImplicitMinMaxValues": null,
-      "Name": "철제 건틀릿",
+      "Name": "철갑 투구",
       "ItemType": 1,
-      "ItemSubType": 3,
-      "Icon": "Gloves1.sprite",
-      "DataId": 20300001
+      "ItemSubType": 2,
+      "Icon": "headgear_02.sprite",
+      "DataId": 20200002
     },
     {
       "DropLevel": 1,
@@ -92,11 +150,149 @@
       ],
       "ImplicitOptions": null,
       "ImplicitMinMaxValues": null,
-      "Name": "철제 각반",
+      "Name": "가죽 장갑",
+      "ItemType": 1,
+      "ItemSubType": 3,
+      "Icon": "leather_glove.sprite",
+      "DataId": 20300001
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        6
+      ],
+      "DefaultOptions": [
+        "Armour"
+      ],
+      "DefaultMinMaxValues": [
+        6.0,
+        10.0
+      ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
+      "Name": "징 박힌 장갑",
+      "ItemType": 1,
+      "ItemSubType": 3,
+      "Icon": "glove_01.sprite",
+      "DataId": 20300002
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        6
+      ],
+      "DefaultOptions": [
+        "Armour"
+      ],
+      "DefaultMinMaxValues": [
+        6.0,
+        11.0
+      ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
+      "Name": "철제 건틀릿",
+      "ItemType": 1,
+      "ItemSubType": 3,
+      "Icon": "glove_02.sprite",
+      "DataId": 20300003
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        6
+      ],
+      "DefaultOptions": [
+        "Armour"
+      ],
+      "DefaultMinMaxValues": [
+        6.0,
+        9.0
+      ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
+      "Name": "천 신발",
       "ItemType": 1,
       "ItemSubType": 4,
-      "Icon": "Boots1.sprite",
+      "Icon": "boots_01.sprite",
       "DataId": 20400001
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        6
+      ],
+      "DefaultOptions": [
+        "Armour"
+      ],
+      "DefaultMinMaxValues": [
+        6.0,
+        10.0
+      ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
+      "Name": "가죽 신발",
+      "ItemType": 1,
+      "ItemSubType": 4,
+      "Icon": "boots_02.sprite",
+      "DataId": 20400002
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        6
+      ],
+      "DefaultOptions": [
+        "Armour"
+      ],
+      "DefaultMinMaxValues": [
+        6.0,
+        11.0
+      ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
+      "Name": "가죽 장화",
+      "ItemType": 1,
+      "ItemSubType": 4,
+      "Icon": "leather_boots_01.sprite",
+      "DataId": 20400003
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        6
+      ],
+      "DefaultOptions": [
+        "Armour"
+      ],
+      "DefaultMinMaxValues": [
+        6.0,
+        12.0
+      ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
+      "Name": "소가죽 장화",
+      "ItemType": 1,
+      "ItemSubType": 4,
+      "Icon": "leather_boots_02.sprite",
+      "DataId": 20400004
     },
     {
       "DropLevel": 1,
@@ -115,11 +311,34 @@
       ],
       "ImplicitOptions": null,
       "ImplicitMinMaxValues": null,
-      "Name": "판금 조끼",
+      "Name": "가죽 갑옷",
       "ItemType": 1,
       "ItemSubType": 5,
-      "Icon": "BodyArmour1.sprite",
+      "Icon": "leather_armor.sprite",
       "DataId": 20500001
+    },
+    {
+      "DropLevel": 1,
+      "RequireStats": [
+        "Strength"
+      ],
+      "RequireStatValues": [
+        12
+      ],
+      "DefaultOptions": [
+        "Armour"
+      ],
+      "DefaultMinMaxValues": [
+        19.0,
+        28.0
+      ],
+      "ImplicitOptions": null,
+      "ImplicitMinMaxValues": null,
+      "Name": "판금 갑옷",
+      "ItemType": 1,
+      "ItemSubType": 5,
+      "Icon": "iron_armor.sprite",
+      "DataId": 20500002
     }
   ]
 }

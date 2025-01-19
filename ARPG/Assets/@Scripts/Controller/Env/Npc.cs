@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D.Animation;
 
 public interface INpcInteraction
 {
@@ -33,18 +34,38 @@ public class Npc : InteractableObject
 
 		ObjectType = Define.EObjectType.Npc;
 
+		
+
 		return true;
 	}
 
-	public virtual void SetInfo(int templateID)
+    public void Start()
+    {
+		switch (NpcData.AnimState)
+		{
+			case "Idle":
+				_animation.Idle();
+				break;
+			case "Die":
+				_animation.Die();
+				break;
+
+			default:
+				_animation.Idle();
+				break;
+		}
+	}
+
+    public virtual void SetInfo(int templateID)
 	{
 		Collider.isTrigger = true;
 
 		DataTemplateID = templateID;
 		NpcData = Managers.Data.NpcDic[templateID];
+		_character.Body.GetComponent<SpriteLibrary>().spriteLibraryAsset = Managers.Resource.Load<SpriteLibraryAsset>(NpcData.SpriteLibrary);
+        
 
-
-		SetSpineAnimation(NpcData.SkeletonDataID, SortingLayers.NPC);
+		//SetSpineAnimation(NpcData.SkeletonDataID, SortingLayers.NPC);
 
 		GameObject nameTagObject = Managers.Resource.Instantiate("NameTag");
 

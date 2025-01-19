@@ -63,7 +63,7 @@ public class ItemBase
 					switch (ItemData.ItemSubType)
 					{
 						case EItemSubType.Weapon:
-							return new Vector2Int(1, 3);
+							return new Vector2Int(2, 3);
 						case EItemSubType.Helmet:
 							return new Vector2Int(2, 2);
 						case EItemSubType.Gloves:

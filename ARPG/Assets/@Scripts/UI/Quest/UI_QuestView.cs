@@ -27,7 +27,7 @@ public class UI_QuestView : UI_Base
         for (int i = 0; i < questIds.Count; i++)
         {
             int questId = questIds[i];
-
+            Debug.Log(questId);
             GameObject questDisc = Managers.Resource.Instantiate("UI_QuestDescriptionView", transform);
             questDisc.name = questDisc.name + questId;
             questDisc.GetComponent<UI_QuestDescriptionView>().SetInfo(questId);

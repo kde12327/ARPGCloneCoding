@@ -150,15 +150,16 @@ public class MapManager
 						Waypoint env = Managers.Object.Spawn<Waypoint>(worldPos, tile.DataTemplateID);
 						env.SetCellPos(cellPos, true);
 					}
-                    else
+					else if(envData.PrefabLabel == "PlayerStartingpoint")
+					{
+						PlayerStartingpoint env = Managers.Object.Spawn<PlayerStartingpoint>(worldPos, tile.DataTemplateID);
+						env.SetCellPos(cellPos, true);
+					}
+					else
                     {
 						Env env = Managers.Object.Spawn<Env>(worldPos, tile.DataTemplateID);
 						env.SetCellPos(cellPos, true);
 					}
-                    
-					
-                    
-					
 
 				}
 				else if(tile.ObjectType == Define.EObjectType.Monster)

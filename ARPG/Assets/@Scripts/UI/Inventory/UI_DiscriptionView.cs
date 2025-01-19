@@ -37,6 +37,29 @@ public class UI_DiscriptionView : UI_Base
         return true;
     }
 
+    public void SetInfo(Data.PassiveSkillData data)
+    {
+        GetText((int)Texts.DiscriptionNameText).text = data.NameDescriptionTextID;
+
+        GameObject discriptionParent = GetObject((int)GameObjects.DiscriptionVertical);
+
+        int count = DiscriptionList.Count;
+        GameObject[] gos = DiscriptionList.ToArray();
+        for (int i = 0; i < count; i++)
+        {
+            Managers.Resource.Destroy(gos[i]);
+        }
+        DiscriptionList.Clear();
+
+
+        GetImage((int)Images.DiscriptionNameImage).color = UIColor.NORMAL;
+        GetText((int)Texts.DiscriptionNameText).color = UIColor.NORMALTEXT;
+
+        GameObject content = Managers.Resource.Instantiate("UI_Discription", discriptionParent.transform);
+        content.GetComponent<UI_Discription>().SetText(data.ContentDescriptionTextID);
+        DiscriptionList.Add(content);
+
+    }
 
     public void SetInfo(ItemBase item)
     {

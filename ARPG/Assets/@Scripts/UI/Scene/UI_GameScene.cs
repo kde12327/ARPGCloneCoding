@@ -24,7 +24,7 @@ public class UI_GameScene : UI_Scene
         UI_ItemFlask5,
         UI_QuestView,
         UI_RewardView,
-
+        UI_GameMenuView
     }
 
     enum Images
@@ -128,6 +128,9 @@ public class UI_GameScene : UI_Scene
         
         var rewardView = GetObject((int)GameObjects.UI_RewardView);
         rewardView.SetActive(false);
+        
+        var gameMenuView = GetObject((int)GameObjects.UI_GameMenuView);
+        gameMenuView.SetActive(false);
 
         var usingItemImage = GetImage((int)Images.UsingItemImage);
         usingItemImage.gameObject.SetActive(false);
@@ -224,6 +227,12 @@ public class UI_GameScene : UI_Scene
     {
         var passiveSkillView = GetObject((int)GameObjects.UI_PassiveSkillView);
         passiveSkillView.SetActive(!passiveSkillView.activeSelf);
+
+        if (passiveSkillView.activeSelf == false)
+        {
+            EnableDiscription();
+        }
+
         /*if (passiveSkillView.activeSelf)
         {
             passiveSkillView.GetComponent<UI_PassiveSkillView>().UpdateStatusView();
@@ -240,6 +249,12 @@ public class UI_GameScene : UI_Scene
             playerStatus.GetComponent<UI_PlayerStatusView>().UpdateStatusView();
         }
 
+    }
+
+    public void GameMenuToggle()
+    {
+        var gameMenuView = GetObject((int)GameObjects.UI_GameMenuView);
+        gameMenuView.SetActive(!gameMenuView.activeSelf);
     }
 
     public void SetRewardItems(List<UI_Item> items)
@@ -279,17 +294,33 @@ public class UI_GameScene : UI_Scene
 
 
 
-    public void SetDiscription(ItemBase item, float top, float left, float right)
+    public void SetDiscription<T>(T obj, RectTransform rect)
     {
+
         var discriptionView = GetObject((int)GameObjects.UI_DiscriptionView);
         discriptionView.SetActive(true);
-        discriptionView.GetComponent<UI_DiscriptionView>().SetInfo(item);
+        if(obj is ItemBase)
+        {
+            discriptionView.GetComponent<UI_DiscriptionView>().SetInfo(obj as ItemBase);
+        }
+        else if(obj is Data.PassiveSkillData)
+        {
+            discriptionView.GetComponent<UI_DiscriptionView>().SetInfo(obj as Data.PassiveSkillData);
+        }
+
+
+        Vector3[] worldCorners = new Vector3[4];
+        rect.GetWorldCorners(worldCorners);
+
+        float left = worldCorners[0].x;
+        float right = worldCorners[3].x;
+        float top = worldCorners[1].y;
+
 
         // 위치
         // 우선순위: 위, 좌, 우
         RectTransform discriptionRect = discriptionView.GetComponent<RectTransform>();
 
-        Vector3[] worldCorners = new Vector3[4];
         discriptionRect.GetWorldCorners(worldCorners);
 
         // worldCorners[0]은 좌하단, worldCorners[1]은 좌상단, worldCorners[2]은 우상단, worldCorners[3]은 우하단 좌표를 가짐
@@ -311,7 +342,7 @@ public class UI_GameScene : UI_Scene
 
 
 
-        newPosition = new Vector2((right + left) / 2 , top);
+        newPosition = new Vector2((right + left) / 2, top);
         //Debug.Log(newPosition.x + ", " + newPosition.y + ", " + discriptionWidth + ", " + discriptionHeight);
         // 1920 1080
         //Debug.Log(Screen.width + ", " + Screen.height );
@@ -321,7 +352,7 @@ public class UI_GameScene : UI_Scene
         if (top + discriptionHeight < Screen.height)  // 화면 안에서 위쪽에 위치 가능
         {
             // 중앙에 위치 (xMin과 xMax의 중간값으로 설정)
-            newPosition = new Vector2((right + left) / 2 , top);
+            newPosition = new Vector2((right + left) / 2, top);
 
         }
         else if (left - discriptionWidth >= 0)  // 화면 왼쪽에 위치 가능
@@ -344,7 +375,6 @@ public class UI_GameScene : UI_Scene
 
         // RectTransform의 위치 설정
         discriptionRect.anchoredPosition = localPoint;
-
     }
 
     public void EnableDiscription()

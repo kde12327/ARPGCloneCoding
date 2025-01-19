@@ -1,3 +1,3 @@
 ﻿ ,BaseType,ItemType,ItemSubType,Icon,FlaskType,FlaskSprite,FlaskFillSprite,EffectName,EffectValue,EffectTime,MaximumCharge,ChargePerUse
-25000001,생명 플라스크,4,0,LifeFlaskImage1.sprite,0,LifeManaFlask1.sprite,LifeFlaskFill1.sprite,LifeRegen,100,4,20,7
-25000002,마나 플라스크,4,0,ManaFlaskImage1.sprite,1,LifeManaFlask1.sprite,ManaFlaskFill1.sprite,ManaRegen,100,4,20,7
+25000001,생명 플라스크,4,0,hp_potion.sprite,0,Flask_01.sprite,LifeFlaskFill_01.sprite,LifeRegen,100,4,20,7
+25000002,마나 플라스크,4,0,mana_potion.sprite,1,Flask_01.sprite,ManaFlaskFill_01.sprite,ManaRegen,100,4,20,7

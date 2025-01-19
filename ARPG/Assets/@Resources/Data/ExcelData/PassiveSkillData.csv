@@ -8,3 +8,4 @@
 900007,힘 소형 노드,힘 +10,Plusstrength_passive_skill_icon.sprite,additional_strength,10,900004,0
 900008,민첩 소형 노드,민첩 +10,Plusdexterity_passive_skill_icon.sprite,additional_dexterity,10,900005,0
 900009,지능 소형 노드,지능 +10,Plusintelligence_passive_skill_icon.sprite,additional_intelligence,10,900006,0
+900010,생명력 최대치 노드,생명력 최대치 + 20,Plusstrength_passive_skill_icon.sprite,base_maximum_life,20,900007&900008,0

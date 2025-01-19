@@ -22,6 +22,19 @@ public class MovementSkill : SkillBase
     protected override void OnAttackEvent()
     {
 
-        
+        if (Owner.Anim == null)
+        {
+            OnAttackEndEvent();
+        }
+    }
+
+	protected override void OnAttackEndEvent()
+    {
+        Owner.OnAnimAttackEnded -= OnAttackEndEvent;
+
+        if (Owner.CreatureState == Define.ECreatureState.Skill)
+        {
+            Owner.CreatureState = Define.ECreatureState.Move;
+        }
     }
 }

@@ -3,7 +3,8 @@
     {
       "DataId": 50000001,
       "DescriptionTextID": "타클레이",
-      "SkeletonDataID": "004_SkeletonData",
+      "SpriteLibrary": "HeavyKnight",
+      "AnimState": "Idle",
       "InteractionTypes": [
         0
       ],
@@ -17,8 +18,9 @@
     },
     {
       "DataId": 50000002,
-      "DescriptionTextID": "마법사",
-      "SkeletonDataID": "002_SkeletonData",
+      "DescriptionTextID": "시체",
+      "SpriteLibrary": "Spearman",
+      "AnimState": "Die",
       "InteractionTypes": [
         0
       ],

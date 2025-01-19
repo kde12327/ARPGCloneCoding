@@ -31,6 +31,7 @@ public class UI_Item : UI_Base
     enum Images
     {
         ItemImage,
+        ItemPanel,
         FlaskFill
     }
     enum GameObjects
@@ -48,7 +49,7 @@ public class UI_Item : UI_Base
         BindTexts(typeof(Texts));
         BindObjects(typeof(GameObjects));
 
-        GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
+        GetImage((int)Images.ItemPanel).gameObject.BindEvent((evt) =>
         {
             
             if(IsReward && evt.button == PointerEventData.InputButton.Left)
@@ -88,21 +89,13 @@ public class UI_Item : UI_Base
                 }
             }
         }, Define.EUIEvent.Click);
-        GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
+        GetImage((int)Images.ItemPanel).gameObject.BindEvent((evt) =>
         {
-            var rect = GetImage((int)Images.ItemImage).GetComponent<RectTransform>();
+            var rect = GetImage((int)Images.ItemPanel).GetComponent<RectTransform>();
 
-            // RectTransform의 World 좌표를 구해서 화면 내 위치로 변환
-            Vector3[] worldCorners = new Vector3[4];
-            rect.GetWorldCorners(worldCorners);
-
-            float left = worldCorners[0].x;
-            float right = worldCorners[3].x;
-            float top = worldCorners[1].y;
-
-            Managers.UI.GetSceneUI<UI_GameScene>().SetDiscription(Item, top, left, right);
+            Managers.UI.GetSceneUI<UI_GameScene>().SetDiscription(Item, rect);
         }, Define.EUIEvent.PointerEnter);
-        GetImage((int)Images.ItemImage).gameObject.BindEvent((evt) =>
+        GetImage((int)Images.ItemPanel).gameObject.BindEvent((evt) =>
         {
 
             Managers.UI.GetSceneUI<UI_GameScene>().EnableDiscription();
@@ -121,6 +114,7 @@ public class UI_Item : UI_Base
                     SetActiveSocket(false);
                 }, Define.EUIEvent.PointerExit);*/
 
+        GetImage((int)Images.ItemPanel).gameObject.SetActive(false);
         GetImage((int)Images.ItemImage).gameObject.SetActive(false);
         GetText((int)Texts.StackSizeText).gameObject.SetActive(false);
 
@@ -133,10 +127,12 @@ public class UI_Item : UI_Base
     }
     public void SetInfo(ItemBase item)
     {
+        GetImage((int)Images.ItemPanel).gameObject.SetActive(true);
         GetImage((int)Images.ItemImage).gameObject.SetActive(true);
         Item = item;
         if(Item == null)
         {
+            GetImage((int)Images.ItemPanel).gameObject.SetActive(false);
             GetImage((int)Images.ItemImage).gameObject.SetActive(false);
             GetText((int)Texts.StackSizeText).gameObject.SetActive(false);
 
@@ -150,7 +146,12 @@ public class UI_Item : UI_Base
         
         if(!IsFlaskViewer)
             item.UIItem = this;
-        GetImage((int)Images.ItemImage).GetComponent<RectTransform>().sizeDelta *= Item.ItemSize;
+
+        // 이미지 사이즈 조정
+        GetImage((int)Images.ItemPanel).GetComponent<RectTransform>().sizeDelta *= Item.ItemSize;
+        GetImage((int)Images.ItemImage).GetComponent<RectTransform>().sizeDelta *= Mathf.Min(Item.ItemSize.x, Item.ItemSize.y);
+
+        // 아이템 타입별 ui 활성화
         if(item.ItemType == Define.EItemType.Consumable)
         {
             GetText((int)Texts.StackSizeText).gameObject.SetActive(true);
@@ -246,7 +247,7 @@ public class UI_Item : UI_Base
     {
         IsItemHolding = true;
         GetComponent<Image>().raycastTarget = false;
-        GetImage((int)Images.ItemImage).raycastTarget = false;
+        GetImage((int)Images.ItemPanel).raycastTarget = false;
     }
 
     public void ItemUsing()
@@ -258,7 +259,7 @@ public class UI_Item : UI_Base
     {
         IsItemHolding = false;
         GetComponent<Image>().raycastTarget = true;
-        GetImage((int)Images.ItemImage).raycastTarget = true;
+        GetImage((int)Images.ItemPanel).raycastTarget = true;
     }
 
 /*    public void SetActiveSocket(bool value)
@@ -272,12 +273,12 @@ public class UI_Item : UI_Base
         if(value == true)
         {
             GetComponent<Image>().raycastTarget = false;
-            GetImage((int)Images.ItemImage).raycastTarget = false;
+            GetImage((int)Images.ItemPanel).raycastTarget = false;
         }
         else
         {
             GetComponent<Image>().raycastTarget = true;
-            GetImage((int)Images.ItemImage).raycastTarget = true;
+            GetImage((int)Images.ItemPanel).raycastTarget = true;
         }
     }
 

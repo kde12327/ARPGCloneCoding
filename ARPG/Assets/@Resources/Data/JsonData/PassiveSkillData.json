@@ -137,6 +137,23 @@
         900006
       ],
       "StartNode": 0
+    },
+    {
+      "DataId": 900010,
+      "NameDescriptionTextID": "생명력 최대치 노드",
+      "ContentDescriptionTextID": "생명력 최대치 + 20",
+      "Icon": "Plusstrength_passive_skill_icon.sprite",
+      "StatNames": [
+        "base_maximum_life"
+      ],
+      "StatValues": [
+        20.0
+      ],
+      "LinkIds": [
+        900007,
+        900008
+      ],
+      "StartNode": 0
     }
   ]
 }

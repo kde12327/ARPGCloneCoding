@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AddressableAssets;
 using static Define;
 
 public class UI_TitleScene : UI_Scene
@@ -32,11 +33,21 @@ public class UI_TitleScene : UI_Scene
 		});
 
 		GetObject((int)GameObjects.StartImage).gameObject.SetActive(false);
-		GetText((int)Texts.StartText).text = $"";
+		GetText((int)Texts.StartText).text = $"Download Assets";
+
+		//init addressable
+		StartCoroutine(InitAddressable());
 
 		StartLoadAssets();
 
 		return true;
+    }
+
+	IEnumerator InitAddressable()
+    {
+		var init = Addressables.InitializeAsync();
+
+		yield return init;
     }
 
 	void StartLoadAssets()
@@ -55,6 +66,11 @@ public class UI_TitleScene : UI_Scene
 				GetText((int)Texts.StartText).text = "Touch Screen To Start";
 
 
+			}
+            else
+            {
+				GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);
+				GetText((int)Texts.StartText).text = $"Downloading ... ({count}/{totalCount})";
 			}
 		});
 	}

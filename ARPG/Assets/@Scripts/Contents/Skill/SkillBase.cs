@@ -46,6 +46,11 @@ public abstract class SkillBase : InitBase
 			Owner.SkeletonAnim.AnimationState.Complete += OnAnimCompleteHandler;*/
 		}
 
+		if(Owner.Anim != null)
+        {
+			Owner.OnAnimAttacked -= OnAttackEvent;
+		}
+
 		// Stat
 		DamageMultiplier = SkillData.DamageMultiplier;
 		ManaMultiplier = 1.0f;
@@ -60,24 +65,45 @@ public abstract class SkillBase : InitBase
 			return;
 		if (Owner.IsValid() == false)
 			return;
-		if (Owner.SkeletonAnim == null)
-			return;
-		if (Owner.SkeletonAnim.AnimationState == null)
-			return;
+		if (Owner.SkeletonAnim != null && Owner.SkeletonAnim.AnimationState != null)
+        {
+			Owner.SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
 
-		Owner.SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
+		}
+
+		if (Owner.Anim != null)
+		{
+			Owner.OnAnimAttacked -= OnAttackEvent;
+			Owner.OnAnimAttackEnded -= OnAttackEndEvent;
+		}
 	}
 	public virtual void DoSkill(Vector2 target)
 	{
 		Target = target;
-
-		Owner.SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
-        Owner.SkeletonAnim.AnimationState.Event += OnAnimEventHandler;
-
 		float timeScale = 1.0f * AttackSpeedMultiplier;
-
 		Owner.CreatureState = Define.ECreatureState.Skill;
-		Owner.PlayAnimation(0, SkillData.AnimName, false).TimeScale = timeScale;
+
+		if (Owner.SkeletonAnim != null)
+        {
+			Owner.SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
+			Owner.SkeletonAnim.AnimationState.Event += OnAnimEventHandler;
+			
+			Owner.PlayAnimation(0, SkillData.AnimName, false).TimeScale = timeScale;
+
+		}
+
+		if (Owner.Anim != null)
+		{
+			Owner.OnAnimAttacked -= OnAttackEvent;
+			Owner.OnAnimAttacked += OnAttackEvent;
+			Owner.OnAnimAttackEnded -= OnAttackEndEvent;
+			Owner.OnAnimAttackEnded += OnAttackEndEvent;
+			//Owner.Anim.SetTrigger(SkillData.ClassName);
+		}
+
+
+
+
 
 		//TODO
 		Owner.LookAtPosition(target);
@@ -156,7 +182,10 @@ public abstract class SkillBase : InitBase
 
 	protected virtual void OnAnimEventHandler(TrackEntry trackEntry, Event e)
     {
-		Owner.SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
+		if(Owner.SkeletonAnim != null)
+        {
+			Owner.SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
+		}
 
 		if (trackEntry.Animation.Name == SkillData.AnimName)
 			OnAttackEvent();
@@ -168,6 +197,7 @@ public abstract class SkillBase : InitBase
 	}
 
 	protected abstract void OnAttackEvent();
+	protected abstract void OnAttackEndEvent();
 
 	public event Action<float> OnCooldownStarted;
 }

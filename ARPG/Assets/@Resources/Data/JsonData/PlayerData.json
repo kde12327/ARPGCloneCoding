@@ -16,7 +16,7 @@
       "CriRate": 0.15,
       "CriDamage": 1.5,
       "IconImage": "002.sprite",
-      "SkeletonDataID": "002_SkeletonData",
+      "SpriteLibrary": "002_SkeletonData",
       "SkillIdList": [
         10002
       ]
@@ -37,7 +37,7 @@
       "CriRate": 0.15,
       "CriDamage": 1.5,
       "IconImage": "001.sprite",
-      "SkeletonDataID": "001_SkeletonData",
+      "SpriteLibrary": "001_SkeletonData",
       "SkillIdList": [
         10001
       ]
@@ -58,7 +58,7 @@
       "CriRate": 0.15,
       "CriDamage": 1.5,
       "IconImage": "003.sprite",
-      "SkeletonDataID": "003_SkeletonData",
+      "SpriteLibrary": "003_SkeletonData",
       "SkillIdList": [
         10002
       ]
@@ -79,7 +79,7 @@
       "CriRate": 0.15,
       "CriDamage": 1.5,
       "IconImage": "004.sprite",
-      "SkeletonDataID": "004_SkeletonData",
+      "SpriteLibrary": "004_SkeletonData",
       "SkillIdList": [
         10001,
         10018,
@@ -102,7 +102,7 @@
       "CriRate": 0.15,
       "CriDamage": 1.5,
       "IconImage": "005.sprite",
-      "SkeletonDataID": "005_SkeletonData",
+      "SpriteLibrary": "005_SkeletonData",
       "SkillIdList": [
         10001
       ]
@@ -123,7 +123,7 @@
       "CriRate": 0.15,
       "CriDamage": 1.5,
       "IconImage": "020.sprite",
-      "SkeletonDataID": "020_SkeletonData",
+      "SpriteLibrary": "020_SkeletonData",
       "SkillIdList": [
         10001,
         10020

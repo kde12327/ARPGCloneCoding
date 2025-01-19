@@ -4,7 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Assets.PixelFantasy.Common.Scripts;
+
 using static Define;
+using UnityEngine.U2D.Animation;
 
 public class Creature : BaseObject
 {
@@ -17,6 +20,9 @@ public class Creature : BaseObject
     public StatComponent Stats;
 
     protected float StopTheshold = 0.02f;
+
+    protected Vector3 PrevPosition;
+
 
 
     #region Stats
@@ -76,7 +82,7 @@ public class Creature : BaseObject
     }
 
 
-    protected ECreatureState _creatureState = ECreatureState.None;
+    protected ECreatureState _creatureState = ECreatureState.Idle;
 
     //protected float Speed = 0.0f;
     public virtual ECreatureState CreatureState
@@ -91,6 +97,10 @@ public class Creature : BaseObject
             }
         }
     }
+
+    public event Action OnAnimAttacked;
+    public event Action OnAnimAttackEnded;
+
 
     public override bool Init()
     {
@@ -107,6 +117,7 @@ public class Creature : BaseObject
         if(ObjectType == EObjectType.Monster)
         {
             CreatureData = Managers.Data.MonsterDic[templateID];
+            _character.Body.GetComponent<SpriteLibrary>().spriteLibraryAsset = Managers.Resource.Load<SpriteLibraryAsset>(CreatureData.SpriteLibrary);
         }
         else if(ObjectType == EObjectType.Player)
         {
@@ -127,7 +138,7 @@ public class Creature : BaseObject
         RigidBody.mass = 0;
 
         // Spine
-        SetSpineAnimation(CreatureData.SkeletonDataID, SortingLayers.CREATURE);
+        //SetSpineAnimation(CreatureData.SkeletonDataID, SortingLayers.CREATURE);
 
         // Skills
         // CreatureData.SkillIdList;
@@ -141,7 +152,7 @@ public class Creature : BaseObject
         Hp = Stats.GetStat(Stat.Life).Value;
 
         // State
-        CreatureState = ECreatureState.Idle;
+        //CreatureState = ECreatureState.Idle;
 
         //Effect
         Effects = gameObject.AddComponent<EffectComponent>();
@@ -154,6 +165,8 @@ public class Creature : BaseObject
         GameObject go = Managers.Resource.Instantiate("HPBar");
         HPBar hp = go.GetComponent<HPBar>();
         hp.SetInfo(this);
+
+        PrevPosition = transform.position;
     }
 
     protected virtual void Update()
@@ -161,8 +174,10 @@ public class Creature : BaseObject
         if (CreatureState != ECreatureState.Skill)
             LerpToCellPos(CreatureData.MoveSpeed);
 
+        
+        
 
-        if(EnergyResetTimer > 0)
+        if (EnergyResetTimer > 0)
         {
             EnergyResetTimer -= Time.deltaTime;
         }
@@ -172,20 +187,44 @@ public class Creature : BaseObject
         }
     }
 
+    protected virtual void FixedUpdate()
+    {
+        if (Anim != null)
+        {
+            //Anim.SetFloat("Speed", (transform.position - PrevPosition).magnitude * 10);
+            //Debug.Log((transform.position - PrevPosition).magnitude * 10);
+            PrevPosition = transform.position;
+        }
+    }
+
     protected override void UpdateAnimation()
     {
         switch (CreatureState)
         {
             case ECreatureState.Idle:
+                if(_character != null)
+                {
+                    _animation.Idle();
+                }
                 PlayAnimation(0, AnimName.IDLE, true);
+
                 break;
             case ECreatureState.Skill:
                 //PlayAnimation(0, AnimName.ATTACK_A, true);
                 break;
             case ECreatureState.Move:
+                if (_character != null)
+                {
+                    _animation.Run();
+
+                }
                 PlayAnimation(0, AnimName.MOVE, true);
                 break;
             case ECreatureState.OnDamaged:
+                if (_character != null)
+                {
+                    _animation.Hit();
+                }
                 PlayAnimation(0, AnimName.IDLE, true);
                 if(Skills.CurrentSkill != null)
                 {
@@ -193,6 +232,10 @@ public class Creature : BaseObject
                 }
                 break;
             case ECreatureState.Dead:
+                if (_character != null)
+                {
+                    _animation.Die();
+                }
                 PlayAnimation(0, AnimName.DEAD, true);
                 RigidBody.simulated = false;
                 break;
@@ -200,6 +243,26 @@ public class Creature : BaseObject
                 break;
         }
     }
+
+    public void OnAnimAttack()
+    {
+        if(OnAnimAttacked != null)
+        {
+            OnAnimAttacked.Invoke();
+        }
+    }
+    
+    public void OnAnimAttackEnd()
+    {
+
+        if(OnAnimAttackEnded != null)
+        {
+            Anim.speed = 1.0f;
+            OnAnimAttackEnded.Invoke();
+        }
+    }
+
+    
 
     #region AI
 

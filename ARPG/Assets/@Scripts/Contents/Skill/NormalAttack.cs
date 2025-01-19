@@ -1,7 +1,6 @@
 using Spine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Define;
 
@@ -23,7 +22,11 @@ public class NormalAttack : SkillBase
     {
         base.DoSkill(target);
 
-        
+        if (Owner._animation != null)
+        {
+            Owner._animation.Attack();
+        }
+
     }
 
     protected override void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
@@ -35,6 +38,9 @@ public class NormalAttack : SkillBase
     }
     protected override void OnAttackEvent()
     {
+        Owner.OnAnimAttacked -= OnAttackEvent;
+
+
         /*if (Owner.Target.IsValid() == false)
             return;*/
 
@@ -65,10 +71,18 @@ public class NormalAttack : SkillBase
             GenerateProjectile(Owner, Owner.CenterPosition);
         }
 
+        if (Owner.Anim == null)
+        {
+            OnAttackEndEvent();
+        }
+    }
+    protected override void OnAttackEndEvent()
+    {
+        Owner.OnAnimAttackEnded -= OnAttackEndEvent;
+
         if (Owner.CreatureState == Define.ECreatureState.Skill)
         {
             Owner.CreatureState = Define.ECreatureState.Move;
         }
     }
-
 }

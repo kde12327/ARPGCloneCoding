@@ -1,36 +1,20 @@
 {
   "envs": [
     {
-      "DataId": 300001,
-      "DescriptionTextID": "나무1",
-      "PrefabLabel": "GatherablePrefab",
-      "MaxHp": 10.0,
-      "IsInteractable": 0,
-      "SkeletonDataIDs": [
-        "wood_1_SkeletonData",
-        "wood_2_SkeletonData"
-      ]
-    },
-    {
-      "DataId": 301000,
-      "DescriptionTextID": "미네랄1",
-      "PrefabLabel": "GatherablePrefab",
-      "MaxHp": 10.0,
-      "IsInteractable": 0,
-      "SkeletonDataIDs": [
-        "wood_1_SkeletonData",
-        "wood_2_SkeletonData"
-      ]
-    },
-    {
       "DataId": 301001,
       "DescriptionTextID": "웨이포인트",
       "PrefabLabel": "Waypoint",
       "MaxHp": 0.0,
       "IsInteractable": 1,
-      "SkeletonDataIDs": [
-        "0"
-      ]
+      "SpriteLibrary": "0"
+    },
+    {
+      "DataId": 301002,
+      "DescriptionTextID": "플레이어스타팅포인트",
+      "PrefabLabel": "PlayerStartingpoint",
+      "MaxHp": 0.0,
+      "IsInteractable": 1,
+      "SpriteLibrary": "0"
     }
   ]
 }

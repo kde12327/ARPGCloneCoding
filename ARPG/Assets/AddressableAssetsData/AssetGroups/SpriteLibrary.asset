@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: SpriteLibrary
+  m_EditorClassIdentifier: 
+  m_GroupName: SpriteLibrary
+  m_Data:
+    m_SerializedData: []
+  m_GUID: e85730face5875c4ba71b4c1d0951f38
+  m_SerializeEntries:
+  - m_GUID: 2add6174195e465cb0ecd47a58ae60ba
+    m_Address: GreenJelly
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 358a5d6c75534e7e909b83786f5d732e
+    m_Address: BrownSpider
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e07d216f0234755a3cd43c0e42cafed
+    m_Address: BlackSpider
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 24f48c5a4e8d4ab38a4a278af2c80508
+    m_Address: BrownStump
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f3c121c0d932407eaaac10369112702b
+    m_Address: BrownBear
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2443b6e4370647b69e340ca4a1d143f9
+    m_Address: GoblinArcher
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5cab341669e34433b5d096c7a65623dd
+    m_Address: Spearman
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12de62cfce7bd8344a8f8b0fba8e1648
+    m_Address: HeavyKnight
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99794edf0a4fc114ba47bdf92cc3b129
+    m_Address: WoodenChestbox
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d9824849e4582004ba9e5a22c383251d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: f59768402b5a6e04f847b10439df8c64, type: 2}
+    - {fileID: 11400000, guid: 98a3691c23d8f7a469eb3d0d06c36a44, type: 2}

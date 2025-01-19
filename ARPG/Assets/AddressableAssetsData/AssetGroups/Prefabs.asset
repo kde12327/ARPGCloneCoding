@@ -17,18 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 4105add6f10b0fa4f876f83e58835077
   m_SerializeEntries:
-  - m_GUID: 3a5e4b1bc5f22d243af02ab5bdf4d607
-    m_Address: Player
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e09707d07c70ff240a789d33a1a84b4c
-    m_Address: Monster
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b0447fc76449edd479ad73f30d3c094c
     m_Address: Env
     m_ReadOnly: 0
@@ -77,12 +65,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 86a7fa24f01dfc7439972f9eabede3a9
-    m_Address: Npc
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a2c4c10e47b251d428df5a6fb9d44332
     m_Address: TownPortal
     m_ReadOnly: 0
@@ -107,7 +89,31 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 69632778a7721c44cb54535f12d38669
+  - m_GUID: a13dc2826f5dc544699995a7deda3fa2
+    m_Address: PlayerStartingpoint
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e7a847eeb8300e45a52ab5d2a8cf4e5
+    m_Address: Player
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c8c16e5a6167ab4fac1ea3c8543e540
+    m_Address: Monster
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7142a4d6b9ba2cb44ab238c7dcc391f4
+    m_Address: Npc
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 286a4cd8811cc2343893dd85b2eed6f7
     m_Address: QuestObject
     m_ReadOnly: 0
     m_SerializedLabels:

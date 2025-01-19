@@ -62,6 +62,16 @@ public class AreaSkill : SkillBase
 			}
 		}
 
+		if (Owner.SkeletonAnim != null)
+		{
+			OnAttackEndEvent();
+		}
+	}
+
+	protected override void OnAttackEndEvent()
+	{
+		Owner.OnAnimAttackEnded -= OnAttackEndEvent;
+
 		if (Owner.CreatureState == Define.ECreatureState.Skill)
 		{
 			Owner.CreatureState = Define.ECreatureState.Move;

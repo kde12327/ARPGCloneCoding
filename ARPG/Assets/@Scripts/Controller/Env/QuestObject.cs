@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D.Animation;
 
 public class QuestObject : Env
 {
@@ -14,8 +15,9 @@ public class QuestObject : Env
 		DataTemplateID = templateID;
 		QuestObjectData = Managers.Data.QuestObjectDic[templateID];
 
-        
 
+
+		_character.Body.GetComponent<SpriteLibrary>().spriteLibraryAsset = Managers.Resource.Load<SpriteLibraryAsset>(QuestObjectData.SpriteLibrary);
 
 		GameObject nameTagObject = Managers.Resource.Instantiate("NameTag");
 		NameTag nameTag = nameTagObject.GetComponent<NameTag>();
@@ -68,6 +70,14 @@ public class QuestObject : Env
 		
 		Managers.Quest.ClearTargetQuest(Define.EQuestType.Interact, DataTemplateID);
 
-		Destroy(this.gameObject);
+		_character.Animator.SetBool("Idle", false);
+		_character.Animator.SetBool("Open", true);
+
+	}
+
+	public void OnOpenAnimEnd()
+    {
+		//Destroy(this.gameObject);
+
 	}
 }

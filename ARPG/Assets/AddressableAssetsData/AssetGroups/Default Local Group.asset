@@ -16,7 +16,37 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: bf925100fcae79340a6a2767d47be32e
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 91e4c373e5470ab45a5447ac19bae4a0
+    m_Address: hp_potion.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02033e18e3c5dc94d840e17cab77ea06
+    m_Address: mana_potion.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 54515d58d45c33b49b8880ebce60b7ae
+    m_Address: LifeFlaskFill_01.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8bde13a06f4d3604dac922cf8cd5717d
+    m_Address: ManaFlaskFill_01.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c50568e8fc5d2524d89c445ba4fa489c
+    m_Address: Flask_01.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d9824849e4582004ba9e5a22c383251d, type: 2}
   m_SchemaSet:

@@ -8,9 +8,7 @@
       "PrefabLabel": "Interactable",
       "MaxHp": 0.0,
       "IsInteractable": 1,
-      "SkeletonDataIDs": [
-        "0"
-      ]
+      "SpriteLibrary": "0"
     },
     {
       "MapName": "ACT01_Town_Map",
@@ -20,9 +18,7 @@
       "PrefabLabel": "Interactable",
       "MaxHp": 0.0,
       "IsInteractable": 1,
-      "SkeletonDataIDs": [
-        "0"
-      ]
+      "SpriteLibrary": "0"
     },
     {
       "MapName": "ACT01_Town_Map",
@@ -32,9 +28,7 @@
       "PrefabLabel": "Interactable",
       "MaxHp": 0.0,
       "IsInteractable": 1,
-      "SkeletonDataIDs": [
-        "0"
-      ]
+      "SpriteLibrary": "0"
     },
     {
       "MapName": "ACT01_02_Map",
@@ -44,9 +38,7 @@
       "PrefabLabel": "Interactable",
       "MaxHp": 0.0,
       "IsInteractable": 1,
-      "SkeletonDataIDs": [
-        "0"
-      ]
+      "SpriteLibrary": "0"
     },
     {
       "MapName": "ACT01_02_Map",
@@ -56,9 +48,7 @@
       "PrefabLabel": "Interactable",
       "MaxHp": 0.0,
       "IsInteractable": 1,
-      "SkeletonDataIDs": [
-        "0"
-      ]
+      "SpriteLibrary": "0"
     },
     {
       "MapName": "ACT01_03_Map",
@@ -68,9 +58,7 @@
       "PrefabLabel": "Interactable",
       "MaxHp": 0.0,
       "IsInteractable": 1,
-      "SkeletonDataIDs": [
-        "0"
-      ]
+      "SpriteLibrary": "0"
     }
   ]
 }

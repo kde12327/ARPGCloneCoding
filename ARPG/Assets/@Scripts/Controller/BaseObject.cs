@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Assets.PixelFantasy.PixelHeroes.Common.Scripts.CharacterScripts;
 using static Define;
+using Assets.PixelFantasy.PixelHeroes.Common.Scripts.ExampleScripts;
 
 public class BaseObject : InitBase
 {
@@ -13,9 +15,17 @@ public class BaseObject : InitBase
     public SkeletonAnimation SkeletonAnim { get; private set; }
     public Rigidbody2D RigidBody { get; private set; }
 
+	public Character _character;
+	public CharacterAnimation _animation;
+
+
 	public float ColliderRadius { get { return Collider != null ? Collider.radius : 0.0f; } }
 	//public float ColliderRadius { get { return Collider?.radius ?? 0.0f; } }
 	public Vector3 CenterPosition { get { return transform.position + Vector3.up * ColliderRadius; } }
+
+	public Animator Anim { get; private set; }
+
+	int direction = 0;
 
 	public int DataTemplateID { get; set; }
 
@@ -39,8 +49,11 @@ public class BaseObject : InitBase
         Collider = gameObject.GetOrAddComponent<CircleCollider2D>();
         SkeletonAnim = GetComponent<SkeletonAnimation>();
         RigidBody = GetComponent<Rigidbody2D>();
+		Anim = GetComponent<Animator>();
+		_character = GetComponent<Character>();
+		_animation = GetComponent<CharacterAnimation>();
 
-        return true;
+		return true;
     }
 	protected virtual void OnDisable()
 	{
@@ -143,10 +156,10 @@ public class BaseObject : InitBase
 
 	public void Flip(bool flag)
 	{
-		if (SkeletonAnim == null)
-			return;
-
-		SkeletonAnim.Skeleton.ScaleX = flag ? -1 : 1;
+		if (SkeletonAnim != null)
+			SkeletonAnim.Skeleton.ScaleX = flag ? -1 : 1;
+		if (_character != null)
+			_character.Body.transform.localScale = new Vector3(flag ? Mathf.Abs(_character.transform.localScale.x) : -Mathf.Abs(_character.transform.localScale.x), _character.transform.localScale.y, _character.transform.localScale.z);
 	}
 
 	public virtual void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
@@ -189,9 +202,15 @@ public class BaseObject : InitBase
 
 		Vector3 destPos = Managers.Map.Cell2World(CellPos);
 		Vector3 dir = destPos - transform.position;
+		if(Anim != null)
+        {
+			//Debug.Log("Lerp: " + destPos + ", " + transform.position);
+		}
+
 
 		if (dir.x < 0)
 			LookLeft = true;
+
 		else
 			LookLeft = false;
 
@@ -205,5 +224,8 @@ public class BaseObject : InitBase
 		float moveDist = Mathf.Min(dir.magnitude, moveSpeed * Time.deltaTime);
 		transform.position += dir.normalized * moveDist;
 	}
+
+
+
 	#endregion
 }

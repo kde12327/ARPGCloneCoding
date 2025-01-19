@@ -28,6 +28,11 @@ public class LeapSlam : MovementSkill
         endPoint = target;
         IsMoving = true;
 
+        if (Owner._animation != null)
+        {
+            Owner._animation.Jump();
+        }
+
 
         duration = durationDefault / AttackSpeedMultiplier;
     }
@@ -48,6 +53,16 @@ public class LeapSlam : MovementSkill
         }
 
 
+
+        if (Owner.Anim == null)
+        {
+            OnAttackEndEvent();
+        }
+    }
+
+    protected override void OnAttackEndEvent()
+    {
+        Owner.OnAnimAttackEnded -= OnAttackEndEvent;
 
         if (Owner.CreatureState == Define.ECreatureState.Skill)
         {

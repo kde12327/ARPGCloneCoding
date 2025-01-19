@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D.Animation;
 using static Define;
 
 public class Env : InteractableObject
@@ -48,6 +49,7 @@ public class Env : InteractableObject
 		/*string ranSpine = _data.SkeletonDataIDs[Random.Range(0, _data.SkeletonDataIDs.Count)];
 		SetSpineAnimation(ranSpine, SortingLayers.ENV);
 		*/
+		//_character.Body.GetComponent<SpriteLibrary>().spriteLibraryAsset = Managers.Resource.Load<SpriteLibraryAsset>(EnvData.SpriteLibrary);
 
 		EnvState = Define.EEnvState.Idle;
 

@@ -34,7 +34,21 @@ public class UI_PassiveSkill : UI_Base
         {
             UILinks[i].SetPassvieNode(this);
         }
+
+        gameObject.BindEvent(evt => 
+        {
+            var rect = GetImage((int)Images.PassiveSkillImage).GetComponent<RectTransform>();
+
+            Managers.UI.GetSceneUI<UI_GameScene>().SetDiscription(PassiveSkillData, rect);
+        }, Define.EUIEvent.PointerEnter);
         
+        gameObject.BindEvent(evt => 
+        {
+            var rect = GetImage((int)Images.PassiveSkillImage).GetComponent<RectTransform>();
+
+            Managers.UI.GetSceneUI<UI_GameScene>().EnableDiscription();
+        }, Define.EUIEvent.PointerExit);
+
 
         return true;
     }

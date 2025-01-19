@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D.Animation;
 using static Define;
 
 public class Player : Creature
@@ -178,6 +179,9 @@ public class Player : Creature
 
         ObjectType = EObjectType.Player;
 
+
+
+
         Managers.Game.OnMovePosChanged -= HandleOnMovePosChanged;
         Managers.Game.OnMovePosChanged += HandleOnMovePosChanged;
         Managers.Game.OnMouseStateChanged -= HandleOnMouseStateChanged;
@@ -212,12 +216,14 @@ public class Player : Creature
         PlayerData = CreatureData as Data.PlayerData;
         return true;
     }
+
+    
     public override void SetInfo(int templateID)
     {
         base.SetInfo(templateID);
 
         // State
-        CreatureState = ECreatureState.Idle;
+        //CreatureState = ECreatureState.Idle;
 
         // Skill
         Skills = gameObject.GetOrAddComponent<SkillComponent>();
@@ -336,6 +342,7 @@ public class Player : Creature
                 Managers.Map.RemoveObject(this);
                 SetCellPos(Managers.Map.World2Cell(NextPoint.transform.position), true);
                 DestPos = transform.position;
+                PrevPosition = transform.position;
             }
 
         }
@@ -347,6 +354,7 @@ public class Player : Creature
         if(forceMove == true)
         {
             DestPos = transform.position;
+            PrevPosition = transform.position;
         }
     }
 
@@ -358,6 +366,9 @@ public class Player : Creature
 
 
         Vector3 dir = (DestPos - transform.position);
+
+        
+
         //Debug.Log(dir.sqrMagnitude);
 
         if(CreatureState != ECreatureState.Skill)
@@ -389,6 +400,7 @@ public class Player : Creature
         }
 
         
+
     }
 
     /*protected override void UpdateIdle() 
@@ -411,7 +423,6 @@ public class Player : Creature
 
     private void OnStateIdle()
     {
-        //SetRigidBodyVelocity(Vector3.zero);
     }
     private void OnStateMove()
     {
@@ -419,11 +430,9 @@ public class Player : Creature
     }
     private void OnStateSkill()
     {
-        //SetRigidBodyVelocity(Vector3.zero);
     }
     private void OnStateDead()
     {
-        //SetRigidBodyVelocity(Vector3.zero);
     }
 
     private void HandleOnMovePosChanged(Vector3 pos)
