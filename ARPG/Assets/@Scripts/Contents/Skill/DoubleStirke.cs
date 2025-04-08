@@ -60,6 +60,9 @@ public class DoubleStrike : NormalAttack
         float radius = Util.GetEffectRadius(SkillData.EffectSize);
         List<Creature> targets = Managers.Object.FindConeRangeTargets(Owner, _skillDir, radius, _angleRange);
 
+        Owner._animation.CustumEffect("Slash");
+
+
         foreach (var target in targets)
         {
             if (target.IsValid())

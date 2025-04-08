@@ -47,12 +47,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b66f3ebb073721e4590a7eef4eb22d49
-    m_Address: Portal
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f6a81ed389f8a4e40a15762d8eec22fb
     m_Address: ItemHolder
     m_ReadOnly: 0
@@ -67,12 +61,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a2c4c10e47b251d428df5a6fb9d44332
     m_Address: TownPortal
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 432cf4b9334c14445a891219f3deccad
-    m_Address: Waypoint
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

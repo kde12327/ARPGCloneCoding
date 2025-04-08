@@ -53,6 +53,14 @@ public class InputManager
         {
             Managers.Game.KeyState = Define.EKeyState.Skill03;
         }
+        else if (Input.GetKey(KeyCode.T))
+        {
+            Managers.Game.KeyState = Define.EKeyState.Skill04;
+        }
+        else if (Input.GetKey(KeyCode.Space))
+        {
+            Managers.Game.KeyState = Define.EKeyState.Skill05;
+        }
 
         if (Input.GetKeyDown(KeyCode.C))
         {

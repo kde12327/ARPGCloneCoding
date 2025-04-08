@@ -2,19 +2,20 @@
   "npcs": [
     {
       "DataId": 50000001,
-      "DescriptionTextID": "타클레이",
+      "DescriptionTextID": "경비병",
       "SpriteLibrary": "HeavyKnight",
       "AnimState": "Idle",
       "InteractionTypes": [
-        0
+        0,
+        2
       ],
-      "ScriptIds": null,
       "VendorList": [
         0,
         1,
         2,
         3
-      ]
+      ],
+      "NeedQuestId": 0
     },
     {
       "DataId": 50000002,
@@ -24,8 +25,97 @@
       "InteractionTypes": [
         0
       ],
-      "ScriptIds": null,
-      "VendorList": null
+      "VendorList": null,
+      "NeedQuestId": 0
+    },
+    {
+      "DataId": 50000003,
+      "DescriptionTextID": "창고",
+      "SpriteLibrary": "SilverChestbox",
+      "AnimState": "Idle",
+      "InteractionTypes": [
+        0,
+        1
+      ],
+      "VendorList": null,
+      "NeedQuestId": 0
+    },
+    {
+      "DataId": 50000004,
+      "DescriptionTextID": "여인",
+      "SpriteLibrary": "TownGirl",
+      "AnimState": "Idle",
+      "InteractionTypes": [
+        0
+      ],
+      "VendorList": null,
+      "NeedQuestId": 0
+    },
+    {
+      "DataId": 50000005,
+      "DescriptionTextID": "경비병",
+      "SpriteLibrary": "Spearman",
+      "AnimState": "Idle",
+      "InteractionTypes": [
+        0
+      ],
+      "VendorList": null,
+      "NeedQuestId": 0
+    },
+    {
+      "DataId": 50000006,
+      "DescriptionTextID": "실종자",
+      "SpriteLibrary": "Missing1",
+      "AnimState": "Die",
+      "InteractionTypes": [
+        0
+      ],
+      "VendorList": null,
+      "NeedQuestId": 0
+    },
+    {
+      "DataId": 50000007,
+      "DescriptionTextID": "실종자",
+      "SpriteLibrary": "Missing2",
+      "AnimState": "Die",
+      "InteractionTypes": [
+        0
+      ],
+      "VendorList": null,
+      "NeedQuestId": 0
+    },
+    {
+      "DataId": 50000008,
+      "DescriptionTextID": "실종자",
+      "SpriteLibrary": "Missing3",
+      "AnimState": "Die",
+      "InteractionTypes": [
+        0
+      ],
+      "VendorList": null,
+      "NeedQuestId": 0
+    },
+    {
+      "DataId": 50000009,
+      "DescriptionTextID": "실종자",
+      "SpriteLibrary": "Missing4",
+      "AnimState": "Die",
+      "InteractionTypes": [
+        0
+      ],
+      "VendorList": null,
+      "NeedQuestId": 0
+    },
+    {
+      "DataId": 50000010,
+      "DescriptionTextID": "실종자",
+      "SpriteLibrary": "Missing1",
+      "AnimState": "Idle",
+      "InteractionTypes": [
+        0
+      ],
+      "VendorList": null,
+      "NeedQuestId": 0
     }
   ]
 }

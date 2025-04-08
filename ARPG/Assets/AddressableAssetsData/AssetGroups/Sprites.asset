@@ -131,32 +131,32 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 60df6c4191a1a2647b16eff76e9039ba
-    m_Address: WhiteSocket.sprite
+  - m_GUID: 02033e18e3c5dc94d840e17cab77ea06
+    m_Address: mana_potion.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 11e85d1761fb4134ab8793a724d70f4d
-    m_Address: RedSocket.sprite
+  - m_GUID: 91e4c373e5470ab45a5447ac19bae4a0
+    m_Address: hp_potion.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fff9165257aa79f4f9a51f450b1c04ef
-    m_Address: Link.sprite
+  - m_GUID: 54515d58d45c33b49b8880ebce60b7ae
+    m_Address: LifeFlaskFill_01.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1c4554d239167f9459673423b767f8fe
-    m_Address: GreenSocket.sprite
+  - m_GUID: 8bde13a06f4d3604dac922cf8cd5717d
+    m_Address: ManaFlaskFill_01.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e10313c1299d0ae41942798b7c5943ba
-    m_Address: BlueSocket.sprite
+  - m_GUID: c50568e8fc5d2524d89c445ba4fa489c
+    m_Address: Flask_01.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

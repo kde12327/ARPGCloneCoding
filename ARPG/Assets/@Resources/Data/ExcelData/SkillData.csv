@@ -1,8 +1,8 @@
 ﻿DataId,Name,ClassName,Description,ProjectileId,PrefabLabel,IconLabel,AnimName,CoolTime,DamageMultiplier,SkillDuration,AnimImpactDuration,CastingSound,SkillRange,ScaleMultiplier,TargetCount,Effects,NextLevelId,AoE,EffectSize
-10001,기본공격,NormalAttack,근접평타,0,,NormalAttackIcon.sprite,attack,0,1,,0,EnergyBolt_Start,0,1,20,,,,
-10002,위자드 직선평타,NormalAttack,주변의 적을 향해 에너지 볼트를 발사한다,70001,ProjectilePrefab,NormalAttackIcon.sprite,attack,0,1,,0,EnergyBolt_Start,0,1,20,,,,
-10003,화살든 고블린 평타,NormalAttack,주변의 적을 향해 에너지 볼트를 발사한다,70002,ProjectilePrefab,NormalAttackIcon.sprite,attack_b,0,1.28,,0,EnergyBolt_Start,0,1,20,,,,
-10004,보스 원형 공격,AreaAttack,보스 원형 공격,0,SpellIndicator,NormalAttackIcon.sprite,skill_a,5,1,,0.9,,3,1,20,62002,,,
+10001,기본공격,NormalAttack,근접평타,0,,Icon33.sprite,attack,0,1,,0,EnergyBolt_Start,0,1,20,,,,
+10002,위자드 직선평타,NormalAttack,주변의 적을 향해 에너지 볼트를 발사한다,70001,ProjectilePrefab,Icon33.sprite,attack,0,1,,0,EnergyBolt_Start,0,1,20,,,,
+10003,화살든 고블린 평타,NormalAttack,주변의 적을 향해 에너지 볼트를 발사한다,70002,ProjectilePrefab,Icon33.sprite,attack_b,0,1.28,,0,EnergyBolt_Start,0,1,20,,,,
+10004,보스 원형 공격,AreaAttack,보스 원형 공격,0,SpellIndicator,Icon33.sprite,skill_a,5,1,,0.9,,3,1,20,62002,,,
 10005,돌진,Dash,돌진,0,SpellIndicator,,attack,7,1,,2,,5,1,20,,,,
 10006,주인공스킬1,,전방으로 검을 휘둘러 적을 멀리 날린다.,,,,attack,9,1,,0,,1.8,1,20,,,,
 10007,주인공스킬2,,자신의 검을 전개시켜 지속적인 광역피해를 준다.,,,,attack,11,1,,0,,1.8,1,20,,,,
@@ -22,6 +22,6 @@
 10023,다중 화염검1,MultiFireSword,화염으로 이루어진 검을 소환하여 광역 피해를 준다,,AoEPrefab,,skill_b,10,1.3,,,,4,1,20,,10024,80010,CircleBig
 10024,다중 화염검2,MultiFireSword,화염으로 이루어진 검을 소환하여 광역 피해를 준다,,AoEPrefab,,skill_b,10,1.3,,,,4,1,20,,10025,80011,CircleBig
 10025,다중 화염검1,MultiFireSword,화염으로 이루어진 검을 소환하여 광역 피해를 준다,,AoEPrefab,,skill_b,10,1.3,,,,4,1,20,,,80012,CircleBig
-10026,이중 타격,DoubleStrike,두번의 근접 공격,0,,Double_Strike_skill_icon.sprite,Melee,0,1.5,,0,EnergyBolt_Start,0,1,20,,,,
-10027,도약 강타,LeapSlam,도약하여 적을 강타한다.,0,,Leap_Slam_skill_icon.sprite,Melee,0,1,,,EnergyBolt_Start,5,1,20,,,,CircleNormal
-10028,단검 투척,NormalAttack,주변의 적을 향해 에너지 볼트를 발사한다,70009,ProjectilePrefab,ThrowingDaggerIcon.sprite,Melee,0,1,,0,EnergyBolt_Start,0,1,1,,,,
+10026,이중 타격,DoubleStrike,두번의 근접 공격,0,,Icon4.sprite,Melee,0,1.5,,0,EnergyBolt_Start,0,1,20,,,,
+10027,도약 강타,LeapSlam,도약하여 적을 강타한다.,0,,Icon7.sprite,Melee,0,1,,,EnergyBolt_Start,5,1,20,,,,CircleNormal
+10028,단검 투척,NormalAttack,주변의 적을 향해 에너지 볼트를 발사한다,70009,ProjectilePrefab,Icon3.sprite,Melee,0,1,,0,EnergyBolt_Start,5,1,1,,,,

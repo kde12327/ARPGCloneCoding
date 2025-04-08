@@ -98,7 +98,7 @@ public class UI_Item : UI_Base
         GetImage((int)Images.ItemPanel).gameObject.BindEvent((evt) =>
         {
 
-            Managers.UI.GetSceneUI<UI_GameScene>().EnableDiscription();
+            Managers.UI.GetSceneUI<UI_GameScene>().DisableDiscription();
         }, Define.EUIEvent.PointerExit);
 
 
@@ -151,8 +151,13 @@ public class UI_Item : UI_Base
         GetImage((int)Images.ItemPanel).GetComponent<RectTransform>().sizeDelta *= Item.ItemSize;
         GetImage((int)Images.ItemImage).GetComponent<RectTransform>().sizeDelta *= Mathf.Min(Item.ItemSize.x, Item.ItemSize.y);
 
+        if(Item.ItemData.ItemType == EItemType.Flask)
+        {
+            GetImage((int)Images.ItemImage).GetComponent<RectTransform>().sizeDelta *= Item.ItemSize;
+        }
+
         // 아이템 타입별 ui 활성화
-        if(item.ItemType == Define.EItemType.Consumable)
+        if (item.ItemType == Define.EItemType.Consumable)
         {
             GetText((int)Texts.StackSizeText).gameObject.SetActive(true);
         }
@@ -212,7 +217,6 @@ public class UI_Item : UI_Base
         {
             str += links[i];
         }
-        Debug.Log(str);
 
         GameObject SocketPanel = GetObject((int)GameObjects.SocketPanel);
         RectTransform SocketRect = SocketPanel.GetComponent<RectTransform>();

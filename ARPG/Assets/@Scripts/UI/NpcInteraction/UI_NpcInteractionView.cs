@@ -62,7 +62,7 @@ public class UI_NpcInteractionView : UI_Base
                 {
                     var rewardItems = Managers.Quest.GetReward(questData.DataId);
                     Managers.UI.GetSceneUI<UI_GameScene>().SetRewardItems(rewardItems);
-                    Managers.UI.GetSceneUI<UI_GameScene>().EnableNpcInteraction();
+                    Managers.UI.GetSceneUI<UI_GameScene>().DisableNpcInteraction();
                 });
                 InteractionList.Add(go);
             }
@@ -80,29 +80,37 @@ public class UI_NpcInteractionView : UI_Base
                         go.BindEvent(evt =>
                         {
                             Managers.UI.GetSceneUI<UI_GameScene>().SetActiveWarehouseInventory(true);
-                            Managers.UI.GetSceneUI<UI_GameScene>().EnableNpcInteraction();
+                            Managers.UI.GetSceneUI<UI_GameScene>().DisableNpcInteraction();
                         });
                         InteractionList.Add(go);
                     }
-                    
+
+
+                    break;
+
+                case Define.EInteractionType.Vendor:
+                    {
+                        if (npc.NpcData.VendorList.Count != 0)
+                        {
+                            GameObject go = Managers.Resource.Instantiate("UI_NpcInteraction", interactionParent.transform);
+                            go.GetComponent<UI_NpcInteraction>().SetText("아이템 구입");
+                            go.BindEvent(evt =>
+                            {
+                                npc.MakeSaleList();
+                                Managers.UI.GetSceneUI<UI_GameScene>().SetActiveVendorInventory(npc, true);
+                                Managers.UI.GetSceneUI<UI_GameScene>().DisableNpcInteraction();
+                            });
+                            InteractionList.Add(go);
+                        }
+                    }
+
 
                     break;
 
             }
         }
-
-        if(npc.NpcData.VendorList.Count != 0)
-        {
-            GameObject go = Managers.Resource.Instantiate("UI_NpcInteraction", interactionParent.transform);
-            go.GetComponent<UI_NpcInteraction>().SetText("아이템 구입");
-            go.BindEvent(evt =>
-            {
-                npc.MakeSaleList();
-                Managers.UI.GetSceneUI<UI_GameScene>().SetActiveVendorInventory(npc, true);
-                Managers.UI.GetSceneUI<UI_GameScene>().EnableNpcInteraction();
-            });
-            InteractionList.Add(go);
-        }
+        
+        
 
         
         GameObject divider = Managers.Resource.Instantiate("UI_InteractionDivider", interactionParent.transform);
@@ -110,7 +118,7 @@ public class UI_NpcInteractionView : UI_Base
         GameObject leave = Managers.Resource.Instantiate("UI_NpcInteraction", interactionParent.transform);
         leave.BindEvent(evt => 
         {
-            Managers.UI.GetSceneUI<UI_GameScene>().EnableNpcInteraction();
+            Managers.UI.GetSceneUI<UI_GameScene>().DisableNpcInteraction();
         });
         InteractionList.Add(leave);
 

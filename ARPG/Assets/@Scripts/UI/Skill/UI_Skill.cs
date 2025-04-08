@@ -64,6 +64,11 @@ public class UI_Skill : UI_Base
 
     }
 
+    public void SetAcitceKeyText(bool isActive)
+    {
+        GetText((int)Texts.TextSkillKey).gameObject.SetActive(isActive);
+    }
+
     public void SetSkillIcon(string skillIconName)
     {
         if(skillIconName == null)

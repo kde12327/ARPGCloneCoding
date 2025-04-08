@@ -71,6 +71,54 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9509a1a666ca4a80b418d45dc18b07c6
+    m_Address: Slug
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8990d283a2312cf409638f403b2c0e20
+    m_Address: SilverChestbox
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33799d641c75e5243b16d76d75221744
+    m_Address: GoldenChestbox
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a560d314f018934fa928acd54dfed3a
+    m_Address: TownGirl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba6930a76c2013c478487e41ec5f3ffd
+    m_Address: Missing4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2d226add6d7ba345928f5277542a862
+    m_Address: Missing3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f53e5aa8818ccd9448306177954f9917
+    m_Address: Missing2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f376c494e934ce4f9e4eee1b99b83d6
+    m_Address: Missing1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d9824849e4582004ba9e5a22c383251d, type: 2}
   m_SchemaSet:

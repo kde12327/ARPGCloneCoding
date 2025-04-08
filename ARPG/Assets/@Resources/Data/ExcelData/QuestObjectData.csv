@@ -1,4 +1,4 @@
 ﻿DataId,DescriptionTextId,SpriteLibrary,RequiredQuestId,QuestObjectItemType
 330001,상자,WoodenChestbox,1001,GetDefaultItems
 330002,낡은 상자,WoodenChestbox,1006,GetQuestObjectItem
-330003,보물 상자,WoodenChestbox,1009,GetQuestObjectItem
+330003,보물 상자,GoldenChestbox,1009,GetQuestObjectItem

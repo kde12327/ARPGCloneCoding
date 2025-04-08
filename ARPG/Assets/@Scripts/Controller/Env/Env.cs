@@ -79,6 +79,7 @@ public class Env : InteractableObject
 		if (EnvState == EEnvState.Dead)
 			return;
 
+		if (EnvData == null) return;
 		if (EnvData.MaxHp == 0) return;
 
 		base.OnDamaged(attacker, skill);

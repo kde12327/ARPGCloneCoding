@@ -69,7 +69,7 @@ public class UI_TitleScene : UI_Scene
 			}
             else
             {
-				GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);
+				GetObject((int)GameObjects.StartImage).gameObject.SetActive(false);
 				GetText((int)Texts.StartText).text = $"Downloading ... ({count}/{totalCount})";
 			}
 		});

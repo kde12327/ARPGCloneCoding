@@ -195,7 +195,7 @@ public class QuestManager
         ClearQuest(CurrentRewardQuestId);
         RefreshCurrentMapQuest();
         Managers.UI.GetSceneUI<UI_GameScene>().ClearRewardItems();
-        Managers.UI.GetSceneUI<UI_GameScene>().EnableRewardView();
+        Managers.UI.GetSceneUI<UI_GameScene>().DisableRewardView();
         return true;
     }
 }

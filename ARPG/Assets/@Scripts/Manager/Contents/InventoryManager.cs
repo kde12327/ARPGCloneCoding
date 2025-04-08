@@ -59,7 +59,10 @@ public class InventoryManager
 		UI_Item uiitem = Managers.Resource.Instantiate("UI_Item").GetComponent<UI_Item>();
 		uiitem.SetInfo(item);
 
-		if(item.ItemType == EItemType.Equipment)
+		AllItems.Add(item);
+
+
+		if (item.ItemType == EItemType.Equipment)
         {
 			ItemBase equippedItem = null;
 			switch(item.ItemSubType)
@@ -114,7 +117,6 @@ public class InventoryManager
 			}
 		}
 
-		AllItems.Add(item);
 
 		return true;
 	}
@@ -128,12 +130,14 @@ public class InventoryManager
 
 		if (HoldingItem == null)
         {
-			int id = 0;
-			id = GetInventoryGridNum(invenType, (int)pos.x, (int)pos.y);
+			int id = GetInventoryGridNum(invenType, (int)pos.x, (int)pos.y);
 
-
-			if (id != 0)
+			if (id == -1) //wrong position
 			{
+				return ESlotState.None;
+			}
+			else if (id != 0) // not empty in grid
+			{ 
 				var item = GetItem(id);
 
 				Vector2Int equipPos = item.EquipPos;
@@ -149,7 +153,7 @@ public class InventoryManager
 
 				return ESlotState.Enable;
 			}
-            else
+            else // empty
             {
 				return ESlotState.None;
 			}
@@ -891,16 +895,20 @@ public class InventoryManager
     {
 		int result = -1;
 
+		// TODO 인벤토리 범위 내에 있는지 체크
 		switch(invenType)
         {
 			case EEquipSlotType.PlayerInventory:
-				result = PlayerInventoryItemGrid[x, y];
+				if(x >= 0 && y >= 0 && x < GetInventorySize(EEquipSlotType.PlayerInventory).x && y < GetInventorySize(EEquipSlotType.PlayerInventory).y)
+					result = PlayerInventoryItemGrid[x, y];
 				break;
 			case EEquipSlotType.WarehouseInventory:
-				result = WarehouseInventoryItemGrid[x, y];
+				if(x >= 0 && y >= 0 && x < GetInventorySize(EEquipSlotType.WarehouseInventory).x && y < GetInventorySize(EEquipSlotType.WarehouseInventory).y)
+					result = WarehouseInventoryItemGrid[x, y];
 				break;
 			case EEquipSlotType.VendorInventory:
-				result = VendorInventoryItemGrid[x, y];
+				if(x >= 0 && y >= 0 && x < GetInventorySize(EEquipSlotType.VendorInventory).x && y < GetInventorySize(EEquipSlotType.VendorInventory).y)
+					result = VendorInventoryItemGrid[x, y];
 				break;
 		}
 

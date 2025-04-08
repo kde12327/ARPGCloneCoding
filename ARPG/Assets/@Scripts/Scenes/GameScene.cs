@@ -40,6 +40,7 @@ public class GameScene : BaseScene
 
 			CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
 			camera.Target = player;
+			Camera.main.cullingMask = ~(1 << LayerMask.NameToLayer("Minimap"));
 		}
 
 

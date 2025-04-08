@@ -52,7 +52,7 @@ public class LeapSlam : MovementSkill
             }
         }
 
-
+        Owner._animation.CustumEffect("LeapSlam", -1);
 
         if (Owner.Anim == null)
         {
@@ -64,10 +64,15 @@ public class LeapSlam : MovementSkill
     {
         Owner.OnAnimAttackEnded -= OnAttackEndEvent;
 
+        Owner.CreatureState = Define.ECreatureState.Idle;
+
+        Owner._animation.Idle();
+
         if (Owner.CreatureState == Define.ECreatureState.Skill)
         {
             Owner.CreatureState = Define.ECreatureState.Move;
         }
+
     }
 
     void Update()
@@ -104,6 +109,9 @@ public class LeapSlam : MovementSkill
         GetComponent<Creature>().SetCellPos(cellPos, true);
         IsMoving = false;
         Owner.CreatureState = Define.ECreatureState.Idle;
+
+        Owner.OnAnimAttack();
+        Owner.OnAnimAttackEnd();
 
     }
 

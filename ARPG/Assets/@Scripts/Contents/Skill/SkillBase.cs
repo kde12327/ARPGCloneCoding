@@ -12,16 +12,65 @@ public abstract class SkillBase : InitBase
 
 	public Data.SkillData SkillData { get; private set; }
 
-	public List<SupportBase> SupportList { get; } = new List<SupportBase>();
+	public List<SupportBase> SupportList { get; set; } = new List<SupportBase>();
 
 	public Vector3 Target { get; set; } = Vector3.zero;
 
+	SkillGemItem _skillGemItem;
+
 
 	#region Stats
-	public float DamageMultiplier { get; set; }
-	public float ManaMultiplier { get; set; }
-	public float AttackSpeedMultiplier { get; set; }
-	public float AreaOfEffectIncreased { get; set; }
+	public float DamageMultiplier { get
+		{
+			float result = SkillData.DamageMultiplier;
+			foreach (var support in SupportList)
+            {
+				result *= support.DamageMultiplier;
+			}
+
+			return result;
+		}
+	}
+	public float ManaMultiplier
+	{
+		get
+		{
+			float result = 1.0f;
+			foreach (var support in SupportList)
+			{
+				result *= support.ManaMultiplier;
+			}
+
+			return result;
+		}
+	}
+	public float AttackSpeedMultiplier
+	{
+		get
+		{
+			float result = 1.0f;
+			foreach (var support in SupportList)
+			{
+				result *= support.AttackSpeedMultiplier;
+			}
+
+			return result;
+		}
+	}
+	public float AreaOfEffectIncreased
+	{
+		get
+		{
+			float result = 1.0f;
+			foreach (var support in SupportList)
+			{
+				result += support.AreaOfEffectIncreased;
+			}
+
+			return result;
+		}
+	}
+
 	public float CoolTime { get; set; }
     #endregion
 
@@ -33,10 +82,13 @@ public abstract class SkillBase : InitBase
 		return true;
 	}
 
-	public virtual void SetInfo(Creature owner, int skillTemplateID)
+	public virtual void SetInfo(Creature owner, SkillGemItem skillGemItem)
 	{
 		Owner = owner;
-		SkillData = Managers.Data.SkillDic[skillTemplateID];
+		SkillData = Managers.Data.SkillDic[skillGemItem.SkillGemItemData.SkillId];
+
+		skillGemItem.SkillBase = this;
+		_skillGemItem = skillGemItem;
 
 		// Register AnimEvent
 		if (Owner.SkeletonAnim != null && Owner.SkeletonAnim.AnimationState != null)
@@ -52,10 +104,29 @@ public abstract class SkillBase : InitBase
 		}
 
 		// Stat
-		DamageMultiplier = SkillData.DamageMultiplier;
-		ManaMultiplier = 1.0f;
-		AttackSpeedMultiplier = 1.0f;
-		AreaOfEffectIncreased = 1.0f;
+		CoolTime = SkillData.CoolTime;
+	}
+
+	public virtual void SetInfo(Creature owner, int skillTemplateID)
+	{
+		Owner = owner;
+		SkillData = Managers.Data.SkillDic[skillTemplateID];
+
+
+		// Register AnimEvent
+		if (Owner.SkeletonAnim != null && Owner.SkeletonAnim.AnimationState != null)
+		{
+			Owner.SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
+			/*Owner.SkeletonAnim.AnimationState.Event += OnAnimEventHandler;
+			Owner.SkeletonAnim.AnimationState.Complete += OnAnimCompleteHandler;*/
+		}
+
+		if (Owner.Anim != null)
+		{
+			Owner.OnAnimAttacked -= OnAttackEvent;
+		}
+
+		// Stat
 		CoolTime = SkillData.CoolTime;
 	}
 
@@ -165,19 +236,18 @@ public abstract class SkillBase : InitBase
                 break;
         }
 
-        projectile.SetSpawnInfo(Owner, this, excludeMask, Target);
+		//TODO: 투사체 최종 위치 계산
+		Vector3 targetPosition = transform.position + (Target - transform.position).normalized * SkillData.SkillRange;
+
+
+
+		projectile.SetSpawnInfo(Owner, this, excludeMask, targetPosition);
     }
 
-    public void AddSupport(SupportBase support)
+    public void AddSupports(List<SupportBase> supports)
 	{
-		SupportList.Add(support);
+		SupportList = supports;
 
-		// Process Support
-		DamageMultiplier *= support.DamageMultiplier;
-		ManaMultiplier *= support.ManaMultiplier;
-		AttackSpeedMultiplier *= support.AttackSpeedMultiplier;
-		AreaOfEffectIncreased += support.AreaOfEffectIncreased;
-		//CoolTime = SkillData.CoolTime;
 	}
 
 	protected virtual void OnAnimEventHandler(TrackEntry trackEntry, Event e)

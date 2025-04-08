@@ -397,8 +397,8 @@ namespace Data
 		public string SpriteLibrary;
 		public string AnimState;
 		public List<EInteractionType> InteractionTypes;
-		public List<int> ScriptIds;
 		public List<EVendorType> VendorList;
+		public int NeedQuestId;
 	}
 
 	[Serializable]
@@ -414,6 +414,25 @@ namespace Data
 		}
 	}
 
+	[Serializable]
+	public class ScriptData
+	{
+		public int DataId;
+		public string ScriptText;
+	}
+
+	[Serializable]
+	public class ScriptDataLoader : ILoader<int, ScriptData>
+	{
+		public List<ScriptData> scripts = new List<ScriptData>();
+		public Dictionary<int, ScriptData> MakeDict()
+		{
+			Dictionary<int, ScriptData> dict = new Dictionary<int, ScriptData>();
+			foreach (ScriptData script in scripts)
+				dict.Add(script.DataId, script);
+			return dict;
+		}
+	}
 
 	#endregion
 
@@ -510,6 +529,8 @@ namespace Data
 		public int QuestTargetId;
 		public EQuestRewardType QuestRewardType;
 		public int NextQuestId;
+		public int BeforeScriptId;
+		public int AfterScriptId;
 	}
 
 	[Serializable]

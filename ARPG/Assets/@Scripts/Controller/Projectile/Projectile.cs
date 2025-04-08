@@ -70,9 +70,13 @@ public class Projectile : BaseObject
 		BaseObject target = other.GetComponent<BaseObject>();
 		if (target.IsValid() == false)
 			return;
-		// TODO
-		target.OnDamaged(Owner, Skill);
-		Managers.Object.Despawn(this);
+	
+		if(Util.DetermineTargetType(Owner.ObjectType, false) == target.ObjectType)
+        {
+			target.OnDamaged(Owner, Skill);
+			Managers.Object.Despawn(this);
+		}
+		
 	}
 
 	private IEnumerator CoReserveDestroy(float lifeTime)

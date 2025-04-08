@@ -148,9 +148,14 @@ public class UI_InventoryGrid : UI_Base
             }
             else
             {
-                Managers.UI.GetSceneUI<UI_GameScene>().EnableDiscription();
+                Managers.UI.GetSceneUI<UI_GameScene>().DisableDiscription();
             }
         }
+    }
+
+    private void OnEnable()
+    {
+        Debug.Log("enable");
     }
 
     public void PutItem(UI_Item item, Vector2 itemPos)
@@ -167,7 +172,7 @@ public class UI_InventoryGrid : UI_Base
     public void PointExit()
     {
         IsPointEnter = false;
-        Managers.UI.GetSceneUI<UI_GameScene>().EnableDiscription();
+        Managers.UI.GetSceneUI<UI_GameScene>().DisableDiscription();
 
     }
 

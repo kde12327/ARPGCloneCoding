@@ -11,7 +11,7 @@ using Assets.PixelFantasy.PixelHeroes.Common.Scripts.ExampleScripts;
 public class BaseObject : InitBase
 {
     public EObjectType ObjectType { get; protected set; } = EObjectType.None;
-    public CircleCollider2D Collider { get; private set; }
+    public BoxCollider2D Collider { get; private set; }
     public SkeletonAnimation SkeletonAnim { get; private set; }
     public Rigidbody2D RigidBody { get; private set; }
 
@@ -19,7 +19,7 @@ public class BaseObject : InitBase
 	public CharacterAnimation _animation;
 
 
-	public float ColliderRadius { get { return Collider != null ? Collider.radius : 0.0f; } }
+	public float ColliderRadius { get { return Collider != null ? Collider.size.x : 0.0f; } }
 	//public float ColliderRadius { get { return Collider?.radius ?? 0.0f; } }
 	public Vector3 CenterPosition { get { return transform.position + Vector3.up * ColliderRadius; } }
 
@@ -46,7 +46,7 @@ public class BaseObject : InitBase
         if (base.Init() == false)
             return false;
 
-        Collider = gameObject.GetOrAddComponent<CircleCollider2D>();
+        Collider = gameObject.GetOrAddComponent<BoxCollider2D>();
         SkeletonAnim = GetComponent<SkeletonAnimation>();
         RigidBody = GetComponent<Rigidbody2D>();
 		Anim = GetComponent<Animator>();

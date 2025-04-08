@@ -63,6 +63,11 @@ public class QuestObject : Env
 
 					var skillGemHolder2 = Managers.Object.Spawn<ItemHolder>(transform.position, 0);
 					skillGemHolder2.SetInfo(0, skillGem2, transform.position);
+					
+					var flask = FlaskItem.MakeFlaskItem(25000001);
+
+					var flaskHolder = Managers.Object.Spawn<ItemHolder>(transform.position, 0);
+					flaskHolder.SetInfo(0, flask, transform.position);
 				}
 				break;
         }

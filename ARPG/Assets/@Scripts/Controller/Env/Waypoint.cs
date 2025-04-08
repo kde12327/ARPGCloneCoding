@@ -30,10 +30,18 @@ public class Waypoint : Env
 
 		Debug.Log("Waypoint");
 
+		_character.Animator.SetBool("Idle", false);
+		_character.Animator.SetBool("Open", true);
 
 		Managers.Map.ActivateWaypoint(Managers.Map.MapName);
 
 		var gamescene = Managers.UI.GetSceneUI<UI_GameScene>();
 		gamescene.SetActiveWaypointView(true);
+	}
+
+	public void OnOpenAnimEnd()
+    {
+		_character.Animator.SetBool("Open", false);
+		_character.Animator.SetBool("Idle", true);
 	}
 }

@@ -33,6 +33,7 @@ public class DataTransformer : EditorWindow
 		ParseExcelDataToJson<PassiveSkillDataLoader, PassiveSkillData>("PassiveSkill");
 		ParseExcelDataToJson<QuestDataLoader, QuestData>("Quest");
 		ParseExcelDataToJson<QuestObjectDataLoader, QuestObjectData>("QuestObject");
+		ParseExcelDataToJson<ScriptDataLoader, ScriptData>("Script");
 
 		Debug.Log("DataTransformer Completed");
 	}
@@ -40,6 +41,7 @@ public class DataTransformer : EditorWindow
 	#region Helpers
 	private static void ParseExcelDataToJson<Loader, LoaderData>(string filename) where Loader : new() where LoaderData : new()
 	{
+		//Debug.Log($"{filename} data tramform success.");
 		Loader loader = new Loader();
 		FieldInfo field = loader.GetType().GetFields()[0];
 		field.SetValue(loader, ParseExcelDataToList<LoaderData>(filename));

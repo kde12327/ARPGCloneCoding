@@ -1,5 +1,5 @@
 ﻿DataId,DescriptionTextID,Label,ColliderOffSetX,ColliderOffsetY,ColliderRadius,MaxHp,UpMaxHp,Atk,AtkRange,AtkBonus,MovSpeed,CriRate,Cridamage,IconImage,SpriteLibrary,SkillIdList,DropItemId
-202001,슬라임,MonsterPrefab,0,0,0.27,100,5,2,1.8,2,4,0,1.5,003.sprite,GreenJelly,10001,400000
+202001,슬라임,MonsterPrefab,0,0,0.27,100,5,2,1.8,2,4,0,1.5,003.sprite,Slug,10001,400000
 202002,일반거미,MonsterPrefab,0,0.2,0.5,150,5,2,1.8,2,4,0,1.5,003.sprite,BrownSpider,10001,400000
 202003,희귀거미,MonsterPrefab,0,0.51,0.5,220,5,2,2.3,2,4,0,1.5,003.sprite,BlackSpider,10001,400000
 202004,나무맨,MonsterPrefab,0,0.19,0.5,400,4,2,1.8,2,4,0,1.5,003.sprite,BrownStump,10001,400000

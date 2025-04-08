@@ -26,6 +26,7 @@ public class Portal : Env
 		GameObject nameTagObject = Managers.Resource.Instantiate("NameTag");
 		NameTag nameTag = nameTagObject.GetComponent<NameTag>();
 		nameTag.SetInfo(this, PortalData.DescriptionTextID);
+		nameTag.transform.localPosition = new Vector2(0.2f, 2.5f); ;
 	}
 
 	public override void Interact(Player player)

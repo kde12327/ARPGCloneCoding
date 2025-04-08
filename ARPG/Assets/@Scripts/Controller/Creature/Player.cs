@@ -152,7 +152,7 @@ public class Player : Creature
 
                 if(_keyState != EKeyState.None && CreatureState != ECreatureState.Skill)
                 {
-                    SkillBase skill = Skills.GetSkill((int)value);
+                    SkillBase skill = Skills.GetSkill(value);
                     if(skill != null)
                     {
                         Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
@@ -251,6 +251,8 @@ public class Player : Creature
         Hp = Stats.GetStat(Stat.Life).Value;
         Mp = MaxMp.Value;
 
+
+        
     }
 
     public void OnPlayerStatChanged()
@@ -273,7 +275,18 @@ public class Player : Creature
         // 아이템 제거/장착에 의한 스킬 재 세팅
         // TODO: 스킬 완전 초기화 방식 -> 변경된 스킬만 제거/추가
         Skills.ResetSkill();
+
         Managers.UI.GetSceneUI<UI_GameScene>().InitSkillImage();
+
+
+        // Add Normal Attack
+        {
+            int skillId = 10001;
+            string className = Managers.Data.SkillDic[skillId].ClassName;
+            SkillBase skillBase = gameObject.AddComponent(Type.GetType(className)) as SkillBase;
+            skillBase.SetInfo(this, skillId);
+            Skills.AddSkill(skillBase);
+        }
 
         List<ItemBase> items = Managers.Inventory.GetEquippedItems();
         List<List<SkillGemItem>> skills = new();
@@ -286,13 +299,23 @@ public class Player : Creature
                 skills.AddRange(_skills);
         }
 
+
         for (int i = 0; i < skills.Count; i++)
         {
-            int skillId = skills[i][0].SkillGemItemData.SkillId;
-            
-            string className = Managers.Data.SkillDic[skillId].ClassName;
-            SkillBase skillBase = gameObject.AddComponent(Type.GetType(className)) as SkillBase;
-            skillBase.SetInfo(this, skillId);
+
+            SkillGemItem skillGem = skills[i][0];
+
+            if (skillGem.SkillBase == null)
+            {
+                int skillId = skills[i][0].SkillGemItemData.SkillId;
+
+                string className = Managers.Data.SkillDic[skillId].ClassName;
+                SkillBase skillBase = gameObject.AddComponent(Type.GetType(className)) as SkillBase;
+                skillBase.SetInfo(this, skillGem);
+
+            }
+
+            List<SupportBase> supports = new();
 
             for (int j = 1; j < skills[i].Count; j++)
             {
@@ -300,16 +323,16 @@ public class Player : Creature
 
                 SupportBase supportBase = new SupportBase();
                 supportBase.SetInfo(skills[i][j].SkillGemItemData.SkillId);
-
-                skillBase.AddSupport(supportBase);
+                supports.Add(supportBase);
             }
-
-            Skills.AddSkill(skillBase);
-
-            Managers.UI.GetSceneUI<UI_GameScene>().SetSkill((UI_GameScene.UISkills)(i+3), skillBase);
+            skillGem.SkillBase.AddSupports(supports);
+            Skills.AddSkill(skillGem.SkillBase);
 
 
         }
+        Managers.UI.GetSceneUI<UI_GameScene>().SetSkillList(Skills.SkillList);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetSkills(Skills.SkillMacro);
+
     }
 
     public void OnMapChange()

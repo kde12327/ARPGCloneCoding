@@ -8,6 +8,9 @@ public class SkillGemItem : ItemBase
     public Data.SkillGemItemData SkillGemItemData;
 
     bool _isInSocket = false;
+
+    public SkillBase SkillBase { get; set; } = null;
+
     public bool IsInSocket
     {
         get

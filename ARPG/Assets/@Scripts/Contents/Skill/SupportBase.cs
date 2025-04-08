@@ -6,7 +6,7 @@ public class SupportBase
 {
     //public Creature Owner { get; protected set; }
     public Data.SupportData SupportData { get; private set; }
-
+	
 	#region Stats
 	public float DamageMultiplier { get; set; }
 	public float ManaMultiplier { get; set; }

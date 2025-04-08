@@ -83,15 +83,29 @@ public class Npc : InteractableObject
 
 		// 보상받을 퀘스트가 있으면 보상 창 띄우기
 
-		foreach (int qeustId in Managers.Quest.CurrentQuestList)
+		foreach (int questId in Managers.Quest.CurrentQuestList)
 		{
-			Data.QuestData questData = Managers.Data.QuestDic[qeustId];
+			Data.QuestData questData = Managers.Data.QuestDic[questId];
+
+			
 
 			if (questData.QuestType == Define.EQuestType.Interact && questData.QuestTargetId == DataTemplateID)
 			{
-				var rewardItems = Managers.Quest.GetReward(questData.DataId);
-				gamescene.SetRewardItems(rewardItems);
-				gamescene.EnableNpcInteraction();
+				if (questData.BeforeScriptId != 0)
+				{
+					gamescene.SetScriptView(questData.BeforeScriptId, NpcData.DataId, questData.DataId);
+				}
+                else
+                {
+					var rewardItems = Managers.Quest.GetReward(questData.DataId);
+					if (rewardItems.Count != 0)
+					{
+						gamescene.SetRewardItems(rewardItems);
+					}
+				}
+
+				gamescene.DisableNpcInteraction();
+
 
 				return;
 			}

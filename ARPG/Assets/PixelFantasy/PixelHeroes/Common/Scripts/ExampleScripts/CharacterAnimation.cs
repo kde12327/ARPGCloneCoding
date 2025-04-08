@@ -119,6 +119,11 @@ namespace Assets.PixelFantasy.PixelHeroes.Common.Scripts.ExampleScripts
             SetState(CharacterState.Crouch);
         }
 
+        public void CustumEffect(string name, int sortingOffset = 1)
+        {
+            EffectManager.Instance.CreateSpriteEffect(_character, name, _character.Body.transform.localScale.x > 0 ? 1 : -1, null, sortingOffset) ;
+        }
+
         public void SetState(CharacterState state)
         {
             foreach (var variable in new[] { "Idle", "Ready", "Walk", "Run", "Crouch", "Crawl", "Jump", "Fall", "Land", "Block", "Climb", "Die" })

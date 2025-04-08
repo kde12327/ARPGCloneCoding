@@ -38,13 +38,13 @@ namespace Assets.PixelFantasy.Common.Scripts
             creature.Body.material = _baseMaterial;
         }
 
-        public SpriteEffect CreateSpriteEffect(Creature creature, string clipName, int direction = 0, Transform parent = null)
+        public SpriteEffect CreateSpriteEffect(Creature creature, string clipName, int direction = 0, Transform parent = null, int sortingOffset = 1)
         {
             var instance = Instantiate(SpriteEffectPrefab, creature.transform.position, Quaternion.identity, parent);
 
             instance.name = clipName;
             instance.transform.position = parent == null ? creature.transform.position : parent.transform.position;
-            instance.GetComponent<SpriteRenderer>().sortingOrder = creature.Body.sortingOrder + 1;
+            instance.GetComponent<SpriteRenderer>().sortingOrder = creature.Body.sortingOrder + sortingOffset;
             instance.Play(clipName, direction == 0 ? Math.Sign(creature.transform.localScale.x) : direction);
 
             return instance;

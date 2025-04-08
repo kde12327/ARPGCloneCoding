@@ -205,6 +205,7 @@ public static class Define
 
     public enum EInteractionType
     {
+        Leave,
         Warehouse,
         Vendor
     }
@@ -355,7 +356,7 @@ public static class Define
 
 	public const float MONSTER_SEARCH_DISTANCE = 5.0f;
     public const int MONSTER_DEFAULT_MELEE_ATTACK_RANGE = 1;
-    public const int MONSTER_DEFAULT_RANGED_ATTACK_RANGE = 5;
+    public const int MONSTER_DEFAULT_RANGED_ATTACK_RANGE = 3;
 
     public const int PLAYER_DEFAULT_MOVE_DEPTH = 5;
     public const int MONSTER_DEFAULT_MOVE_DEPTH = 3;

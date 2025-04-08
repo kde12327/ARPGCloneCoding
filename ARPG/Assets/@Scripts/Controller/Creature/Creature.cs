@@ -127,8 +127,8 @@ public class Creature : BaseObject
         gameObject.name = $"{CreatureData.DataId}_{CreatureData.DescriptionTextID}";
 
         // Collider
-        Collider.offset = new Vector2(CreatureData.ColliderOffsetX, CreatureData.ColliderOffsetY);
-        Collider.radius = CreatureData.ColliderRadius;
+        /*Collider.offset = new Vector2(CreatureData.ColliderOffsetX, CreatureData.ColliderOffsetY);
+        Collider.radius = CreatureData.ColliderRadius;*/
 
         Stats = new();
         Stats.SetInfo(this);

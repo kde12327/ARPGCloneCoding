@@ -17,7 +17,7 @@
     {
       "DataId": 330003,
       "DescriptionTextId": "보물 상자",
-      "SpriteLibrary": "WoodenChestbox",
+      "SpriteLibrary": "GoldenChestbox",
       "RequiredQuestId": 1009,
       "QuestObjectItemType": 1
     }

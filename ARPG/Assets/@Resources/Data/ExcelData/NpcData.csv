@@ -1,3 +1,11 @@
-﻿DataId,DescriptionTextID,SpriteLibrary,AnimState,InteractionTypes,ScriptIds,VendorList
-50000001,타클레이,HeavyKnight,Idle,0,,0&1&2&3
+﻿DataId,DescriptionTextID,SpriteLibrary,AnimState,InteractionTypes,VendorList,NeedQuestId
+50000001,경비병,HeavyKnight,Idle,0&2,0&1&2&3,
 50000002,시체,Spearman,Die,0,,
+50000003,창고,SilverChestbox,Idle,0&1,,
+50000004,여인,TownGirl,Idle,0,,
+50000005,경비병,Spearman,Idle,0,,
+50000006,실종자,Missing1,Die,0,,
+50000007,실종자,Missing2,Die,0,,
+50000008,실종자,Missing3,Die,0,,
+50000009,실종자,Missing4,Die,0,,
+50000010,실종자,Missing1,Idle,0,,

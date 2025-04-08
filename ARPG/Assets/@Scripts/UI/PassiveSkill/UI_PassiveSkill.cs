@@ -46,7 +46,7 @@ public class UI_PassiveSkill : UI_Base
         {
             var rect = GetImage((int)Images.PassiveSkillImage).GetComponent<RectTransform>();
 
-            Managers.UI.GetSceneUI<UI_GameScene>().EnableDiscription();
+            Managers.UI.GetSceneUI<UI_GameScene>().DisableDiscription();
         }, Define.EUIEvent.PointerExit);
 
 
@@ -65,7 +65,7 @@ public class UI_PassiveSkill : UI_Base
     {
         if (isSelected)
         {
-            GetImage((int)Images.PassiveSkillFrameImage).sprite = Managers.Resource.Load<Sprite>("PassiveIconFrameSelected.sprite");
+            GetImage((int)Images.PassiveSkillFrameImage).sprite = Managers.Resource.Load<Sprite>("PassiveSkillFrameSelected.sprite");
             for (int i = 0; i < UILinks.Count; i++)
             {
                 UI_PassiveSkill node = UILinks[i].GetOtherNode(this);
@@ -78,7 +78,7 @@ public class UI_PassiveSkill : UI_Base
         }
         else
         {
-            GetImage((int)Images.PassiveSkillFrameImage).sprite = Managers.Resource.Load<Sprite>("PassiveIconFrame.sprite");
+            GetImage((int)Images.PassiveSkillFrameImage).sprite = Managers.Resource.Load<Sprite>("PassiveSkillFrame.sprite");
             for (int i = 0; i < UILinks.Count; i++)
             {
                 UILinks[i].SetSelected(isSelected);

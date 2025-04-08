@@ -17,7 +17,7 @@
       "CriRate": 0.0,
       "CriDamage": 1.5,
       "IconImage": "003.sprite",
-      "SpriteLibrary": "GreenJelly",
+      "SpriteLibrary": "Slug",
       "SkillIdList": [
         10001
       ]

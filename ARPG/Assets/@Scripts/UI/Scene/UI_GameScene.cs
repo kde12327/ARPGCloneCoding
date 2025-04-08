@@ -24,7 +24,9 @@ public class UI_GameScene : UI_Scene
         UI_ItemFlask5,
         UI_QuestView,
         UI_RewardView,
-        UI_GameMenuView
+        UI_GameMenuView,
+        UI_SkillSettingView,
+        UI_ScriptView
     }
 
     enum Images
@@ -93,6 +95,9 @@ public class UI_GameScene : UI_Scene
         BindSliders(typeof(Sliders));
         BindImages(typeof(Images));
         Bind<UI_Skill>(typeof(UISkills));
+
+        
+
         Bind<UI_ItemSlot>(typeof(UIItemSlots));
         Bind<UI_InventoryGrid>(typeof(UI_InventoryGrids));
 
@@ -131,6 +136,13 @@ public class UI_GameScene : UI_Scene
         
         var gameMenuView = GetObject((int)GameObjects.UI_GameMenuView);
         gameMenuView.SetActive(false);
+        
+        var skillSettingView = GetObject((int)GameObjects.UI_SkillSettingView);
+        skillSettingView.SetActive(false);
+
+        var scriptView = GetObject((int)GameObjects.UI_ScriptView);
+        scriptView.SetActive(false);
+        
 
         var usingItemImage = GetImage((int)Images.UsingItemImage);
         usingItemImage.gameObject.SetActive(false);
@@ -144,6 +156,36 @@ public class UI_GameScene : UI_Scene
             passiveSkillView.SetActive(true);
         });
 
+        Get<UI_Skill>((int)UISkills.UI_SkillQ).gameObject.BindEvent(evt =>
+        {
+            OnClickSkill(EKeyState.Skill00);
+        }, EUIEvent.Click);
+        
+        Get<UI_Skill>((int)UISkills.UI_SkillW).gameObject.BindEvent(evt =>
+        {
+            OnClickSkill(EKeyState.Skill01);
+        }, EUIEvent.Click);
+        
+        Get<UI_Skill>((int)UISkills.UI_SkillE).gameObject.BindEvent(evt =>
+        {
+            OnClickSkill(EKeyState.Skill02);
+        }, EUIEvent.Click);
+        
+        Get<UI_Skill>((int)UISkills.UI_SkillR).gameObject.BindEvent(evt =>
+        {
+            OnClickSkill(EKeyState.Skill03);
+        }, EUIEvent.Click);
+        
+        Get<UI_Skill>((int)UISkills.UI_SkillT).gameObject.BindEvent(evt =>
+        {
+            OnClickSkill(EKeyState.Skill04);
+        }, EUIEvent.Click);
+        Get<UI_Skill>((int)UISkills.UI_SkillSpaceBar).gameObject.BindEvent(evt =>
+        {
+            OnClickSkill(EKeyState.Skill05);
+        }, EUIEvent.Click);
+
+
 
         return true;
     }
@@ -156,6 +198,35 @@ public class UI_GameScene : UI_Scene
             usingItemImage.transform.position = Input.mousePosition;
         }
     }
+
+    public void OnClickSkill(EKeyState keyState)
+    {
+        var skillSettingView = GetObject((int)GameObjects.UI_SkillSettingView);
+
+        skillSettingView.SetActive(true);
+        skillSettingView.GetComponent<UI_SkillSettingView>().SetKey(keyState);
+    }
+
+    public void DisableSkillView()
+    {
+        var skillSettingView = GetObject((int)GameObjects.UI_SkillSettingView);
+
+        skillSettingView.SetActive(false);
+    }
+
+    public void SetScriptView(int scriptId, int npcId, int questId)
+    {
+        var scriptView = GetObject((int)GameObjects.UI_ScriptView);
+        scriptView.SetActive(true);
+        scriptView.GetComponent<UI_ScriptView>().SetInfo(scriptId, npcId, questId);
+    }
+
+    public void DisableScriptView()
+    {
+        var scriptView = GetObject((int)GameObjects.UI_ScriptView);
+        scriptView.SetActive(false);
+    }
+
 
     public void SetWaypoints(Dictionary<string, bool> waypoints)
     {
@@ -198,7 +269,8 @@ public class UI_GameScene : UI_Scene
 
         var uiItem = GetObject(objectIndex).GetComponent<UI_Item>();
         uiItem.SetInfo(item);
-        item.SetFlaskUIItem(uiItem);
+        if(item != null)
+            item.SetFlaskUIItem(uiItem);
     }
 
     public void SetUsingItem(ItemBase item)
@@ -230,7 +302,7 @@ public class UI_GameScene : UI_Scene
 
         if (passiveSkillView.activeSelf == false)
         {
-            EnableDiscription();
+            DisableDiscription();
         }
 
         /*if (passiveSkillView.activeSelf)
@@ -271,7 +343,7 @@ public class UI_GameScene : UI_Scene
         rewardView.SetActive(false);
     }
 
-    public void EnableRewardView()
+    public void DisableRewardView()
     {
         var rewardView = GetObject((int)GameObjects.UI_RewardView);
         rewardView.SetActive(false);
@@ -286,7 +358,7 @@ public class UI_GameScene : UI_Scene
     
     
 
-    public void EnableNpcInteraction()
+    public void DisableNpcInteraction()
     {
         var npcInteractinoView = GetObject((int)GameObjects.UI_NpcInteractionView);
         npcInteractinoView.SetActive(false);
@@ -377,12 +449,20 @@ public class UI_GameScene : UI_Scene
         discriptionRect.anchoredPosition = localPoint;
     }
 
-    public void EnableDiscription()
+    public void DisableDiscription()
     {
         var discriptionView = GetObject((int)GameObjects.UI_DiscriptionView);
         discriptionView.SetActive(false);
     }
 
+    public void DisableItemSlot()
+    {
+        for(int i = 0; i < Enum.GetNames(typeof(UIItemSlots)).Length; i++)
+        {
+            Get<UI_ItemSlot>((int)i).SetSlotState(ESlotState.None);
+        }
+
+    }
 
     public void InventoryToggle()
     {
@@ -390,7 +470,8 @@ public class UI_GameScene : UI_Scene
         playerInven.SetActive(!playerInven.activeSelf);
         if (!playerInven.activeSelf)
         {
-            EnableDiscription();
+            DisableDiscription();
+            DisableItemSlot();
         }
     }
 
@@ -414,12 +495,13 @@ public class UI_GameScene : UI_Scene
         if (!active && TEMPOPENPLAYERINVENTORYFLAG)
         {
             TEMPOPENPLAYERINVENTORYFLAG = false;
+            DisableItemSlot();
             playerInven.SetActive(false);
         }
 
         if (!warehouseInven.activeSelf)
         {
-            EnableDiscription();
+            DisableDiscription();
         }
 
 
@@ -447,7 +529,9 @@ public class UI_GameScene : UI_Scene
         if (!active && TEMPOPENPLAYERINVENTORYFLAG)
         {
             TEMPOPENPLAYERINVENTORYFLAG = false;
+            DisableItemSlot();
             playerInven.SetActive(false);
+
         }
     }
 
@@ -514,8 +598,9 @@ public class UI_GameScene : UI_Scene
     {
         SetActiveWarehouseInventory(false);
         SetActiveVendorInventory(null, false);
-        EnableNpcInteraction();
+        DisableNpcInteraction();
         SetActiveWaypointView(false);
+        DisableSkillView();
         // 스크립트 보거나 하는 경우 false 반환
 
         return true;
@@ -599,7 +684,7 @@ public class UI_GameScene : UI_Scene
                 }
                 else
                 {
-                    //EnableDiscription();
+                    //DisableDiscription();
                 }
 
                 if (Managers.Inventory.HoldingItem != null)
@@ -622,7 +707,7 @@ public class UI_GameScene : UI_Scene
             {
                 ItemBase item = Managers.Inventory.GetEquippedItem(slotType);
 
-                //EnableDiscription();
+                //DisableDiscription();
                 /*if (item != null && item.ItemType == EItemType.Equipment)
                 {
                     var eItem = item as EquipmentItem;
@@ -674,6 +759,61 @@ public class UI_GameScene : UI_Scene
         UI_Skill uiskill = Get<UI_Skill>((int)key);
 
         uiskill.SetSkill(skill);
+    }
+
+    public void SetSkills(Dictionary<EKeyState, SkillBase> skillMacro)
+    {
+
+        foreach( var pair in skillMacro)
+        {
+            EKeyState key = pair.Key;
+            SkillBase skill = pair.Value;
+            Debug.Log(pair.Key + ", " + skill.SkillData.Name);
+
+            switch (key)
+            {
+                case EKeyState.Skill00:
+                    { 
+                        SetSkill(UISkills.UI_SkillQ, skill);
+                    }
+                    break;
+                case EKeyState.Skill01:
+                    { 
+                        SetSkill(UISkills.UI_SkillW, skill);
+                    }
+                    break;
+                case EKeyState.Skill02:
+                    { 
+                        SetSkill(UISkills.UI_SkillE, skill);
+                    }
+                    break;
+                case EKeyState.Skill03:
+                    { 
+                        SetSkill(UISkills.UI_SkillR, skill);
+                    }
+                    break;
+                case EKeyState.Skill04:
+                    { 
+                        SetSkill(UISkills.UI_SkillT, skill);
+                    }
+                    break;
+                case EKeyState.Skill05:
+                    { 
+                        SetSkill(UISkills.UI_SkillSpaceBar, skill);
+                    }
+                    break;
+            }
+        }
+
+        
+    }
+
+    public void SetSkillList(List<SkillBase> skills)
+    {
+
+        var skillSettingView = GetObject((int)GameObjects.UI_SkillSettingView);
+        skillSettingView.GetComponent<UI_SkillSettingView>().SetSkillList(skills);
+
     }
 
     public void SetSkillCooldown(UISkills key, float cooldownRatio)

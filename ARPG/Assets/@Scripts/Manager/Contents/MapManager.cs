@@ -86,9 +86,9 @@ public class MapManager
 	void ParseCollisionData(GameObject map, string mapName, string tilemap = "Tilemap_Collision")
 	{
 		GameObject collision = Util.FindChild(map, tilemap, true);
-		if (collision != null)
+		/*if (collision != null)
 			collision.SetActive(false);
-
+*/
 		// Collision 관련 파일
 		TextAsset txt = Managers.Resource.Load<TextAsset>($"{mapName}Collision");
 		StringReader reader = new StringReader(txt.text);
